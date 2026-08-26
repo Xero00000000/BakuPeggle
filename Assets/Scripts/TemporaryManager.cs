@@ -19,11 +19,13 @@ public class TemporaryManager : MonoBehaviour
     {
         mousePos = pegCamera.ScreenToWorldPoint(Input.mousePosition);
 
+        mousePos.z = -(transform.position.x - pegCamera.transform.position.x);
+
         Vector3 rotation = mousePos - transform.position;
 
-        float rotZ = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
+        float rotX = Mathf.Atan2(rotation.z, rotation.y) * Mathf.Rad2Deg;
 
-        transform.rotation = Quaternion.Euler(0, 0, rotZ);
+        transform.rotation = Quaternion.Euler(rotX, 0, 0);
 
         if (Input.GetMouseButtonDown(0))
         {
