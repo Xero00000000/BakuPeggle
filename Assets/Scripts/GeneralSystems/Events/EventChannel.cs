@@ -26,34 +26,6 @@ public abstract class EventChannel : ScriptableObject
     }
 }
 
-[CreateAssetMenu(fileName = "VoidEventChannel", menuName = "ScriptableObjects/EventsChannels/VoidEventChannel")]
-public class VoidEventChannel : EventChannel
-{
-    public void Raise(Component sender) //se le suele decir raise, pero siento que "broadcast" seria mas correcto lol
-    {
-        for (int i = 0; i < listeners.Count; i++)
-        {
-            if (listeners[i] is VoidEventListener listener)
-            {
-                listener.OnEventRaised(sender);
-            }
-        }
-    }
-}
 
-[CreateAssetMenu(fileName = "SceneChangeEventChannel", menuName = "ScriptableObjects/EventsChannels/SceneChangeEventChannel")]
-public class SceneChangeEventChannel : EventChannel
-{
-    public void Raise(Component sender, SceneField[] scenesToLoad, SceneField[] scenesToUnload, object[] transitionEffects) //se le suele decir raise, pero siento que "broadcast" seria mas correcto lol
-    {
-        for (int i = 0; i < listeners.Count; i++)
-        {
-            if (listeners[i] is SceneChangeEventListener listener)
-            {
-                listener.OnEventRaised(sender, scenesToLoad, scenesToUnload, transitionEffects);
-            }
-        }
-    }
-}
 
 

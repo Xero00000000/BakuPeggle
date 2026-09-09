@@ -11,8 +11,9 @@ public class SceneTransition : MonoBehaviour
     private int fadeAmount = Shader.PropertyToID("FadeAmount");
 
     //private int useNombre = Shader.PropertyToID("nombre"); aca pones los shaders que estan dentro del coso
-    private int useShader1 = Shader.PropertyToID("Shader1");
-    private int useShader2 = Shader.PropertyToID("Shader2");
+    private int useShader1 = Shader.PropertyToID("UseShader1");
+    private int useShader2 = Shader.PropertyToID("UseShader2");
+    private int useShader3 = Shader.PropertyToID("UseShader3");
 
     private int? lastEffect;
 
@@ -21,8 +22,9 @@ public class SceneTransition : MonoBehaviour
     private enum TransitionEffect
     {
         Shader1,
-        Shader2
-        //[Obsolete("usa otro")] Shader3 //este es de ejemplo para acordarme a mi mismo si usamos esto en otro lado como hacer si borramos algo, porque se mueve todo y es un alboroto
+        Shader2,
+        Shader3
+        //[Obsolete("usa otro")] Shader4 //este es de ejemplo para acordarme a mi mismo si usamos esto en otro lado como hacer si borramos algo, porque se mueve todo y es un alboroto
     }
 
     [EnumButtons(true)]
@@ -65,6 +67,9 @@ public class SceneTransition : MonoBehaviour
                 break;
             case TransitionEffect.Shader2:
                 SwitchEffect(useShader2);
+                break;
+            case TransitionEffect.Shader3:
+                SwitchEffect(useShader3);
                 break;
         }
     }
