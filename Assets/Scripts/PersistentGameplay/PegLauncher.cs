@@ -29,7 +29,7 @@ public class PegLauncher : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             var instance = Instantiate(ballPrefab, spawnPoint.transform.position, Quaternion.identity);
-            instance.GetComponent<Rigidbody>().AddForce((mousePos) * force);
+            instance.GetComponent<Rigidbody2D>().AddForce((direction) * force);
         }
     }
 }
