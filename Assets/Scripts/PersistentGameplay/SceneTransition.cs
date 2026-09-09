@@ -21,7 +21,7 @@ public class SceneTransition : MonoBehaviour
     private enum TransitionEffect
     {
         Shader1,
-        Shader2,
+        Shader2
         //[Obsolete("usa otro")] Shader3 //este es de ejemplo para acordarme a mi mismo si usamos esto en otro lado como hacer si borramos algo, porque se mueve todo y es un alboroto
     }
 

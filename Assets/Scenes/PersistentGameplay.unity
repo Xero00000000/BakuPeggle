@@ -306,7 +306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeDuration: 1
-  Effect: 0
+  Effect: 1
 --- !u!114 &438015972
 MonoBehaviour:
   m_ObjectHideFlags: 0
