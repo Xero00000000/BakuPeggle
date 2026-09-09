@@ -1,67 +1,91 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using PrimeTween;
 
 public class SceneTransition : MonoBehaviour
 {
-    [SerializeField] float fadeDuration = 1f;
+    [SerializeField] private float fadeDuration = 1f;
 
-    private int fadeAmount = Shader.PropertyToID("FadeAmount");
+    [Header("Materiales/Shaders (7 Elementos + 1 General)")]
+    [SerializeField] private List<Material> transitionMaterials = new List<Material>();
 
+<<<<<<< Updated upstream
     //private int useNombre = Shader.PropertyToID("nombre"); aca pones los shaders que estan dentro del coso
     private int useShader1 = Shader.PropertyToID("UseShader1");
     private int useShader2 = Shader.PropertyToID("UseShader2");
     private int useShader3 = Shader.PropertyToID("UseShader3");
 
     private int? lastEffect;
+=======
+    // Propiedad que se conecta con el Reference Name de Shader Graph
+    private static readonly int FadeAmountProperty = Shader.PropertyToID("FadeAmount");
+>>>>>>> Stashed changes
 
     private Image image;
-    private Material material;
-    private enum TransitionEffect
+    private Material currentMaterialInstance;
+    private Coroutine currentFadeCoroutine;
+
+    public enum TransitionEffect
     {
+<<<<<<< Updated upstream
         Shader1,
         Shader2,
         Shader3
         //[Obsolete("usa otro")] Shader4 //este es de ejemplo para acordarme a mi mismo si usamos esto en otro lado como hacer si borramos algo, porque se mueve todo y es un alboroto
+=======
+        Agua,
+        Fuego,
+        Hielo,
+        Tierra,
+        Rayo,
+        Neutro,
+        Oscuro,
+        ShaderTransicion
+>>>>>>> Stashed changes
     }
 
-    [EnumButtons(true)]
-    [SerializeField] TransitionEffect Effect;
+    [SerializeField] private TransitionEffect effect;
 
     private void Awake()
     {
         image = GetComponent<Image>();
-
-        Material mat = image.material;
-        image.material = new Material(mat);
-        material = image.material;
-
-        lastEffect = useShader1;
+        ChangeTransitionEffect(effect);
     }
 
-    private void FadeOut(TransitionEffect transitionType)
+    private void OnDestroy()
     {
-        ChangeTransitionEffect(transitionType);
-        StartFadeOut();
+        if (currentMaterialInstance != null)
+        {
+            Destroy(currentMaterialInstance);
+        }
     }
 
-    private void FadeIn(TransitionEffect transitionType)
+    public void FadeOut(TransitionEffect transitionType)
     {
         ChangeTransitionEffect(transitionType);
-        StartFadeIn();
+        StartFade(0f, 1f); 
+    }
+
+    public void FadeIn(TransitionEffect transitionType)
+    {
+        ChangeTransitionEffect(transitionType);
+        StartFade(1f, 0f); // Transición (1 a 0)
     }
 
     private void ChangeTransitionEffect(TransitionEffect transitionType)
     {
-        if (lastEffect.HasValue)
+        int materialIndex = (int)transitionType;
+
+        if (transitionMaterials == null || materialIndex >= transitionMaterials.Count || transitionMaterials[materialIndex] == null)
         {
-            material.SetFloat(lastEffect.Value, 0f);
+            Debug.LogError($"[SceneTransition] Falta asignar el material para {transitionType} en el índice {materialIndex} de la lista.");
+            return;
         }
 
-        switch (transitionType)
+        if (currentMaterialInstance != null)
         {
+<<<<<<< Updated upstream
             case TransitionEffect.Shader1:
                 SwitchEffect(useShader1);
                 break;
@@ -71,54 +95,60 @@ public class SceneTransition : MonoBehaviour
             case TransitionEffect.Shader3:
                 SwitchEffect(useShader3);
                 break;
+=======
+            Destroy(currentMaterialInstance);
+>>>>>>> Stashed changes
         }
+
+        Material baseMaterial = transitionMaterials[materialIndex];
+        currentMaterialInstance = new Material(baseMaterial);
+        image.material = currentMaterialInstance;
     }
 
-    private void SwitchEffect(int effect)
+    private void StartFade(float startAmount, float targetAmount)
     {
-        material.SetFloat(effect, 1f);
+        if (currentMaterialInstance == null) return;
 
-        lastEffect = effect;
+        if (currentFadeCoroutine != null)
+        {
+            StopCoroutine(currentFadeCoroutine);
+        }
+
+        currentFadeCoroutine = StartCoroutine(HandleFade(startAmount, targetAmount));
     }
 
-    private void StartFadeOut()
-    {
-        material.SetFloat(fadeAmount, 0f);
-        //material.DOFade(1f, fadeAmount, fadeDuration).SetEase(Ease, InOutSine); despues me fijo como hacer esto en primetween para no tener que hacer la corrutina
-
-        StartCoroutine(HandleFade(1f, 0f));
-    }
-
-    private void StartFadeIn()
-    {
-        material.SetFloat(fadeAmount, 1f);
-
-        StartCoroutine(HandleFade(0f, 1f));
-    }
-
-    private IEnumerator HandleFade(float targetAmount, float startAmount)
+    private IEnumerator HandleFade(float startAmount, float targetAmount)
     {
         float elapsedTime = 0f;
-        while(elapsedTime < fadeDuration)
+        currentMaterialInstance.SetFloat(FadeAmountProperty, startAmount);
+
+        while (elapsedTime < fadeDuration)
         {
             elapsedTime += Time.deltaTime;
+            float lerpedAmount = Mathf.Lerp(startAmount, targetAmount, elapsedTime / fadeDuration);
 
-            float lerpedAmount = Mathf.Lerp(startAmount, targetAmount, (elapsedTime / fadeDuration));
+            if (currentMaterialInstance != null)
+            {
+                currentMaterialInstance.SetFloat(FadeAmountProperty, lerpedAmount);
+            }
 
             yield return null;
         }
 
-        material.SetFloat(fadeAmount, targetAmount);
-    }
+        if (currentMaterialInstance != null)
+        {
+            currentMaterialInstance.SetFloat(FadeAmountProperty, targetAmount);
+        }
 
-    //lo de aca es temporal para probar
+        currentFadeCoroutine = null;
+    }
     public void FadeInTest()
     {
-        FadeIn(Effect);
+        FadeIn(effect);
     }
 
     public void FadeOutTest()
     {
-        FadeOut(Effect);
+        FadeOut(effect);
     }
 }
