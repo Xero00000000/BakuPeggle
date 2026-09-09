@@ -12,4 +12,9 @@ public class TestingEvents : MonoBehaviour
     {
         _sceneTransition.Raise(this, _scenesToLoad, _scenesToUnload, _aaa);
     }
+
+    public void VolvemosLol()
+    {
+        _sceneTransition.Raise(this, _scenesToUnload, _scenesToLoad, _aaa);
+    }
 }
