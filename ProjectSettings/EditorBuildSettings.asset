@@ -8,6 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Overworld.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Test.unity
+    guid: b209b1fcd7628b6499b87bb2e0859858
+  - enabled: 1
+    path: Assets/Scenes/Peggle.unity
+    guid: 752e3a588dcebd9459ab25eb8e06cabb
+  - enabled: 1
+    path: Assets/Scenes/PersistentGameplay.unity
+    guid: a2109864f2a3e0e4f8fe656383cfa033
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
