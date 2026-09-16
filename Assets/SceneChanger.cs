@@ -24,6 +24,10 @@ public class SceneChanger : MonoBehaviour
     private RawImage overlayImage;
     private bool isLoading = false;
 
+    [Header("Escena en editor de en serio.")]
+    [SerializeField] private SceneField[] _scenesToLoad;
+    [SerializeField] private SceneField[] _scenesToUnload;
+
 #if UNITY_EDITOR
     private void OnValidate()
     {
@@ -136,5 +140,64 @@ public class SceneChanger : MonoBehaviour
 
         if (transitionMaterial != null) transitionMaterial.SetFloat("_Progress", 0f);
         isLoading = false;
+    }
+    
+    public void NewLoad()
+    {
+        StartCoroutine(LoadSceneFieldAsyncCoroutine());
+    }
+
+    private IEnumerator LoadSceneFieldAsyncCoroutine()
+    {
+        isLoading = true;
+
+        float elapsed = 0f;
+        float halfDuration = transitionDuration / 2f;
+
+        while (elapsed < halfDuration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsed / halfDuration);
+            if (transitionMaterial != null) transitionMaterial.SetFloat("_Progress", progress);
+            yield return null;
+        }
+
+        AsyncOperation asyncLoad = null;
+
+        foreach (SceneField scene in _scenesToLoad)
+        {
+            asyncLoad = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
+        }
+
+        if (asyncLoad != null)
+        {
+            asyncLoad.allowSceneActivation = false;
+
+            while (asyncLoad.progress < 0.9f)
+            {
+                yield return null;
+            }
+
+            asyncLoad.allowSceneActivation = true;
+        }
+
+        elapsed = 0f;
+        while (elapsed < halfDuration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Clamp01(1f - (elapsed / halfDuration));
+            if (transitionMaterial != null) transitionMaterial.SetFloat("_Progress", progress);
+            yield return null;
+        }
+
+        if (transitionMaterial != null) transitionMaterial.SetFloat("_Progress", 0f);
+        isLoading = false;
+
+        
+       foreach (SceneField scene in _scenesToUnload)
+       {
+           SceneManager.UnloadSceneAsync(scene);
+       }
+       
     }
 }
