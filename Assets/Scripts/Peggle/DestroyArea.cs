@@ -26,5 +26,7 @@ public class DestroyArea : MonoBehaviour
         {
             manager.ball2Destroyed = true;
         }
+
+        Destroy(collision.gameObject);
     }
 }

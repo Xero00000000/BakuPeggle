@@ -406,10 +406,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ball1Destroyed: 0
   ball2Destroyed: 0
-  player1MaxHP: 100
-  player2MaxHP: 100
-  player1CurrentHP: 100
-  player2CurrentHP: 100
+  player1MaxHP: 1000
+  player2MaxHP: 1000
+  player1CurrentHP: 1000
+  player2CurrentHP: 1000
   _shoot: {fileID: 11400000, guid: 1382fbfddabb6dc43806f6ca1d4c076c, type: 2}
   _newTurn: {fileID: 11400000, guid: 35149c0842fb421409f750e1e63a9451, type: 2}
   ballPrefab: {fileID: 2717892554777837764, guid: 85401a63e7953954a816ac060cff60d6, type: 3}
@@ -422,10 +422,11 @@ Transform:
   m_GameObject: {fileID: 150006841}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.118877366, y: -3.6155002, z: -0.0294111}
+  m_LocalPosition: {x: 0, y: 0, z: 15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 706036652}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &153642419
@@ -1298,6 +1299,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 889142823769953118, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
   m_PrefabInstance: {fileID: 667896434}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &706036651
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 706036652}
+  m_Layer: 0
+  m_Name: Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &706036652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706036651}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -1, w: 0.0000005066394}
+  m_LocalPosition: {x: 10, y: 10, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 150006845}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
 --- !u!1 &707597352
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ public class PegLauncher : MonoBehaviour
     [SerializeField] private float force;
 
     //temporal hasta que mejore los turnos
-    private bool isTurn = true;
+    private bool isTurn;
     [SerializeField] private ShotEventChannel _shoot;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -45,6 +45,7 @@ public class PegLauncher : MonoBehaviour
             var instance = Instantiate(ballPrefab, spawnPoint.transform.position, Quaternion.identity);
             instance.GetComponent<Rigidbody2D>().AddForce((direction) * force);
             _shoot.Raise(this, 1);
+            isTurn = false;
         }
     }
 

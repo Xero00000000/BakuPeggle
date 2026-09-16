@@ -10,6 +10,8 @@ public class TemporaryManager : MonoBehaviour
     public bool ball1Destroyed = false;
     public bool ball2Destroyed = false;
 
+    private bool isPlayer2Turn;
+
     [SerializeField] private int player1MaxHP;
     [SerializeField] private int player2MaxHP;
     [SerializeField] private int player1CurrentHP;
@@ -49,6 +51,7 @@ public class TemporaryManager : MonoBehaviour
         else
         {
             _newTurn.Raise(this);
+            isPlayer2Turn = true;
         }
     }
 
