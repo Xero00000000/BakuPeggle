@@ -23,21 +23,21 @@ public class RToReload : MonoBehaviour
         isReloading = true;
 
         AsyncOperation unloadPeggle = SceneManager.UnloadSceneAsync(peggle);
-        AsyncOperation unloadLaunchers = SceneManager.UnloadSceneAsync(launchers);
+        //AsyncOperation unloadLaunchers = SceneManager.UnloadSceneAsync(launchers);
 
         if (unloadPeggle != null)
             yield return new WaitUntil(() => unloadPeggle.isDone);
 
-        if (unloadLaunchers != null)
-            yield return new WaitUntil(() => unloadLaunchers.isDone);
+        //if (unloadLaunchers != null)
+            //yield return new WaitUntil(() => unloadLaunchers.isDone);
         AsyncOperation loadPeggle = SceneManager.LoadSceneAsync(peggle, LoadSceneMode.Additive);
-        AsyncOperation loadLaunchers = SceneManager.LoadSceneAsync(launchers, LoadSceneMode.Additive);
+        //AsyncOperation loadLaunchers = SceneManager.LoadSceneAsync(launchers, LoadSceneMode.Additive);
 
         if (loadPeggle != null)
             yield return new WaitUntil(() => loadPeggle.isDone);
 
-        if (loadLaunchers != null)
-            yield return new WaitUntil(() => loadLaunchers.isDone);
+        //if (loadLaunchers != null)
+            //yield return new WaitUntil(() => loadLaunchers.isDone);
 
         isReloading = false;
     }
