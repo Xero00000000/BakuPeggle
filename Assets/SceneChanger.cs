@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -9,12 +10,10 @@ using UnityEditor;
 
 public class SceneChanger : MonoBehaviour
 {
-    [Header("Selección de Escena")]
+    [Header("Selección de Escena Individual")]
 #if UNITY_EDITOR
-    [Tooltip("Arrastra aquí el archivo de la escena (solo funciona en el Editor).")]
     public SceneAsset sceneAsset;
 #endif
-    [Tooltip("Nombre exacto de la escena en Build Settings.")]
     public string sceneName;
 
     [Header("Efecto Transición (Shader HLSL)")]
@@ -22,32 +21,38 @@ public class SceneChanger : MonoBehaviour
     public float transitionDuration = 0.8f;
 
     private RawImage overlayImage;
+    private GameObject canvasObj;
     private bool isLoading = false;
 
-    [Header("Escena en editor de en serio.")]
+    [Header("Múltiples Escenas (Additive)")]
     [SerializeField] private SceneField[] _scenesToLoad;
     [SerializeField] private SceneField[] _scenesToUnload;
 
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        if (sceneAsset != null)
-        {
-            sceneName = sceneAsset.name;
-        }
+        if (sceneAsset != null) sceneName = sceneAsset.name;
     }
 #endif
 
     private void Start()
     {
         SetupOverlayCanvas();
+
+        // Al entrar a una nueva escena, inicia opaco (1) y revela el contenido (0)
+        if (transitionMaterial != null)
+        {
+            StartCoroutine(AnimateTransition(1f, 0f, transitionDuration / 2f));
+        }
     }
 
     private void SetupOverlayCanvas()
     {
         if (transitionMaterial == null) return;
 
-        GameObject canvasObj = new GameObject("SceneTransitionOverlayCanvas");
+        canvasObj = new GameObject("SceneTransitionOverlayCanvas");
+        // NOTA: NO usamos DontDestroyOnLoad. Este Canvas morirá con la escena actual.
+
         Canvas canvas = canvasObj.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = 9999;
@@ -63,141 +68,92 @@ public class SceneChanger : MonoBehaviour
         rect.anchorMin = Vector2.zero;
         rect.anchorMax = Vector2.one;
         rect.sizeDelta = Vector2.zero;
-
-        transitionMaterial.SetFloat("_Progress", 0f);
-    }
-    public void LoadScene()
-    {
-        LoadSceneByName(sceneName);
     }
 
-    public void LoadSceneByName(string nameToLoad)
-    {
-        if (isLoading) return;
-
-        if (!string.IsNullOrEmpty(nameToLoad))
-        {
-            StartCoroutine(LoadSceneAsyncCoroutine(nameToLoad));
-        }
-        else
-        {
-            Debug.LogError("[SceneChanger] El nombre de la escena está vacío.", this);
-        }
-    }
-
-    public void LoadSceneByIndex(int buildIndex)
-    {
-        if (isLoading) return;
-        StartCoroutine(LoadSceneAsyncCoroutine(buildIndex));
-    }
-
-    private IEnumerator LoadSceneAsyncCoroutine(object sceneIdentifier)
-    {
-        isLoading = true;
-
-        float elapsed = 0f;
-        float halfDuration = transitionDuration / 2f;
-
-        while (elapsed < halfDuration)
-        {
-            elapsed += Time.deltaTime;
-            float progress = Mathf.Clamp01(elapsed / halfDuration);
-            if (transitionMaterial != null) transitionMaterial.SetFloat("_Progress", progress);
-            yield return null;
-        }
-
-        AsyncOperation asyncLoad = null;
-
-        if (sceneIdentifier is string name)
-        {
-            asyncLoad = SceneManager.LoadSceneAsync(name);
-        }
-        else if (sceneIdentifier is int index)
-        {
-            asyncLoad = SceneManager.LoadSceneAsync(index);
-        }
-
-        if (asyncLoad != null)
-        {
-            asyncLoad.allowSceneActivation = false;
-
-            while (asyncLoad.progress < 0.9f)
-            {
-                yield return null;
-            }
-
-            asyncLoad.allowSceneActivation = true;
-        }
-
-        elapsed = 0f;
-        while (elapsed < halfDuration)
-        {
-            elapsed += Time.deltaTime;
-            float progress = Mathf.Clamp01(1f - (elapsed / halfDuration));
-            if (transitionMaterial != null) transitionMaterial.SetFloat("_Progress", progress);
-            yield return null;
-        }
-
-        if (transitionMaterial != null) transitionMaterial.SetFloat("_Progress", 0f);
-        isLoading = false;
-    }
-    
     public void NewLoad()
     {
-        StartCoroutine(LoadSceneFieldAsyncCoroutine());
+        if (isLoading) return;
+        StartCoroutine(LoadMultipleScenesAsyncCoroutine());
     }
 
-    private IEnumerator LoadSceneFieldAsyncCoroutine()
+    private IEnumerator LoadMultipleScenesAsyncCoroutine()
     {
         isLoading = true;
-
-        float elapsed = 0f;
         float halfDuration = transitionDuration / 2f;
 
-        while (elapsed < halfDuration)
+        // 1. Ocultar la escena actual (Shader 0 a 1)
+        yield return StartCoroutine(AnimateTransition(0f, 1f, halfDuration));
+
+        // 2. Preparar lista de descarga
+        List<AsyncOperation> unloadOperations = new List<AsyncOperation>();
+
+        foreach (SceneField scene in _scenesToUnload)
         {
-            elapsed += Time.deltaTime;
-            float progress = Mathf.Clamp01(elapsed / halfDuration);
-            if (transitionMaterial != null) transitionMaterial.SetFloat("_Progress", progress);
-            yield return null;
+            if (scene != null && !string.IsNullOrEmpty(scene.SceneName))
+            {
+                Scene loadedScene = SceneManager.GetSceneByName(scene.SceneName);
+                if (loadedScene.isLoaded)
+                {
+                    AsyncOperation op = SceneManager.UnloadSceneAsync(loadedScene);
+                    if (op != null) unloadOperations.Add(op);
+                }
+            }
         }
 
-        AsyncOperation asyncLoad = null;
-
+        // 3. Cargar las nuevas escenas
+        List<AsyncOperation> loadOperations = new List<AsyncOperation>();
         foreach (SceneField scene in _scenesToLoad)
         {
-            asyncLoad = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
-        }
-
-        if (asyncLoad != null)
-        {
-            asyncLoad.allowSceneActivation = false;
-
-            while (asyncLoad.progress < 0.9f)
+            if (scene != null && !string.IsNullOrEmpty(scene.SceneName))
             {
-                yield return null;
+                AsyncOperation op = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
+                if (op != null)
+                {
+                    op.allowSceneActivation = false;
+                    loadOperations.Add(op);
+                }
             }
-
-            asyncLoad.allowSceneActivation = true;
         }
 
-        elapsed = 0f;
-        while (elapsed < halfDuration)
+        // Esperar a que carguen al 90%
+        bool allLoaded = false;
+        while (!allLoaded)
         {
-            elapsed += Time.deltaTime;
-            float progress = Mathf.Clamp01(1f - (elapsed / halfDuration));
-            if (transitionMaterial != null) transitionMaterial.SetFloat("_Progress", progress);
+            allLoaded = true;
+            foreach (var op in loadOperations)
+            {
+                if (op.progress < 0.9f) { allLoaded = false; break; }
+            }
             yield return null;
         }
 
-        if (transitionMaterial != null) transitionMaterial.SetFloat("_Progress", 0f);
-        isLoading = false;
+        // Activar escenas
+        foreach (var op in loadOperations) op.allowSceneActivation = true;
 
-        
-       foreach (SceneField scene in _scenesToUnload)
-       {
-           SceneManager.UnloadSceneAsync(scene);
-       }
-       
+        while (loadOperations.Exists(op => !op.isDone)) yield return null;
+
+        // 4. Finalmente, descargar la escena de origen. 
+        // ¡Atención! Esta escena y este script SE DESTRUIRÁN en la siguiente línea.
+        // La nueva escena (que tiene su propio SceneChanger) ejecutará su Start() y hará el Fade Out.
+        Scene currentScene = gameObject.scene;
+        if (currentScene.isLoaded)
+        {
+            SceneManager.UnloadSceneAsync(currentScene);
+        }
+    }
+
+    private IEnumerator AnimateTransition(float startVal, float endVal, float duration)
+    {
+        if (transitionMaterial == null || duration <= 0) yield break;
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Lerp(startVal, endVal, elapsed / duration);
+            transitionMaterial.SetFloat("_Progress", progress);
+            yield return null;
+        }
+        transitionMaterial.SetFloat("_Progress", endVal);
     }
 }

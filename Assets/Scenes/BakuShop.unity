@@ -808,14 +808,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 786781713}
         m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: LoadSceneByName
-        m_Mode: 5
+        m_MethodName: NewLoad
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Shopping
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &32389828
@@ -54948,6 +54948,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: sceneName
+      value: Shopping
+      objectReference: {fileID: 0}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: sceneAsset
+      value: 
+      objectReference: {fileID: 102900000, guid: 41a2fec26c297584bac03162c9a6d067, type: 3}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToLoad.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToUnload.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToLoad.Array.data[0].m_SceneName
+      value: Peggle
+      objectReference: {fileID: 0}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToLoad.Array.data[1].m_SceneName
+      value: PersistentGameplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToLoad.Array.data[0].m_SceneAsset
+      value: 
+      objectReference: {fileID: 102900000, guid: 752e3a588dcebd9459ab25eb8e06cabb, type: 3}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToLoad.Array.data[1].m_SceneAsset
+      value: 
+      objectReference: {fileID: 102900000, guid: a2109864f2a3e0e4f8fe656383cfa033, type: 3}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToUnload.Array.data[0].m_SceneName
+      value: BakuShop
+      objectReference: {fileID: 0}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToUnload.Array.data[0].m_SceneAsset
+      value: 
+      objectReference: {fileID: 102900000, guid: 768e102249fca4444bd4677d2fbf20fb, type: 3}
     - target: {fileID: 4526100489876714376, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: m_Name
       value: SceneManager
