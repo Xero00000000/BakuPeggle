@@ -206,6 +206,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToLoad.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToUnload.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToLoad.Array.data[0].m_SceneName
+      value: Shopping
+      objectReference: {fileID: 0}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToLoad.Array.data[0].m_SceneAsset
+      value: 
+      objectReference: {fileID: 102900000, guid: 41a2fec26c297584bac03162c9a6d067, type: 3}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToUnload.Array.data[0].m_SceneName
+      value: Peggle
+      objectReference: {fileID: 0}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToUnload.Array.data[1].m_SceneName
+      value: PersistentGameplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToUnload.Array.data[0].m_SceneAsset
+      value: 
+      objectReference: {fileID: 102900000, guid: 752e3a588dcebd9459ab25eb8e06cabb, type: 3}
+    - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: _scenesToUnload.Array.data[1].m_SceneAsset
+      value: 
+      objectReference: {fileID: 102900000, guid: a2109864f2a3e0e4f8fe656383cfa033, type: 3}
     - target: {fileID: 4526100489876714376, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: m_Name
       value: SceneManager (1)
@@ -255,17 +287,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
---- !u!114 &30559796 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
-  m_PrefabInstance: {fileID: 30559795}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82b206afea054694abcd5ebdce7ed7b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &62957806 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 889142823769953118, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
@@ -3501,9 +3522,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 30559796}
-        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: LoadSceneByName
+      - m_Target: {fileID: 11400000, guid: 798f46ee9b9a6f644a576b7b6abe9d83, type: 2}
+        m_TargetAssemblyTypeName: SceneChangeEventChannel, Assembly-CSharp
+        m_MethodName: set_name
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5569,9 +5590,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 30559796}
-        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: LoadSceneByName
+      - m_Target: {fileID: 11400000, guid: 798f46ee9b9a6f644a576b7b6abe9d83, type: 2}
+        m_TargetAssemblyTypeName: SceneChangeEventChannel, Assembly-CSharp
+        m_MethodName: set_name
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
