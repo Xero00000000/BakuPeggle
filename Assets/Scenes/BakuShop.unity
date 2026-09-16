@@ -808,8 +808,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 786781713}
         m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: LoadSceneByName
-        m_Mode: 5
+        m_MethodName: NewLoad
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -20311,6 +20311,14 @@ MonoBehaviour:
   sceneName: 
   transitionMaterial: {fileID: 2100000, guid: ff3d6a65b80910d41a9427203e6e2e37, type: 2}
   transitionDuration: 0.8
+  _scenesToLoad:
+  - m_SceneAsset: {fileID: 102900000, guid: a2109864f2a3e0e4f8fe656383cfa033, type: 3}
+    m_SceneName: PersistentGameplay
+  - m_SceneAsset: {fileID: 102900000, guid: 752e3a588dcebd9459ab25eb8e06cabb, type: 3}
+    m_SceneName: Peggle
+  _scenesToUnload:
+  - m_SceneAsset: {fileID: 102900000, guid: 768e102249fca4444bd4677d2fbf20fb, type: 3}
+    m_SceneName: BakuShop
 --- !u!4 &786781714
 Transform:
   m_ObjectHideFlags: 0
