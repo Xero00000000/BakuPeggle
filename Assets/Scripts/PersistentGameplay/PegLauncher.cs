@@ -9,18 +9,13 @@ public class PegLauncher : MonoBehaviour
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private float force;
+    [SerializeField] private AudioClip audioClip;
+    [SerializeField] private AudioSource audioSource;
 
     //temporal hasta que mejore los turnos
     private bool isTurn;
     [SerializeField] private ShotEventChannel _shoot;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         /*
@@ -42,6 +37,7 @@ public class PegLauncher : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && isTurn == true)
         {
+            audioSource.PlayOneShot(audioClip, 1f);
             var instance = Instantiate(ballPrefab, spawnPoint.transform.position, Quaternion.identity);
             instance.GetComponent<Rigidbody2D>().AddForce((direction) * force);
             _shoot.Raise(this, 1);
