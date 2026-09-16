@@ -413,6 +413,10 @@ MonoBehaviour:
   _shoot: {fileID: 11400000, guid: 1382fbfddabb6dc43806f6ca1d4c076c, type: 2}
   _newTurn: {fileID: 11400000, guid: 35149c0842fb421409f750e1e63a9451, type: 2}
   ballPrefab: {fileID: 2717892554777837764, guid: 85401a63e7953954a816ac060cff60d6, type: 3}
+  spawnPoint: {fileID: 706036651}
+  force: 60
+  spawnPointMinRotation: -180
+  spawnPointMaxRotation: 0
 --- !u!4 &150006845
 Transform:
   m_ObjectHideFlags: 0
@@ -1643,7 +1647,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 150006844}
-  playerArea: 1
+  playerArea: 0
 --- !u!61 &782504196
 BoxCollider2D:
   m_ObjectHideFlags: 0

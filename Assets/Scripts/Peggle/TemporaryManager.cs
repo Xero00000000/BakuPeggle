@@ -21,6 +21,10 @@ public class TemporaryManager : MonoBehaviour
     [SerializeField] private VoidEventChannel _newTurn;
 
     [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private GameObject spawnPoint;
+    [SerializeField] private float force;
+    [SerializeField] private float spawnPointMinRotation;
+    [SerializeField] private float spawnPointMaxRotation;
 
     public void Start()
     {
@@ -46,7 +50,7 @@ public class TemporaryManager : MonoBehaviour
 
         if (player1CurrentHP <= 0 || player2CurrentHP <= 0)
         {
-
+            //ganar o perder
         }
         else
         {
@@ -61,6 +65,7 @@ public class TemporaryManager : MonoBehaviour
         {
             player1Shot = true;
         }
+        ShootEnemyBall();
     }
 
     public void AddPoints(Component sender, bool player, int type)
@@ -87,5 +92,14 @@ public class TemporaryManager : MonoBehaviour
         {
             player2CurrentHP = player2CurrentHP - points;
         }
+    }
+
+    public void ShootEnemyBall()
+    {
+        float randomZ = Random.Range(spawnPointMinRotation, spawnPointMaxRotation);
+        spawnPoint.transform.rotation = Quaternion.Euler(0f, 0f, randomZ);
+        var instance = Instantiate(ballPrefab, spawnPoint.transform.position, Quaternion.identity);
+        instance.GetComponent<Rigidbody2D>().AddForce((transform.up) * force);
+        player2Shot = true;
     }
 }
