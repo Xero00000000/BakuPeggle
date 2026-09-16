@@ -9,6 +9,10 @@ public class CustomVoidEvent : UnityEvent <Component> { }
 public class CustomSceneChangeEvent : UnityEvent<Component, SceneField[], SceneField[], object[]> { } //agregar algo para efectos de cambio de escena
 [System.Serializable]
 public class CustomAAAEvent : UnityEvent<Component, object[]> { }
+[System.Serializable]
+public class CustomShotEvent : UnityEvent<Component, int> { }
+[System.Serializable]
+public class CustomPointsEvent : UnityEvent<Component, bool, int> { }
 
 public abstract class EventListener : MonoBehaviour
 {

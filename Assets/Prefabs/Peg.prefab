@@ -136,3 +136,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cea103d1827eaa144ad03a76b2c3ed0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPeg: 0
+  types:
+  - {fileID: 2100000, guid: 4a8d2f78522b64f40908b0d04abf70e6, type: 2}
+  - {fileID: 2100000, guid: 67d536537cc57ad47a7551cd15cb1435, type: 2}
+  - {fileID: 2100000, guid: 0cf921cc92e61d54fa631e099779c287, type: 2}
+  currentType: 0
+  _addPoints: {fileID: 11400000, guid: 49dec7ca8445ee846bf9cea276179cc1, type: 2}
