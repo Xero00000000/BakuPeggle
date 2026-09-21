@@ -29,7 +29,6 @@ public class EnemyInteractableFP : MonoBehaviour
 
     void Start()
     {
-        // Buscamos la cámara del jugador para saber exactamente hacia dónde estás mirando
         Camera cam = Camera.main;
         if (cam != null)
         {
@@ -51,19 +50,15 @@ public class EnemyInteractableFP : MonoBehaviour
     {
         if (hasTriggered || playerCameraTransform == null) return;
 
-        // Distancia real entre la cámara y el centro del enemigo
-        Vector3 enemyCenter = transform.position + Vector3.up * 1.0f; // apuntamos al centro/pecho
+        Vector3 enemyCenter = transform.position + Vector3.up * 1.0f; 
         float distance = Vector3.Distance(playerCameraTransform.position, enemyCenter);
 
         if (distance <= triggerDistance)
         {
-            // Vector desde los ojos del jugador hacia el enemigo
             Vector3 dirToEnemy = (enemyCenter - playerCameraTransform.position).normalized;
 
-            // Evaluamos el ángulo entre la mirada de la cámara y el enemigo
             float angle = Vector3.Angle(playerCameraTransform.forward, dirToEnemy);
 
-            // Si el enemigo está dentro del cono visible de la pantalla
             if (angle <= visionAngle * 0.5f)
             {
                 hasTriggered = true;
@@ -77,7 +72,6 @@ public class EnemyInteractableFP : MonoBehaviour
         if (playerController != null)
             playerController.SetControlState(false);
 
-        // Pop-in del '!'
         if (alertIconTransform != null)
         {
             Tween.Scale(alertIconTransform, endValue: Vector3.one, duration: 0.3f, ease: Ease.OutBack);

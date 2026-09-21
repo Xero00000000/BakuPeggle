@@ -18,7 +18,7 @@ public class EnemyInteractable : MonoBehaviour
     public Vector3 iconWorldOffset = new Vector3(0, 2f, 0);
 
     [Header("Detección")]
-    public float triggerDistance = 3.5f; // Aumentamos un poco el rango
+    public float triggerDistance = 3.5f; 
 
     private bool hasTriggered = false;
 
@@ -40,7 +40,6 @@ public class EnemyInteractable : MonoBehaviour
     {
         if (hasTriggered || playerTransform == null) return;
 
-        // Medimos solo en el eje horizontal X para evitar problemas de altura/profundidad
         float distanceX = Mathf.Abs(transform.position.x - playerTransform.position.x);
 
         if (distanceX <= triggerDistance)
@@ -53,7 +52,6 @@ public class EnemyInteractable : MonoBehaviour
 
     private IEnumerator TriggerEncounterRoutine()
     {
-        // 1. Congelar Player
         PlayerScrollerMovement movement = playerTransform.GetComponent<PlayerScrollerMovement>();
         if (movement != null)
         {
@@ -61,7 +59,6 @@ public class EnemyInteractable : MonoBehaviour
             Debug.Log("[1/3] Movimiento de jugador congelado.");
         }
 
-        // 2. Mostrar Ícono
         if (alertIconUI != null)
         {
             alertIconUI.SetActive(true);
@@ -74,7 +71,6 @@ public class EnemyInteractable : MonoBehaviour
 
         if (alertIconUI != null) alertIconUI.SetActive(false);
 
-        // 3. Diálogo
         if (DialogueUI.Instance != null)
         {
             Debug.Log("[3/3] Abriendo diálogo...");

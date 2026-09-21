@@ -130,7 +130,6 @@ public class ShopAudioAndDialogueManager : MonoBehaviour
 
     public void NextDialogue()
     {
-        // Si estaba a medio escribir, completar el texto y frenar la voz
         if (isTyping)
         {
             if (typingCoroutine != null) StopCoroutine(typingCoroutine);
