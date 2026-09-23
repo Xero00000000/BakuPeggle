@@ -14,10 +14,12 @@ public class TemporaryManager : MonoBehaviour
     private bool isPlayer2Turn;
 
     [Header("Salud de Jugadores")]
-    [SerializeField] private int player1MaxHP = 100;
-    [SerializeField] private int player2MaxHP = 100;
+    [SerializeField] private int player1MaxHP;
+    [SerializeField] private int player2MaxHP;
     [SerializeField] private int player1CurrentHP;
     [SerializeField] private int player2CurrentHP;
+    private int player1DamageToTake;
+    private int player2DamageToTake;
 
     [Header("Event Channels")]
     [SerializeField] private ShotEventChannel _shoot;
@@ -45,6 +47,10 @@ public class TemporaryManager : MonoBehaviour
     [SerializeField] private GameObject player2PointsCanvas;
     [SerializeField] private TextMeshProUGUI player2PointsText;
 
+    [Header("UI Barras de Vida Jugadores")]
+    [SerializeField] private TextMeshProUGUI player1HealthBar;
+    [SerializeField] private TextMeshProUGUI player2HealthBar;
+
     [Header("Configuración UI Puntos")]
     [Tooltip("Tiempo en segundos antes de ocultar los textos de puntos.")]
     [SerializeField] private float pointsDisplayDuration = 2f;
@@ -57,6 +63,12 @@ public class TemporaryManager : MonoBehaviour
     {
         player1CurrentHP = player1MaxHP;
         player2CurrentHP = player2MaxHP;
+        player1DamageToTake = 0;
+        player2DamageToTake = 0;
+        if (player1HealthBar != null)
+            player1HealthBar.text = player1CurrentHP.ToString() + "/" + player1MaxHP.ToString();
+        if (player2HealthBar != null)
+            player2HealthBar.text = player2CurrentHP.ToString() + "/" + player2MaxHP.ToString();
 
         if (winCanvas != null) winCanvas.SetActive(false);
         if (loseCanvas != null) loseCanvas.SetActive(false);
@@ -79,6 +91,15 @@ public class TemporaryManager : MonoBehaviour
 
     private void ResetTurn()
     {
+        player1CurrentHP -= player1DamageToTake;
+        player2CurrentHP -= player2DamageToTake;
+        player1DamageToTake = 0;
+        player2DamageToTake = 0;
+        if (player1HealthBar != null)
+            player1HealthBar.text = player1CurrentHP.ToString() + "/" + player1MaxHP.ToString();
+        if (player2HealthBar != null)
+            player2HealthBar.text = player2CurrentHP.ToString() + "/" + player2MaxHP.ToString();
+
         player1Shot = false;
         player2Shot = false;
         ball1Destroyed = false;
@@ -102,11 +123,11 @@ public class TemporaryManager : MonoBehaviour
         if (player1PointsCanvas != null) player1PointsCanvas.SetActive(false);
         if (player2PointsCanvas != null) player2PointsCanvas.SetActive(false);
 
-        if (player2CurrentHP <= 0)
+        if (player1CurrentHP > player2CurrentHP)
         {
             if (winCanvas != null) winCanvas.SetActive(true);
         }
-        else if (player1CurrentHP <= 0)
+        else
         {
             if (loseCanvas != null) loseCanvas.SetActive(true);
         }
@@ -143,18 +164,13 @@ public class TemporaryManager : MonoBehaviour
 
         if (player)
         {
-            player1CurrentHP -= points;
-            ShowPlayerPoints(1, points);
+            player2DamageToTake += points;
+            ShowPlayerPoints(1, player2DamageToTake);
         }
         else
         {
-            player2CurrentHP -= points;
-            ShowPlayerPoints(2, points);
-        }
-
-        if (player1CurrentHP <= 0 || player2CurrentHP <= 0)
-        {
-            HandleGameOver();
+            player1DamageToTake += points;
+            ShowPlayerPoints(2, player1DamageToTake);
         }
     }
 
