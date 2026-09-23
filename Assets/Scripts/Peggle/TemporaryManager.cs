@@ -17,8 +17,8 @@ public class TemporaryManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI abilityChargeBar;
 
     [Header("Salud de Jugadores")]
-    [SerializeField] private int player1MaxHP = 100;
-    [SerializeField] private int player2MaxHP = 100;
+    [SerializeField] private int player1MaxHP;
+    [SerializeField] private int player2MaxHP;
     [SerializeField] private int player1CurrentHP;
     [SerializeField] private int player2CurrentHP;
     private int player1DamageToTake;
