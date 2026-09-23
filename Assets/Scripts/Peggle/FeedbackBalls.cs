@@ -1,16 +1,20 @@
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal; // Necesario para Post-Processing / URP Volume
+using UnityEngine.Rendering.Universal;
+using UnityEngine.UI; // Necesario para Post-Processing / URP Volume
 
 public class FeedbackBalls : MonoBehaviour
 {
     [SerializeField] private bool playerPeg;
 
-    private Renderer pegRenderer;
+    [SerializeField] private Renderer pegRenderer;
     private Collider2D pegCollider;
+    [SerializeField] private Image image;
 
     [Header("Configuración de Tipos / Colores")]
     [SerializeField] private Material[] types;
+    //[SerializeField] private Color[] types;
     [SerializeField] private bool useRandomType = true;
     [SerializeField] private int currentType;
 
@@ -56,6 +60,20 @@ public class FeedbackBalls : MonoBehaviour
             if (pegRenderer != null && types[currentType] != null)
             {
                 pegRenderer.material = types[currentType];
+
+                switch(currentType)
+                {
+                    case 0:
+                        image.color = Color.red;
+                        break;
+                    case 1:
+                        image.color = Color.green;
+                        break;
+                    case 2:
+                        image.color = Color.blue;
+                        break;
+
+                }
             }
         }
 
