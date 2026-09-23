@@ -13,6 +13,9 @@ public class TemporaryManager : MonoBehaviour
 
     private bool isPlayer2Turn;
 
+    private int abilityCharge;
+    [SerializeField] private TextMeshProUGUI abilityChargeBar;
+
     [Header("Salud de Jugadores")]
     [SerializeField] private int player1MaxHP;
     [SerializeField] private int player2MaxHP;
@@ -69,6 +72,7 @@ public class TemporaryManager : MonoBehaviour
             player1HealthBar.text = player1CurrentHP.ToString() + "/" + player1MaxHP.ToString();
         if (player2HealthBar != null)
             player2HealthBar.text = player2CurrentHP.ToString() + "/" + player2MaxHP.ToString();
+        abilityCharge = 0;
 
         if (winCanvas != null) winCanvas.SetActive(false);
         if (loseCanvas != null) loseCanvas.SetActive(false);
@@ -86,6 +90,11 @@ public class TemporaryManager : MonoBehaviour
         if (player1Shot && player2Shot && ball1Destroyed && ball2Destroyed)
         {
             ResetTurn();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && player1Shot == false && abilityCharge >= 100)
+        {
+            UseActiveAbility();
         }
     }
 
@@ -149,16 +158,20 @@ public class TemporaryManager : MonoBehaviour
         if (isGameOver) return;
 
         int points = 0;
+        int charge = 0;
         switch (type)
         {
             case 0:
                 points = 15;
+                charge += 15;
                 break;
             case 1:
                 points = 30;
+                charge += 30;
                 break;
             case 2:
                 points = 60;
+                charge += 15;
                 break;
         }
 
@@ -166,6 +179,9 @@ public class TemporaryManager : MonoBehaviour
         {
             player2DamageToTake += points;
             ShowPlayerPoints(1, player2DamageToTake);
+            abilityCharge += charge;
+            if (abilityChargeBar != null)
+                abilityChargeBar.text = abilityCharge.ToString();
         }
         else
         {
@@ -220,5 +236,15 @@ public class TemporaryManager : MonoBehaviour
         var instance = Instantiate(ballPrefab, spawnPoint.transform.position, Quaternion.identity);
         instance.GetComponent<Rigidbody2D>().AddForce(spawnPoint.transform.up * force);
         player2Shot = true;
+    }
+
+    public void UseActiveAbility() //placeholder hasta que pulee todo lo de la abilidad
+    {
+        abilityCharge -= 100;
+        player2CurrentHP -= 100;
+        if (player2HealthBar != null)
+            player2HealthBar.text = player2CurrentHP.ToString() + "/" + player2MaxHP.ToString();
+        if (abilityChargeBar != null)
+            abilityChargeBar.text = abilityCharge.ToString();
     }
 }
