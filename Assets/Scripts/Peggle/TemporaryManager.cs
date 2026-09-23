@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro; 
+using TMPro;
 
 public class TemporaryManager : MonoBehaviour
 {
@@ -17,12 +17,19 @@ public class TemporaryManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI abilityChargeBar;
 
     [Header("Salud de Jugadores")]
-    [SerializeField] private int player1MaxHP;
-    [SerializeField] private int player2MaxHP;
+    [SerializeField] private int player1MaxHP = 100;
+    [SerializeField] private int player2MaxHP = 100;
     [SerializeField] private int player1CurrentHP;
     [SerializeField] private int player2CurrentHP;
     private int player1DamageToTake;
     private int player2DamageToTake;
+
+    [Header("UI Barras de Vida Jugadores")]
+    [SerializeField] private PlayerHealthUI player1HealthUI;
+    [SerializeField] private PlayerHealthUI player2HealthUI;
+
+    [Header("Efecto de Daño HLSL (Pantalla Completa)")]
+    [SerializeField] private DamageEffectManager damageEffectManager;
 
     [Header("Event Channels")]
     [SerializeField] private ShotEventChannel _shoot;
@@ -50,10 +57,6 @@ public class TemporaryManager : MonoBehaviour
     [SerializeField] private GameObject player2PointsCanvas;
     [SerializeField] private TextMeshProUGUI player2PointsText;
 
-    [Header("UI Barras de Vida Jugadores")]
-    [SerializeField] private TextMeshProUGUI player1HealthBar;
-    [SerializeField] private TextMeshProUGUI player2HealthBar;
-
     [Header("Configuración UI Puntos")]
     [Tooltip("Tiempo en segundos antes de ocultar los textos de puntos.")]
     [SerializeField] private float pointsDisplayDuration = 2f;
@@ -68,11 +71,22 @@ public class TemporaryManager : MonoBehaviour
         player2CurrentHP = player2MaxHP;
         player1DamageToTake = 0;
         player2DamageToTake = 0;
-        if (player1HealthBar != null)
-            player1HealthBar.text = player1CurrentHP.ToString() + "/" + player1MaxHP.ToString();
-        if (player2HealthBar != null)
-            player2HealthBar.text = player2CurrentHP.ToString() + "/" + player2MaxHP.ToString();
+
+        UpdateHealthUI();
+
+        // Forzar a que los textos de vida de ambos jugadores permanezcan visibles siempre
+        if (player1HealthUI != null)
+        {
+            player1HealthUI.ShowHealthText();
+        }
+
+        if (player2HealthUI != null)
+        {
+            player2HealthUI.ShowHealthText();
+        }
+
         abilityCharge = 0;
+        if (abilityChargeBar != null) abilityChargeBar.text = abilityCharge.ToString();
 
         if (winCanvas != null) winCanvas.SetActive(false);
         if (loseCanvas != null) loseCanvas.SetActive(false);
@@ -100,14 +114,18 @@ public class TemporaryManager : MonoBehaviour
 
     private void ResetTurn()
     {
+        // Disparar el shader HLSL a pantalla completa si alguno de los jugadores acumuló daño
+        if ((player1DamageToTake > 0 || player2DamageToTake > 0) && damageEffectManager != null)
+        {
+            damageEffectManager.TriggerDamageEffect();
+        }
+
         player1CurrentHP -= player1DamageToTake;
         player2CurrentHP -= player2DamageToTake;
         player1DamageToTake = 0;
         player2DamageToTake = 0;
-        if (player1HealthBar != null)
-            player1HealthBar.text = player1CurrentHP.ToString() + "/" + player1MaxHP.ToString();
-        if (player2HealthBar != null)
-            player2HealthBar.text = player2CurrentHP.ToString() + "/" + player2MaxHP.ToString();
+
+        UpdateHealthUI();
 
         player1Shot = false;
         player2Shot = false;
@@ -123,6 +141,15 @@ public class TemporaryManager : MonoBehaviour
             _newTurn.Raise(this);
             isPlayer2Turn = true;
         }
+    }
+
+    private void UpdateHealthUI()
+    {
+        if (player1HealthUI != null)
+            player1HealthUI.UpdateHealth(player1CurrentHP, player1MaxHP);
+
+        if (player2HealthUI != null)
+            player2HealthUI.UpdateHealth(player2CurrentHP, player2MaxHP);
     }
 
     private void HandleGameOver()
@@ -238,12 +265,19 @@ public class TemporaryManager : MonoBehaviour
         player2Shot = true;
     }
 
-    public void UseActiveAbility() //placeholder hasta que pulee todo lo de la abilidad
+    public void UseActiveAbility()
     {
         abilityCharge -= 100;
         player2CurrentHP -= 100;
-        if (player2HealthBar != null)
-            player2HealthBar.text = player2CurrentHP.ToString() + "/" + player2MaxHP.ToString();
+
+        // Disparar el efecto de daño al usar la habilidad
+        if (damageEffectManager != null)
+        {
+            damageEffectManager.TriggerDamageEffect();
+        }
+
+        UpdateHealthUI();
+
         if (abilityChargeBar != null)
             abilityChargeBar.text = abilityCharge.ToString();
     }

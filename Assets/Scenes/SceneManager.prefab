@@ -48,3 +48,5 @@ MonoBehaviour:
   sceneName: 
   transitionMaterial: {fileID: 2100000, guid: ff3d6a65b80910d41a9427203e6e2e37, type: 2}
   transitionDuration: 0.8
+  _scenesToLoad: []
+  _scenesToUnload: []
