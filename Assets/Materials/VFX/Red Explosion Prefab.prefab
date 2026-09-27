@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6078388707800551688}
   m_Layer: 0
-  m_Name: Explosion Prefab
+  m_Name: Red Explosion Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,16 @@ VisualEffect:
     m_Vector3f:
       m_Array: []
     m_Vector4f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 0, y: 0.8962264, z: 0.008003914, w: 0}
+        m_Name: Spark Color 1
+        m_Overridden: 1
+      - m_Value: {x: 0, y: 0.89626956, z: 0.008023192, w: 0}
+        m_Name: Explosion color
+        m_Overridden: 1
+      - m_Value: {x: 0, y: 0.89626956, z: 0.008023192, w: 0}
+        m_Name: Fire color
+        m_Overridden: 1
     m_Uint:
       m_Array: []
     m_Int:
