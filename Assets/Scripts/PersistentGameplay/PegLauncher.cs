@@ -13,7 +13,7 @@ public class PegLauncher : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
 
     //temporal hasta que mejore los turnos
-    private bool isTurn;
+    [SerializeField] private bool isTurn;
     [SerializeField] private ShotEventChannel _shoot;
 
     void Update()

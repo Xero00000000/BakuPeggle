@@ -7,8 +7,9 @@ public class GrowUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] private float growAmount = 0.2f;
     [SerializeField] private float speed = 10f;
 
+    [Header("Tamaño")]
+    [SerializeField] private Vector3 targetScale;
     private Vector3 initialScale;
-    private Vector3 targetScale;
 
     private void Awake()
     {

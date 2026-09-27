@@ -5109,8 +5109,8 @@ GameObject:
   - component: {fileID: 1128321720292066545}
   - component: {fileID: 6360434742560852550}
   - component: {fileID: 5499578563447509671}
-  - component: {fileID: 4500000191866649959}
-  - component: {fileID: 6800018739898384089}
+  - component: {fileID: 7923533084221852419}
+  - component: {fileID: 7460607188954084675}
   m_Layer: 0
   m_Name: Peg
   m_TagString: Untagged
@@ -5227,7 +5227,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &4500000191866649959
+--- !u!114 &7923533084221852419
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5239,21 +5239,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cea103d1827eaa144ad03a76b2c3ed0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPeg: 0
-  types:
-  - {fileID: 2100000, guid: 4a8d2f78522b64f40908b0d04abf70e6, type: 2}
-  - {fileID: 2100000, guid: 67d536537cc57ad47a7551cd15cb1435, type: 2}
-  - {fileID: 2100000, guid: 0cf921cc92e61d54fa631e099779c287, type: 2}
+  playerPeg: 1
+  types: []
   currentType: 0
   _addPoints: {fileID: 11400000, guid: 49dec7ca8445ee846bf9cea276179cc1, type: 2}
---- !u!114 &6800018739898384089
+--- !u!114 &7460607188954084675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7616273831579344739}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82114bb79e7293e438642a53563a5d90, type: 3}
   m_Name: 
@@ -5262,17 +5259,17 @@ MonoBehaviour:
   pegRenderer: {fileID: 5666029341433008186}
   image: {fileID: 1556949369855642475}
   types:
-  - {fileID: 2100000, guid: 4a8d2f78522b64f40908b0d04abf70e6, type: 2}
-  - {fileID: 2100000, guid: 67d536537cc57ad47a7551cd15cb1435, type: 2}
-  - {fileID: 2100000, guid: 0cf921cc92e61d54fa631e099779c287, type: 2}
+  - {fileID: 2100000, guid: f20b040c70922ad4ca3a1cf66359b65a, type: 2}
+  - {fileID: 2100000, guid: adbae6f9ee3de9a44ba052dee40628ac, type: 2}
+  - {fileID: 2100000, guid: e2ae148c46a397240b45113fd2927a92, type: 2}
   useRandomType: 1
   currentType: 0
   _addPoints: {fileID: 11400000, guid: 49dec7ca8445ee846bf9cea276179cc1, type: 2}
   impactParticlesPrefab: {fileID: 428673707738846750}
-  hitSound: {fileID: 8300000, guid: 2b7bff94d62303d4aa000e6d0423e8b8, type: 3}
+  hitSound: {fileID: 8300000, guid: d05722332818a1b4a8adf9ea9031e345, type: 3}
   basePitch: 1
   pitchStep: 0.05
-  maxPitch: 2
+  maxPitch: 2.5
   comboResetTime: 2
   globalVolume: {fileID: 0}
   chromaticStep: 0.15
@@ -5362,6 +5359,7 @@ GameObject:
   m_Component:
   - component: {fileID: 692200110939147531}
   - component: {fileID: 9021559223183199209}
+  - component: {fileID: 6401200957426351002}
   m_Layer: 0
   m_Name: Audio
   m_TagString: Untagged
@@ -5395,16 +5393,16 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 2b7bff94d62303d4aa000e6d0423e8b8, type: 3}
+  m_Resource: {fileID: 8300000, guid: d05722332818a1b4a8adf9ea9031e345, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 1.11
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0.17
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
@@ -5456,7 +5454,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.047222223
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -5471,7 +5469,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 1.095
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -5481,6 +5479,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!164 &6401200957426351002
+AudioReverbFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9015011331511819483}
+  m_Enabled: 1
+  m_DryLevel: 0
+  m_Room: -1000
+  m_RoomHF: -1000
+  m_DecayTime: 2.81
+  m_DecayHFRatio: 0.14
+  m_ReflectionsLevel: 429
+  m_ReverbLevel: 1023
+  m_ReverbDelay: 0.021
+  m_Diffusion: 80
+  m_Density: 60
+  m_HFReference: 5000
+  m_RoomLF: 0
+  m_LFReference: 250
+  m_ReflectionsDelay: 0
+  m_ReverbPreset: 22
 --- !u!1 &9100348245289469032
 GameObject:
   m_ObjectHideFlags: 0
@@ -5492,7 +5513,7 @@ GameObject:
   - component: {fileID: 3350292235145615603}
   - component: {fileID: 7931132922742667467}
   - component: {fileID: 5666029341433008186}
-  - component: {fileID: 7071466328700718464}
+  - component: {fileID: 3060118067248975097}
   m_Layer: 0
   m_Name: Color
   m_TagString: Untagged
@@ -5568,7 +5589,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7071466328700718464
+--- !u!114 &3060118067248975097
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5591,7 +5612,7 @@ MonoBehaviour:
   currentType: 0
   _addPoints: {fileID: 11400000, guid: 49dec7ca8445ee846bf9cea276179cc1, type: 2}
   impactParticlesPrefab: {fileID: 428673707738846750}
-  hitSound: {fileID: 8300000, guid: 2b7bff94d62303d4aa000e6d0423e8b8, type: 3}
+  hitSound: {fileID: 8300000, guid: d05722332818a1b4a8adf9ea9031e345, type: 3}
   basePitch: 1
   pitchStep: 0.05
   maxPitch: 2
