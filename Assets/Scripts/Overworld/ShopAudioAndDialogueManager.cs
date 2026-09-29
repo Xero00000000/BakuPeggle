@@ -31,6 +31,23 @@ public class ShopAudioAndDialogueManager : MonoBehaviour
     public TextMeshProUGUI dialogueText;
     public GameObject dialoguePanel;
 
+    [Header("Timbre y Personalización de Voz")]
+    [Range(0.2f, 3f)]
+    [Tooltip("Tono base del cajero: < 1 voz grave/ronca, 1 normal, > 1 aguda/animada")]
+    public float voiceBasePitch = 1.0f;
+
+    [Range(0f, 0.6f)]
+    [Tooltip("Variación tonal aleatoria entre letras (0 = robot monótono)")]
+    public float voicePitchVariation = 0.08f;
+
+    [Range(0f, 1f)]
+    [Tooltip("Volumen individual de los balbuceos")]
+    public float voiceVolume = 0.85f;
+
+    [Range(1, 5)]
+    [Tooltip("Cada cuántos caracteres suena el balbuceo (1 = cada letra, 2 o 3 = estilo Animal Crossing/Undertale menos saturado)")]
+    public int blipCharacterFrequency = 1;
+
     [TextArea(2, 4)]
     public string[] dialogues = new string[]
     {
@@ -164,14 +181,19 @@ public class ShopAudioAndDialogueManager : MonoBehaviour
         isTyping = true;
         dialogueText.text = "";
 
+        int charCounter = 0;
+
         foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
 
-            if (voiceSource != null && voiceBlipClip != null && !char.IsWhiteSpace(letter))
+            if (!char.IsWhiteSpace(letter))
             {
-                voiceSource.pitch = Random.Range(0.92f, 1.08f);
-                voiceSource.PlayOneShot(voiceBlipClip);
+                charCounter++;
+                if (charCounter % blipCharacterFrequency == 0)
+                {
+                    PlayVoiceBlip();
+                }
             }
 
             yield return new WaitForSeconds(textSpeed);
@@ -180,6 +202,17 @@ public class ShopAudioAndDialogueManager : MonoBehaviour
         StopVoice();
         isTyping = false;
         typingCoroutine = null;
+    }
+
+    private void PlayVoiceBlip()
+    {
+        if (voiceSource == null || voiceBlipClip == null) return;
+
+        float randomPitch = Random.Range(-voicePitchVariation, voicePitchVariation);
+        voiceSource.pitch = Mathf.Clamp(voiceBasePitch + randomPitch, 0.1f, 3f);
+        voiceSource.volume = voiceVolume;
+
+        voiceSource.PlayOneShot(voiceBlipClip);
     }
 
     private void StopVoice()
