@@ -44,49 +44,27 @@ public class FeedbackBalls : MonoBehaviour
     [SerializeField] private GameObject peggBg;
 
     [Header("Pop Destroy")]
-    [Tooltip("Multiplicador de tamaño máximo antes de implosionar (ej: 1.35 = 35% más grande).")]
     [SerializeField] private float popScaleFactor = 1.35f;
-    [Tooltip("Duración en segundos del aumento de tamaño.")]
     [SerializeField] private float popDuration = 0.06f;
-    [Tooltip("Duración en segundos de la implosión (reducción a 0).")]
     [SerializeField] private float shrinkDuration = 0.12f;
 
     [Header("Hit Flash")]
-    [Tooltip("Color del destello al momento del impacto.")]
     [SerializeField] private Color hitFlashColor = new Color(1f, 1f, 1f, 0.8f);
-    [Tooltip("Duración en segundos del destello blanco.")]
     [SerializeField] private float flashDuration = 0.05f;
 
     [Header("Ghost Outline Effect")]
-    [Tooltip("¿Activar la creación de un contorno fantasma que se expande?")]
     [SerializeField] private bool enableGhostOutline = true;
-    [Tooltip("Escala máxima que alcanza la onda fantasma (ej: 1.8 = 80% más grande).")]
     [SerializeField] private float ghostMaxScaleFactor = 1.8f;
-    [Tooltip("Duración de la expansión y desvanecimiento del contorno.")]
     [SerializeField] private float ghostFadeDuration = 0.15f;
-    [Tooltip("Color tintado del borde fantasma.")]
     [SerializeField] private Color ghostColor = new Color(1f, 1f, 1f, 0.6f);
 
     [Header("Camera Shake")]
-    [Tooltip("¿Activar una leve sacudida de cámara al impactar?")]
     [SerializeField] private bool enableCameraShake = true;
-    [Tooltip("Intensidad de la vibración de la cámara.")]
     [SerializeField] private float shakeIntensity = 0.08f;
-    [Tooltip("Duración en segundos de la vibración.")]
     [SerializeField] private float shakeDuration = 0.08f;
 
-    [Header("Hitstop / Freeze Frame")]
-    [Tooltip("¿Activar la micro pausa de tiempo al recibir el golpe?")]
-    [SerializeField] private bool enableHitstop = true;
-    [Tooltip("Combo mínimo necesario para activar la pausa de tiempo.")]
-    [SerializeField] private int minComboForHitstop = 1;
-    [Tooltip("Duración en segundos reales del congelamiento de pantalla.")]
-    [SerializeField] private float hitstopDuration = 0.03f;
-
     [Header("Texto Flotante")]
-    [Tooltip("Prefab opcional con el script FloatingText para mostrar el puntaje.")]
     [SerializeField] private FloatingText floatingTextPrefab;
-    [Tooltip("Puntos base que otorga este peg.")]
     [SerializeField] private int basePoints = 100;
 
     private static int hitStreak = 0;
@@ -164,7 +142,7 @@ public class FeedbackBalls : MonoBehaviour
         UpdateComboState();
         PlayEscalatingHitSound();
         VolumeApllications();
-        SpawnImpactParticles(collision);
+        StartParticles(collision);
 
         SpawnFloatingText();
 
@@ -173,11 +151,6 @@ public class FeedbackBalls : MonoBehaviour
         if (enableGhostOutline)
         {
             StartCoroutine(CreateGhostOutline());
-        }
-
-        if (enableHitstop && hitStreak >= minComboForHitstop)
-        {
-            StartCoroutine(ApplyHitstop());
         }
 
         if (enableCameraShake)
@@ -291,16 +264,6 @@ public class FeedbackBalls : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private IEnumerator ApplyHitstop()
-    {
-        float previousTimeScale = Time.timeScale;
-        Time.timeScale = 0f;
-
-        yield return new WaitForSecondsRealtime(hitstopDuration);
-
-        Time.timeScale = previousTimeScale;
-    }
-
     private IEnumerator ApplyCameraShake()
     {
         if (mainCamera == null) yield break;
@@ -379,7 +342,7 @@ public class FeedbackBalls : MonoBehaviour
         chromaticComponent.intensity.value = newIntensity;
     }
 
-    private void SpawnImpactParticles(Collision2D collision)
+    private void StartParticles(Collision2D collision)
     {
         if (impactParticlesPrefab == null) return;
 

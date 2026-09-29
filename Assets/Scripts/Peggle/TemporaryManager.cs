@@ -11,7 +11,7 @@ public class TemporaryManager : MonoBehaviour
     public bool ball1Destroyed = false;
     public bool ball2Destroyed = false;
 
-    private bool isPlayer2Turn;
+    [SerializeField] private bool isPlayer2Turn;
 
     private int abilityCharge;
     [SerializeField] private TextMeshProUGUI abilityChargeBar;
@@ -42,11 +42,11 @@ public class TemporaryManager : MonoBehaviour
     [SerializeField] private float spawnPointMinRotation;
     [SerializeField] private float spawnPointMaxRotation;
 
-    [Header("UI Canvas Final de Juego")]
-    [Tooltip("Canvas que se activará cuando el Jugador 1 gane (Player 2 HP <= 0).")]
+    [Header("Canvas")]
+    [Tooltip("Canvas Win.")]
     [SerializeField] private GameObject winCanvas;
 
-    [Tooltip("Canvas que se activará cuando el Jugador 1 pierda (Player 1 HP <= 0).")]
+    [Tooltip("Canvas Lose")]
     [SerializeField] private GameObject loseCanvas;
 
     [Header("UI Puntos / Daño Jugador 1")]
@@ -73,8 +73,6 @@ public class TemporaryManager : MonoBehaviour
         player2DamageToTake = 0;
 
         UpdateHealthUI();
-
-        // Forzar a que los textos de vida de ambos jugadores permanezcan visibles siempre
         if (player1HealthUI != null)
         {
             player1HealthUI.ShowHealthText();
