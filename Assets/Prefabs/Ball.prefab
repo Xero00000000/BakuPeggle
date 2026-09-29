@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5201849460732664206}
   m_Layer: 0
   m_Name: Ball
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 67d536537cc57ad47a7551cd15cb1435, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -103,7 +103,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 0.48
+  m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 7997b68ba18c51145ab9e9543e2d3ad3, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
