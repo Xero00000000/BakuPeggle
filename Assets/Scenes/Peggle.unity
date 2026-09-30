@@ -1039,6 +1039,9 @@ MonoBehaviour:
   player2PointsCanvas: {fileID: 858349490}
   player2PointsText: {fileID: 893211858}
   pointsDisplayDuration: 2.5
+  abilityWaitTime: 3
+  abilityWaitToUnfreeze: 0.5
+  abilityImages: []
 --- !u!4 &150006845
 Transform:
   m_ObjectHideFlags: 0

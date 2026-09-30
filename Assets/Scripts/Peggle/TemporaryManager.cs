@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.UI;
 
 public class TemporaryManager : MonoBehaviour
 {
@@ -65,6 +66,10 @@ public class TemporaryManager : MonoBehaviour
     private Coroutine hideP2Coroutine;
     private bool isGameOver = false;
 
+    [SerializeField] private float abilityWaitTime;
+    [SerializeField] private float abilityWaitToUnfreeze;
+    [SerializeField] private List<GameObject> abilityImages;
+
     public void Start()
     {
         player1CurrentHP = player1MaxHP;
@@ -93,6 +98,11 @@ public class TemporaryManager : MonoBehaviour
         if (player2PointsCanvas != null) player2PointsCanvas.SetActive(false);
 
         ResetTurn();
+
+        foreach (GameObject image in abilityImages)
+        {
+            image.SetActive(false);
+        }
     }
 
     public void Update()
@@ -265,18 +275,44 @@ public class TemporaryManager : MonoBehaviour
 
     public void UseActiveAbility()
     {
+        Time.timeScale = 0f;
+
         abilityCharge -= 100;
-        player2CurrentHP -= 100;
+        if (abilityChargeBar != null)
+            abilityChargeBar.text = abilityCharge.ToString();
+
+        foreach (GameObject image in abilityImages)
+        {
+            image.SetActive(true);
+        }
+
+        //sonido durante la imagen aca
+
+        StartCoroutine(WaitAbility(abilityWaitTime));
+        
+        //sonido al golpear
+
+        //efecto... en barra de vida?
 
         // Disparar el efecto de daño al usar la habilidad
         if (damageEffectManager != null)
         {
             damageEffectManager.TriggerDamageEffect();
         }
-
+        foreach (GameObject image in abilityImages)
+        {
+            image.SetActive(false);
+        }
+        player2CurrentHP -= 100;
         UpdateHealthUI();
 
-        if (abilityChargeBar != null)
-            abilityChargeBar.text = abilityCharge.ToString();
+        StartCoroutine(WaitAbility(abilityWaitToUnfreeze));
+
+        Time.timeScale = 1f;
+    }
+
+    IEnumerator WaitAbility(float waitTime)
+    {
+        yield return new WaitForSecondsRealtime(waitTime);
     }
 }
