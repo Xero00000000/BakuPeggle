@@ -66,9 +66,23 @@ public class TemporaryManager : MonoBehaviour
     private Coroutine hideP2Coroutine;
     private bool isGameOver = false;
 
-    [SerializeField] private float abilityWaitTime;
-    [SerializeField] private float abilityWaitToUnfreeze;
-    [SerializeField] private List<GameObject> abilityImages;
+    [Header("Configuración de Habilidad Especial")]
+    [SerializeField] private float abilityInDuration = 0.12f; // Duración corta para entrada rápida/agresiva
+    [SerializeField] private float abilityWaitTime = 0.5f;
+    [SerializeField] private float abilityWaitToUnfreeze = 0.2f;
+    [SerializeField] private List<RectTransform> abilityImageTransforms;
+
+    [Header("Sonidos de Habilidad")]
+    [SerializeField] private AudioClip abilityInSound; // Sonido cuando entra la imagen
+    [SerializeField] private AudioClip hitSound;       // Sonido al momento del impacto/daño
+
+    [Header("Shake de UI del Enemigo")]
+    [Tooltip("Elementos de la UI del enemigo que recibirán el impacto (Barra de vida, avatar, etc.)")]
+    [SerializeField] private List<RectTransform> enemyUIElementsToShake;
+    [SerializeField] private float shakeIntensity = 15f;
+    [SerializeField] private float shakeDuration = 0.3f;
+
+    private bool isAbilityExecuting = false;
 
     public void Start()
     {
@@ -99,9 +113,9 @@ public class TemporaryManager : MonoBehaviour
 
         ResetTurn();
 
-        foreach (GameObject image in abilityImages)
+        foreach (var img in abilityImageTransforms)
         {
-            image.SetActive(false);
+            if (img != null) img.gameObject.SetActive(false);
         }
     }
 
@@ -114,15 +128,14 @@ public class TemporaryManager : MonoBehaviour
             ResetTurn();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && player1Shot == false && abilityCharge >= 100)
+        if (Input.GetKeyDown(KeyCode.Space) && !player1Shot && abilityCharge >= 100 && !isAbilityExecuting)
         {
-            UseActiveAbility();
+            StartCoroutine(ExecuteActiveAbilitySequence());
         }
     }
 
     private void ResetTurn()
     {
-        // Disparar el shader HLSL a pantalla completa si alguno de los jugadores acumuló daño
         if ((player1DamageToTake > 0 || player2DamageToTake > 0) && damageEffectManager != null)
         {
             damageEffectManager.TriggerDamageEffect();
@@ -179,7 +192,7 @@ public class TemporaryManager : MonoBehaviour
 
     public void WasShot(Component sender, int which)
     {
-        if (isGameOver) return;
+        if (isGameOver || isAbilityExecuting) return;
 
         if (which == 1)
         {
@@ -264,7 +277,7 @@ public class TemporaryManager : MonoBehaviour
 
     public void ShootEnemyBall()
     {
-        if (isGameOver) return;
+        if (isGameOver || isAbilityExecuting) return;
 
         float randomZ = Random.Range(spawnPointMinRotation, spawnPointMaxRotation);
         spawnPoint.transform.rotation = Quaternion.Euler(0f, 0f, randomZ);
@@ -273,46 +286,152 @@ public class TemporaryManager : MonoBehaviour
         player2Shot = true;
     }
 
-    public void UseActiveAbility()
+    public IEnumerator ExecuteActiveAbilitySequence()
     {
+        isAbilityExecuting = true;
         Time.timeScale = 0f;
 
         abilityCharge -= 100;
         if (abilityChargeBar != null)
             abilityChargeBar.text = abilityCharge.ToString();
 
-        foreach (GameObject image in abilityImages)
-        {
-            image.SetActive(true);
-        }
+        PlaySoundUnscaled(abilityInSound);
 
-        //sonido durante la imagen aca
+        yield return StartCoroutine(AnimateAbilityImagesInAggressive());
+        yield return new WaitForSecondsRealtime(abilityWaitTime);
+        yield return StartCoroutine(AnimateAbilityImagesOut());
 
-        StartCoroutine(WaitAbility(abilityWaitTime));
-        
-        //sonido al golpear
+        PlaySoundUnscaled(hitSound);
 
-        //efecto... en barra de vida?
-
-        // Disparar el efecto de daño al usar la habilidad
         if (damageEffectManager != null)
         {
             damageEffectManager.TriggerDamageEffect();
         }
-        foreach (GameObject image in abilityImages)
-        {
-            image.SetActive(false);
-        }
+
         player2CurrentHP -= 100;
         UpdateHealthUI();
 
-        StartCoroutine(WaitAbility(abilityWaitToUnfreeze));
+        // Sacudida de barra de vida
+        yield return StartCoroutine(ShakeEnemyUI());
+        yield return new WaitForSecondsRealtime(abilityWaitToUnfreeze);
 
         Time.timeScale = 1f;
+        isAbilityExecuting = false;
     }
 
-    IEnumerator WaitAbility(float waitTime)
+    private IEnumerator AnimateAbilityImagesInAggressive()
     {
-        yield return new WaitForSecondsRealtime(waitTime);
+        float elapsed = 0f;
+        float screenWidth = Screen.width;
+
+        foreach (var imgRect in abilityImageTransforms)
+        {
+            if (imgRect == null) continue;
+            imgRect.gameObject.SetActive(true);
+
+            CanvasGroup group = imgRect.GetComponent<CanvasGroup>();
+            if (group == null) group = imgRect.gameObject.AddComponent<CanvasGroup>();
+            group.alpha = 1f;
+        }
+
+        while (elapsed < abilityInDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / abilityInDuration);
+
+            float easeT = 1f - Mathf.Pow(1f - t, 3f);
+
+            foreach (var imgRect in abilityImageTransforms)
+            {
+                if (imgRect == null) continue;
+                float currentX = Mathf.Lerp(-screenWidth, 0f, easeT);
+                imgRect.anchoredPosition = new Vector2(currentX, imgRect.anchoredPosition.y);
+            }
+
+            yield return null;
+        }
+
+        foreach (var imgRect in abilityImageTransforms)
+        {
+            if (imgRect != null)
+                imgRect.anchoredPosition = new Vector2(0f, imgRect.anchoredPosition.y);
+        }
+    }
+
+    private IEnumerator AnimateAbilityImagesOut()
+    {
+        float fadeDuration = 0.15f;
+        float elapsed = 0f;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+
+            foreach (var imgRect in abilityImageTransforms)
+            {
+                if (imgRect == null) continue;
+                CanvasGroup group = imgRect.GetComponent<CanvasGroup>();
+                if (group != null) group.alpha = alpha;
+            }
+
+            yield return null;
+        }
+
+        foreach (var imgRect in abilityImageTransforms)
+        {
+            if (imgRect != null) imgRect.gameObject.SetActive(false);
+        }
+    }
+
+    private IEnumerator ShakeEnemyUI()
+    {
+        if (enemyUIElementsToShake == null || enemyUIElementsToShake.Count == 0) yield break;
+
+        List<Vector2> originalPositions = new List<Vector2>();
+        foreach (var uiElem in enemyUIElementsToShake)
+        {
+            if (uiElem != null)
+                originalPositions.Add(uiElem.anchoredPosition);
+            else
+                originalPositions.Add(Vector2.zero);
+        }
+
+        float elapsed = 0f;
+
+        while (elapsed < shakeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+
+            for (int i = 0; i < enemyUIElementsToShake.Count; i++)
+            {
+                RectTransform uiElem = enemyUIElementsToShake[i];
+                if (uiElem == null) continue;
+
+                Vector2 offset = Random.insideUnitCircle * shakeIntensity;
+                uiElem.anchoredPosition = originalPositions[i] + offset;
+            }
+
+            yield return null;
+        }
+
+        for (int i = 0; i < enemyUIElementsToShake.Count; i++)
+        {
+            if (enemyUIElementsToShake[i] != null)
+                enemyUIElementsToShake[i].anchoredPosition = originalPositions[i];
+        }
+    }
+
+    private void PlaySoundUnscaled(AudioClip clip)
+    {
+        if (clip == null) return;
+
+        GameObject soundObj = new GameObject("TempAbilityAudio");
+        AudioSource audioSource = soundObj.AddComponent<AudioSource>();
+        audioSource.clip = clip;
+        audioSource.ignoreListenerPause = true; 
+        audioSource.Play();
+
+        Destroy(soundObj, clip.length);
     }
 }
