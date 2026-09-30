@@ -5,15 +5,15 @@ using UnityEngine.SceneManagement;
 public class CellphonePauseSystem : MonoBehaviour
 {
     [Header("Referencias de UI")]
-    public RectTransform phoneFullRect;     
-    public RectTransform phoneMiniRect;     
-    public GameObject fullPhoneContainer;     
+    public RectTransform phoneFullRect;
+    public RectTransform phoneMiniRect;
+    public GameObject fullPhoneContainer;
 
     [Header("Configuración de Animación")]
     public float animationDuration = 0.28f;
     public AnimationCurve transitionCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-    [Header("Escenas de Navegación")]
+    [Header("Escenas de Navegación por Defecto")]
     public string streetSceneName = "StreetScene";
     public string settingsSceneName = "SettingsScene";
 
@@ -124,15 +124,22 @@ public class CellphonePauseSystem : MonoBehaviour
         ClosePhone();
     }
 
-    public void AppGoToStreet()
+    public void AppGoToSettings(string customSceneName = "")
     {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(streetSceneName);
-    }
+        string sceneToLoad = string.IsNullOrEmpty(customSceneName) ? settingsSceneName : customSceneName;
 
-    public void AppGoToSettings()
-    {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(settingsSceneName);
+        SceneManager.LoadScene(sceneToLoad);
+    }
+    public void AppGoToScene(string sceneName)
+    {
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            Debug.LogWarning("El nombre de la escena está vacío.");
+            return;
+        }
+
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(sceneName);
     }
 }

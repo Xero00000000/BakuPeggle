@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
+using UnityEngine.VFX; // Necesario para usar VisualEffect
 
 public class FeedbackBalls : MonoBehaviour
 {
@@ -20,9 +21,11 @@ public class FeedbackBalls : MonoBehaviour
 
     [SerializeField] private PointsEventChannel _addPoints;
 
-    [Header("Efecto de Partículas")]
-    [Tooltip("Asigna aquí un Prefab de Particle System.")]
-    [SerializeField] private ParticleSystem impactParticlesPrefab;
+    [Header("Efecto de VFX")]
+    [Tooltip("Asigna aquí un Prefab que contenga un componente VisualEffect.")]
+    [SerializeField] private VisualEffect impactVFXPrefab;
+    [Tooltip("Nombre del parámetro Exposed Color definido en el VFX Graph.")]
+    [SerializeField] private string vfxColorPropertyName = "Color";
 
     [Header("Configuración de Sonido & Combo Pitch")]
     [SerializeField] private AudioClip hitSound;
@@ -239,7 +242,7 @@ public class FeedbackBalls : MonoBehaviour
         while (elapsed < popDuration)
         {
             transform.localScale = Vector3.Lerp(originalScale, targetPopScale, elapsed / popDuration);
-            elapsed += Time.unscaledDeltaTime; 
+            elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
 
@@ -291,7 +294,7 @@ public class FeedbackBalls : MonoBehaviour
         int totalPoints = basePoints * multiplier;
 
         string text = hitStreak > 1 ? $"+{totalPoints} (x{hitStreak})" : $"+{totalPoints}";
-        Color color = hitStreak >= 3 ? new Color(1f, 0.85f, 0f) : Color.white; // Dorado en combos altos
+        Color color = hitStreak >= 3 ? new Color(1f, 0.85f, 0f) : Color.white;
 
         Vector3 spawnPos = transform.position + Vector3.up * 0.3f;
         FloatingText ft = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
@@ -344,7 +347,7 @@ public class FeedbackBalls : MonoBehaviour
 
     private void StartParticles(Collision2D collision)
     {
-        if (impactParticlesPrefab == null) return;
+        if (impactVFXPrefab == null) return;
 
         Vector3 spawnPosition;
         if (collision != null && collision.contactCount > 0)
@@ -357,7 +360,7 @@ public class FeedbackBalls : MonoBehaviour
             spawnPosition = transform.position;
         }
 
-        ParticleSystem particles = Instantiate(impactParticlesPrefab, spawnPosition, Quaternion.identity, null);
+        VisualEffect vfxInstance = Instantiate(impactVFXPrefab, spawnPosition, Quaternion.identity);
 
         Color targetColor = Color.white;
         if (types != null && types.Length > currentType && types[currentType] != null && types[currentType].HasProperty("_Color"))
@@ -365,10 +368,9 @@ public class FeedbackBalls : MonoBehaviour
             targetColor = types[currentType].color;
         }
 
-        var mainModule = particles.main;
-        mainModule.startColor = targetColor;
+        vfxInstance.SetVector4(vfxColorPropertyName, targetColor);
+        vfxInstance.Play();
 
-        particles.Play();
-        Destroy(particles.gameObject, mainModule.duration + mainModule.startLifetime.constantMax);
+        Destroy(vfxInstance.gameObject, 2f);
     }
 }
