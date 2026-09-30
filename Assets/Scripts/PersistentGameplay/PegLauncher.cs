@@ -16,6 +16,11 @@ public class PegLauncher : MonoBehaviour
     [SerializeField] private bool isTurn;
     [SerializeField] private ShotEventChannel _shoot;
 
+    private void Start()
+    {
+        isTurn = true;
+    }
+
     void Update()
     {
         /*

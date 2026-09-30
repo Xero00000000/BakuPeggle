@@ -1569,9 +1569,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 69146431}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.894, y: -7.911, z: 4.9612293}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2.4521072, y: 2.4521072, z: 2.4521072}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2013659495}
@@ -1587,7 +1587,7 @@ Transform:
   - {fileID: 607612374}
   - {fileID: 1223563137}
   - {fileID: 1024101050}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1601819717}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &71372090 stripped
 GameObject:
@@ -3675,7 +3675,7 @@ GameObject:
   - component: {fileID: 130818833}
   - component: {fileID: 130818832}
   m_Layer: 0
-  m_Name: polySurface24 (3)
+  m_Name: Machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4024,7 +4024,7 @@ GameObject:
   - component: {fileID: 149054178}
   - component: {fileID: 149054177}
   m_Layer: 0
-  m_Name: polySurface24 (5)
+  m_Name: Machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5902,7 +5902,7 @@ GameObject:
   - component: {fileID: 229350258}
   - component: {fileID: 229350257}
   m_Layer: 0
-  m_Name: polySurface24 (2)
+  m_Name: Machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6919,7 +6919,7 @@ GameObject:
   - component: {fileID: 278798449}
   - component: {fileID: 278798448}
   m_Layer: 0
-  m_Name: polySurface24
+  m_Name: Machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9926,7 +9926,7 @@ GameObject:
   - component: {fileID: 368440047}
   - component: {fileID: 368440046}
   m_Layer: 0
-  m_Name: polySurface24
+  m_Name: Machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10184,7 +10184,7 @@ GameObject:
   - component: {fileID: 373613730}
   - component: {fileID: 373613729}
   m_Layer: 0
-  m_Name: polySurface24 (1)
+  m_Name: Machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15759,6 +15759,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 551163167}
   m_Mesh: {fileID: -2219959266817758823, guid: 2fc8f8e1ffb84664cb9b3529893eb9b3, type: 3}
+--- !u!1 &552774684
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 552774685}
+  m_Layer: 0
+  m_Name: Ruido
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &552774685
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552774684}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 40435533611730242}
+  - {fileID: 2134194909}
+  - {fileID: 7108230567068908926}
+  - {fileID: 1527751425}
+  m_Father: {fileID: 1076077510}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &552821278
 GameObject:
   m_ObjectHideFlags: 0
@@ -29177,7 +29212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 989034849}
   m_Layer: 0
-  m_Name: pCube80
+  m_Name: Gacha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31602,15 +31637,11 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9069922122170019394}
-  - {fileID: 40435533611730242}
-  - {fileID: 2134194909}
-  - {fileID: 7108230567068908926}
-  - {fileID: 1527751425}
+  - {fileID: 552774685}
   - {fileID: 4583993474767220339}
   - {fileID: 5012220205959754567}
   - {fileID: 990038376}
   - {fileID: 1127558962}
-  - {fileID: 1487168596}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1076077511
@@ -33729,7 +33760,7 @@ GameObject:
   - component: {fileID: 1120215961}
   - component: {fileID: 1120215960}
   m_Layer: 0
-  m_Name: polySurface25
+  m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34055,7 +34086,7 @@ Transform:
   m_GameObject: {fileID: 1127558961}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -14.71, y: 23.34, z: -26.23}
+  m_LocalPosition: {x: -16, y: 16.353, z: -26.23}
   m_LocalScale: {x: 3.5544, y: 3.5544, z: 3.5544}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -34095,7 +34126,7 @@ Light:
   serializedVersion: 11
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 591.4
+  m_Intensity: 886.21
   m_Range: 92.8
   m_SpotAngle: 92.253845
   m_InnerSpotAngle: 26.161541
@@ -34888,7 +34919,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1164825104}
   m_Layer: 0
-  m_Name: pCube80
+  m_Name: Gacha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42418,7 +42449,7 @@ GameObject:
   - component: {fileID: 1455432931}
   - component: {fileID: 1455432930}
   m_Layer: 0
-  m_Name: polySurface23
+  m_Name: Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43015,8 +43046,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1487168595}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.4299994, y: 5.1169996, z: -3.3268166}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 3.8599994, y: 4.1039996, z: -7.8331833}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -43026,7 +43057,7 @@ Transform:
   - {fileID: 1924057015}
   - {fileID: 993422964}
   - {fileID: 1794095478}
-  m_Father: {fileID: 1076077510}
+  m_Father: {fileID: 9069922122170019394}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1488459671
 GameObject:
@@ -44048,7 +44079,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1527751425}
   m_Layer: 0
-  m_Name: Gachapon Interactuable (3)
+  m_Name: Gachapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44069,7 +44100,7 @@ Transform:
   m_Children:
   - {fileID: 989034849}
   - {fileID: 278798447}
-  m_Father: {fileID: 1076077510}
+  m_Father: {fileID: 552774685}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &1528767818
 GameObject:
@@ -46517,6 +46548,39 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1599982180}
   m_Mesh: {fileID: -2462094995631150537, guid: 2fc8f8e1ffb84664cb9b3529893eb9b3, type: 3}
+--- !u!1 &1601819716
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1601819717}
+  m_Layer: 0
+  m_Name: Deco
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1601819717
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601819716}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.644287, y: 122.13397, z: 12.165466}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2112147983}
+  - {fileID: 69146432}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1608278058
 GameObject:
   m_ObjectHideFlags: 0
@@ -48085,7 +48149,7 @@ GameObject:
   - component: {fileID: 1675389658}
   - component: {fileID: 1675389657}
   m_Layer: 0
-  m_Name: polySurface23
+  m_Name: Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49271,7 +49335,7 @@ GameObject:
   - component: {fileID: 1710458051}
   - component: {fileID: 1710458050}
   m_Layer: 0
-  m_Name: polySurface24 (4)
+  m_Name: Machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56205,7 +56269,7 @@ GameObject:
   - component: {fileID: 1971807862}
   - component: {fileID: 1971807861}
   m_Layer: 0
-  m_Name: polySurface25
+  m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59877,8 +59941,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2112147982}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.63, y: -1.7950476, z: 58.547}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.014287, y: -123.929016, z: 46.381535}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -59887,7 +59951,7 @@ Transform:
   - {fileID: 1119590450}
   - {fileID: 950740668}
   - {fileID: 964154834}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1601819717}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2112172808
 GameObject:
@@ -60365,7 +60429,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2134194909}
   m_Layer: 0
-  m_Name: Gachapon Interactuable (2)
+  m_Name: Gachapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60380,13 +60444,13 @@ Transform:
   m_GameObject: {fileID: 2134194908}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: -3.7, y: 1.013, z: -11.16}
+  m_LocalPosition: {x: -3.6999998, y: 1.013, z: -11.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1164825104}
   - {fileID: 368440045}
-  m_Father: {fileID: 1076077510}
+  m_Father: {fileID: 552774685}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &2135456910
 GameObject:
@@ -61204,14 +61268,14 @@ Transform:
   m_GameObject: {fileID: 847933797273657336}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 5.489001, y: 1.013, z: -11.16}
+  m_LocalPosition: {x: 5.4890003, y: 1.013, z: -11.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2376794633374539892}
   - {fileID: 6493829579050132572}
   - {fileID: 373613728}
-  m_Father: {fileID: 1076077510}
+  m_Father: {fileID: 552774685}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &63619135042058432
 GameObject:
@@ -61258,7 +61322,7 @@ GameObject:
   - component: {fileID: 4903965511121648465}
   - component: {fileID: 3697266250498594144}
   m_Layer: 0
-  m_Name: polySurface23
+  m_Name: Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61291,7 +61355,7 @@ GameObject:
   - component: {fileID: 2475976316493815325}
   - component: {fileID: 3565980221369432215}
   m_Layer: 0
-  m_Name: polySurface24
+  m_Name: Gacha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61348,7 +61412,7 @@ GameObject:
   m_Component:
   - component: {fileID: 40435533611730242}
   m_Layer: 0
-  m_Name: Gachapon Interactuable
+  m_Name: 'Gachapon '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61439,7 +61503,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2376794633374539892}
   m_Layer: 0
-  m_Name: pCube80
+  m_Name: Gacha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61457,7 +61521,7 @@ GameObject:
   - component: {fileID: 4406555909744315681}
   - component: {fileID: 3316826399588395947}
   m_Layer: 0
-  m_Name: polySurface24
+  m_Name: Machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61919,7 +61983,7 @@ GameObject:
   - component: {fileID: 590611821190865366}
   - component: {fileID: 3447137296739636508}
   m_Layer: 0
-  m_Name: Mueble 1 (1)
+  m_Name: Isla
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62029,7 +62093,7 @@ GameObject:
   - component: {fileID: 2196103084757577537}
   - component: {fileID: 6507149673301008721}
   m_Layer: 0
-  m_Name: polySurface25
+  m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62212,7 +62276,7 @@ GameObject:
   - component: {fileID: 7145895273586279489}
   - component: {fileID: 2819108076584061521}
   m_Layer: 0
-  m_Name: polySurface25
+  m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62556,7 +62620,7 @@ GameObject:
   - component: {fileID: 8223889776332979426}
   - component: {fileID: 6180582888608352296}
   m_Layer: 0
-  m_Name: Mueble 1 (2)
+  m_Name: Isla
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62918,7 +62982,7 @@ GameObject:
   - component: {fileID: 8957666203221972861}
   - component: {fileID: 4063425315738474861}
   m_Layer: 0
-  m_Name: polySurface25
+  m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63096,7 +63160,7 @@ GameObject:
   - component: {fileID: 2748400060380218221}
   - component: {fileID: 5865219423971732828}
   m_Layer: 0
-  m_Name: polySurface23
+  m_Name: Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63111,7 +63175,7 @@ Transform:
   m_GameObject: {fileID: 7633129294327670724}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 8.529, y: 1.013, z: -11.16}
+  m_LocalPosition: {x: 8.529001, y: 1.013, z: -11.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -63121,7 +63185,7 @@ Transform:
   - {fileID: 1710458049}
   - {fileID: 130818831}
   - {fileID: 149054176}
-  m_Father: {fileID: 1076077510}
+  m_Father: {fileID: 552774685}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!33 &7145895273586279489
 MeshFilter:
@@ -63224,7 +63288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7108230567068908926}
   m_Layer: 0
-  m_Name: Gachapon Interactuable (1)
+  m_Name: 'Gachapon '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63326,7 +63390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6750161207053093748}
   m_Layer: 0
-  m_Name: pCube80
+  m_Name: Gacha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63342,7 +63406,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4816098205812136008}
   m_Layer: 0
-  m_Name: pCube80
+  m_Name: Gacha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63526,7 +63590,7 @@ GameObject:
   - component: {fileID: 6849164339794507037}
   - component: {fileID: 5489212729587045271}
   m_Layer: 0
-  m_Name: polySurface24
+  m_Name: Machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63589,6 +63653,7 @@ Transform:
   - {fileID: 6750161207053093748}
   - {fileID: 2832700816499445596}
   - {fileID: 1926227421}
+  - {fileID: 1487168596}
   m_Father: {fileID: 1076077510}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &9134064468618782920
@@ -63603,7 +63668,7 @@ GameObject:
   - component: {fileID: 4134044271499120721}
   - component: {fileID: 5628978271554109024}
   m_Layer: 0
-  m_Name: polySurface23
+  m_Name: Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63629,6 +63694,7 @@ MeshFilter:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 403203679}
   - {fileID: 817266555}
   - {fileID: 4731341708243577228}
   - {fileID: 1874111476}
@@ -63636,15 +63702,13 @@ SceneRoots:
   - {fileID: 606632078}
   - {fileID: 1454913134}
   - {fileID: 1592404423}
-  - {fileID: 403203679}
-  - {fileID: 2112147983}
   - {fileID: 471862006}
+  - {fileID: 1601819717}
   - {fileID: 1203935124}
   - {fileID: 878017184}
   - {fileID: 1223045955}
   - {fileID: 1076077510}
   - {fileID: 1565825898}
-  - {fileID: 69146432}
   - {fileID: 1770838304}
   - {fileID: 1844820241}
   - {fileID: 735505249}

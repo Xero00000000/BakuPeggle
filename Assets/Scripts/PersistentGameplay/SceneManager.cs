@@ -16,7 +16,7 @@ public class SceneLoadManager : MonoBehaviour
     public void SceneTransition(Component sender, SceneField[] scenesToLoad, SceneField[] scenesToUnload, object[] transitionEffects)
     {
         LoadScenes(scenesToLoad);
-        UnLoadScenes(scenesToLoad);
+        UnLoadScenes(scenesToUnload);
     }
 
     private void LoadScenes(SceneField[] _scenesToLoad)

@@ -14,8 +14,15 @@ public class RToReload : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R) && !isReloading)
         {
-            StartCoroutine(ReloadScenesRoutine());
+            //StartCoroutine(ReloadScenesRoutine());
+            SceneManager.LoadScene(peggle);
         }
+    }
+
+    public void Restart()
+    {
+        //StartCoroutine(ReloadScenesRoutine());
+        SceneManager.LoadScene(peggle);
     }
 
     private IEnumerator ReloadScenesRoutine()

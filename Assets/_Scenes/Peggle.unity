@@ -3521,7 +3521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b59bd315c16e03438da1af792d45b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _eventChannel: {fileID: 11400000, guid: 798f46ee9b9a6f644a576b7b6abe9d83, type: 2}
+  _eventChannel: {fileID: 11400000, guid: 7ed4c0fc4b6aebf4e8cd8ee75cc3c325, type: 2}
   _response:
     m_PersistentCalls:
       m_Calls:
@@ -6560,6 +6560,7 @@ GameObject:
   - component: {fileID: 896611498}
   - component: {fileID: 896611497}
   - component: {fileID: 896611496}
+  - component: {fileID: 896611499}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -6631,9 +6632,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1209879277}
-        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: NewLoad
+      - m_Target: {fileID: 896611499}
+        m_TargetAssemblyTypeName: LoadScenes, Assembly-CSharp
+        m_MethodName: RaiseEvent
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6681,6 +6682,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 896611494}
   m_CullTransparentMesh: 1
+--- !u!114 &896611499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896611494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fa80288316d15a48a1958a88cd53ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventToBroadcast: {fileID: 11400000, guid: 7ed4c0fc4b6aebf4e8cd8ee75cc3c325, type: 2}
+  scenesToLoad:
+  - m_SceneAsset: {fileID: 102900000, guid: 41a2fec26c297584bac03162c9a6d067, type: 3}
+    m_SceneName: Shopping
+  scenesToUnload:
+  - m_SceneAsset: {fileID: 102900000, guid: 752e3a588dcebd9459ab25eb8e06cabb, type: 3}
+    m_SceneName: Peggle
 --- !u!1 &903109334
 GameObject:
   m_ObjectHideFlags: 0
@@ -11314,10 +11334,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 7ed4c0fc4b6aebf4e8cd8ee75cc3c325, type: 2}
-        m_TargetAssemblyTypeName: SceneChangeEventChannel, Assembly-CSharp
-        m_MethodName: set_name
-        m_Mode: 5
+      - m_Target: {fileID: 490575002}
+        m_TargetAssemblyTypeName: RToReload, Assembly-CSharp
+        m_MethodName: Restart
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -12417,13 +12437,14 @@ GameObject:
   - component: {fileID: 1639582129}
   - component: {fileID: 1639582128}
   - component: {fileID: 1639582127}
+  - component: {fileID: 1639582132}
   m_Layer: 5
   m_Name: WinCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &1639582127
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12606,6 +12627,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1639582132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639582126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fa80288316d15a48a1958a88cd53ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventToBroadcast: {fileID: 11400000, guid: 7ed4c0fc4b6aebf4e8cd8ee75cc3c325, type: 2}
+  scenesToLoad:
+  - m_SceneAsset: {fileID: 0}
+    m_SceneName: 
+  scenesToUnload: []
 --- !u!1001 &1654745626
 PrefabInstance:
   m_ObjectHideFlags: 0
