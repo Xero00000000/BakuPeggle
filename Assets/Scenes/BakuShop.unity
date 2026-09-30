@@ -53235,7 +53235,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -546, y: 11}
+  m_AnchoredPosition: {x: -374, y: 11}
   m_SizeDelta: {x: 1100, y: 160}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1858361913
@@ -62121,7 +62121,7 @@ PrefabInstance:
       objectReference: {fileID: 102900000, guid: 41a2fec26c297584bac03162c9a6d067, type: 3}
     - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: _scenesToLoad.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: _scenesToUnload.Array.size
