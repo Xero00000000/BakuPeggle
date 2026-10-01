@@ -14,8 +14,20 @@ public class TemporaryManager : MonoBehaviour
 
     [SerializeField] private bool isPlayer2Turn;
 
-    private int abilityCharge;
+    [Header("Habilidad & Indicador")]
+    [SerializeField] private int abilityCharge;
     [SerializeField] private TextMeshProUGUI abilityChargeBar;
+    [SerializeField] private int pointsToActivate = 100;
+    [SerializeField] private List<RectTransform> imagesToAnimate;
+    [SerializeField] private float bounceScale = 1.2f;
+    [SerializeField] private float animSpeed = 6f;
+
+    [Range(0f, 1f)][SerializeField] private float minOpacity = 0.3f;
+    [Range(0f, 1f)][SerializeField] private float maxOpacity = 1.0f;
+
+    private bool animActive = false;
+    private Coroutine animCoroutine;
+    private List<Vector3> originalScal = new List<Vector3>();
 
     [Header("Salud de Jugadores")]
     [SerializeField] private int player1MaxHP;
@@ -67,14 +79,14 @@ public class TemporaryManager : MonoBehaviour
     private bool isGameOver = false;
 
     [Header("Configuración de Habilidad Especial")]
-    [SerializeField] private float abilityInDuration = 0.12f; // Duración corta para entrada rápida/agresiva
+    [SerializeField] private float abilityInDuration = 0.12f;
     [SerializeField] private float abilityWaitTime = 0.5f;
     [SerializeField] private float abilityWaitToUnfreeze = 0.2f;
     [SerializeField] private List<RectTransform> abilityImageTransforms;
 
     [Header("Sonidos de Habilidad")]
-    [SerializeField] private AudioClip abilityInSound; // Sonido cuando entra la imagen
-    [SerializeField] private AudioClip hitSound;       // Sonido al momento del impacto/daño
+    [SerializeField] private AudioClip abilityInSound;
+    [SerializeField] private AudioClip hitSound;
 
     [Header("Shake de UI del Enemigo")]
     [Tooltip("Elementos de la UI del enemigo que recibirán el impacto (Barra de vida, avatar, etc.)")]
@@ -82,7 +94,7 @@ public class TemporaryManager : MonoBehaviour
     [SerializeField] private float shakeIntensity = 15f;
     [SerializeField] private float shakeDuration = 0.3f;
 
-    private bool isAbilityExecuting = false;
+    private bool isAbilityOn = false;
 
     public void Start()
     {
@@ -90,6 +102,14 @@ public class TemporaryManager : MonoBehaviour
         player2CurrentHP = player2MaxHP;
         player1DamageToTake = 0;
         player2DamageToTake = 0;
+
+        // Guardar escalas base de las imágenes indicadoras
+        originalScal.Clear();
+        foreach (var img in imagesToAnimate)
+        {
+            if (img != null) originalScal.Add(img.localScale);
+            else originalScal.Add(Vector3.one);
+        }
 
         UpdateHealthUI();
         if (player1HealthUI != null)
@@ -128,9 +148,9 @@ public class TemporaryManager : MonoBehaviour
             ResetTurn();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && !player1Shot && abilityCharge >= 100 && !isAbilityExecuting)
+        if (Input.GetKeyDown(KeyCode.Space) && !player1Shot && abilityCharge >= pointsToActivate && !isAbilityOn)
         {
-            StartCoroutine(ExecuteActiveAbilitySequence());
+            StartCoroutine(AbilityAnimSetActive());
         }
     }
 
@@ -192,7 +212,7 @@ public class TemporaryManager : MonoBehaviour
 
     public void WasShot(Component sender, int which)
     {
-        if (isGameOver || isAbilityExecuting) return;
+        if (isGameOver || isAbilityOn) return;
 
         if (which == 1)
         {
@@ -230,11 +250,97 @@ public class TemporaryManager : MonoBehaviour
             abilityCharge += charge;
             if (abilityChargeBar != null)
                 abilityChargeBar.text = abilityCharge.ToString();
+
+            UpdateAbilityImageInd();
         }
         else
         {
             player1DamageToTake += points;
             ShowPlayerPoints(2, player1DamageToTake);
+        }
+    }
+
+    private void UpdateAbilityImageInd()
+    {
+        if (abilityCharge >= pointsToActivate && !animActive)
+        {
+            StartAbilityAnim();
+        }
+        else if (abilityCharge < pointsToActivate && animActive)
+        {
+            StopAbilitiAnim();
+        }
+    }
+
+    private void StartAbilityAnim()
+    {
+        if (imagesToAnimate == null || imagesToAnimate.Count == 0) return;
+
+        animActive = true;
+        if (animCoroutine != null) StopCoroutine(animCoroutine);
+        animCoroutine = StartCoroutine(AnimAbiliti());
+    }
+
+    private void StopAbilitiAnim()
+    {
+        animActive = false;
+        if (animCoroutine != null)
+        {
+            StopCoroutine(animCoroutine);
+            animCoroutine = null;
+        }
+
+        for (int i = 0; i < imagesToAnimate.Count; i++)
+        {
+            if (imagesToAnimate[i] != null)
+            {
+                if (i < originalScal.Count)
+                    imagesToAnimate[i].localScale = originalScal[i];
+
+                ChangeImageOpacity(imagesToAnimate[i], 1.0f);
+            }
+        }
+    }
+
+    private IEnumerator AnimAbiliti()
+    {
+        while (animActive)
+        {
+            float animMotion = (Mathf.Sin(Time.unscaledTime * animSpeed) + 1f) * 0.5f;
+            float imagesScale = Mathf.Lerp(1f, bounceScale, animMotion);
+            float currentOpacity = Mathf.Lerp(minOpacity, maxOpacity, animMotion);
+
+            for (int i = 0; i < imagesToAnimate.Count; i++)
+            {
+                if (imagesToAnimate[i] != null)
+                {
+                    if (i < originalScal.Count)
+                        imagesToAnimate[i].localScale = originalScal[i] * imagesScale;
+
+                    ChangeImageOpacity(imagesToAnimate[i], currentOpacity);
+                }
+            }
+
+            yield return null;
+        }
+    }
+    private void ChangeImageOpacity(RectTransform rectTransform, float opacity)
+    {
+        if (rectTransform == null) return;
+
+        CanvasGroup imageGroup = rectTransform.GetComponent<CanvasGroup>();
+        if (imageGroup != null)
+        {
+            imageGroup.alpha = opacity;
+            return;
+        }
+
+        Graphic image = rectTransform.GetComponent<Graphic>();
+        if (image != null)
+        {
+            Color c = image.color;
+            c.a = opacity;
+            image.color = c;
         }
     }
 
@@ -277,7 +383,7 @@ public class TemporaryManager : MonoBehaviour
 
     public void ShootEnemyBall()
     {
-        if (isGameOver || isAbilityExecuting) return;
+        if (isGameOver || isAbilityOn) return;
 
         float randomZ = Random.Range(spawnPointMinRotation, spawnPointMaxRotation);
         spawnPoint.transform.rotation = Quaternion.Euler(0f, 0f, randomZ);
@@ -286,18 +392,20 @@ public class TemporaryManager : MonoBehaviour
         player2Shot = true;
     }
 
-    public IEnumerator ExecuteActiveAbilitySequence()
+    public IEnumerator AbilityAnimSetActive()
     {
-        isAbilityExecuting = true;
+        isAbilityOn = true;
         Time.timeScale = 0f;
 
-        abilityCharge -= 100;
+        abilityCharge -= pointsToActivate;
         if (abilityChargeBar != null)
             abilityChargeBar.text = abilityCharge.ToString();
 
+        UpdateAbilityImageInd();
+
         PlaySoundUnscaled(abilityInSound);
 
-        yield return StartCoroutine(AnimateAbilityImagesInAggressive());
+        yield return StartCoroutine(AnimateAbilityImages());
         yield return new WaitForSecondsRealtime(abilityWaitTime);
         yield return StartCoroutine(AnimateAbilityImagesOut());
 
@@ -311,15 +419,14 @@ public class TemporaryManager : MonoBehaviour
         player2CurrentHP -= 100;
         UpdateHealthUI();
 
-        // Sacudida de barra de vida
         yield return StartCoroutine(ShakeEnemyUI());
         yield return new WaitForSecondsRealtime(abilityWaitToUnfreeze);
 
         Time.timeScale = 1f;
-        isAbilityExecuting = false;
+        isAbilityOn = false;
     }
 
-    private IEnumerator AnimateAbilityImagesInAggressive()
+    private IEnumerator AnimateAbilityImages()
     {
         float elapsed = 0f;
         float screenWidth = Screen.width;
@@ -429,7 +536,7 @@ public class TemporaryManager : MonoBehaviour
         GameObject soundObj = new GameObject("TempAbilityAudio");
         AudioSource audioSource = soundObj.AddComponent<AudioSource>();
         audioSource.clip = clip;
-        audioSource.ignoreListenerPause = true; 
+        audioSource.ignoreListenerPause = true;
         audioSource.Play();
 
         Destroy(soundObj, clip.length);
