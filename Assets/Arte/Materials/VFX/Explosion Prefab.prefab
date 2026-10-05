@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6078388707800551688}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Explosion Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 6301515279831820802}
   - component: {fileID: 3009900033438102574}
   - component: {fileID: 5974720170057423475}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sparks_VFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,11 +92,14 @@ VisualEffect:
       - m_Value: {x: 0.9716981, y: 0.041251317, z: 0.041251317, w: 0}
         m_Name: Spark Color 1
         m_Overridden: 1
-      - m_Value: {x: 0.9734455, y: 0.04091521, z: 0.04091521, w: 0}
+      - m_Value: {x: 1, y: 1, z: 1, w: 0}
         m_Name: Explosion color
         m_Overridden: 1
-      - m_Value: {x: 0.9734455, y: 0.04091521, z: 0.04091521, w: 0}
+      - m_Value: {x: 1, y: 1, z: 1, w: 0}
         m_Name: Fire color
+        m_Overridden: 1
+      - m_Value: {x: 1, y: 1, z: 1, w: 0}
+        m_Name: Color
         m_Overridden: 1
     m_Uint:
       m_Array: []
