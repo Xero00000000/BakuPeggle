@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5909241039058943248}
   - component: {fileID: 5001046958495864478}
   - component: {fileID: 1609933740635529682}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 3545070540535602139}
   - component: {fileID: 398449556264689709}
   - component: {fileID: 7593763834598410371}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 5302236054868953486}
   - component: {fileID: 4948263510993532013}
   - component: {fileID: 6350463698590463077}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -273,7 +273,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 889142823769953118}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Peg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 6675348246471447153}
   - component: {fileID: 1237459680191998752}
   - component: {fileID: 1556949369855642475}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -386,7 +386,7 @@ GameObject:
   - component: {fileID: 692200110939147531}
   - component: {fileID: 9021559223183199209}
   - component: {fileID: 6401200957426351002}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Audio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -541,7 +541,7 @@ GameObject:
   - component: {fileID: 5666029341433008186}
   - component: {fileID: 3060118067248975097}
   - component: {fileID: 6107240070830430919}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Color
   m_TagString: Untagged
   m_Icon: {fileID: 0}
