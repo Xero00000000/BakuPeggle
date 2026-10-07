@@ -6705,6 +6705,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2650578598785622, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 724481466793890022, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -6785,9 +6789,69 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 738438445124321097, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1240369908958715908, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1185112
+      objectReference: {fileID: 0}
+    - target: {fileID: 1240369908958715908, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.84968895
+      objectReference: {fileID: 0}
+    - target: {fileID: 1240369908958715908, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.5433133
+      objectReference: {fileID: 0}
+    - target: {fileID: 1240369908958715908, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.8999939
+      objectReference: {fileID: 0}
+    - target: {fileID: 1240369908958715908, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -57.7
+      objectReference: {fileID: 0}
     - target: {fileID: 2637423389558771871, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
       propertyPath: m_Name
       value: CeluCanva
+      objectReference: {fileID: 0}
+    - target: {fileID: 2717492734170086604, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2717492734170086604, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9fc63c6023e520342b362cc30165e10c, type: 3}
+    - target: {fileID: 3956821661699185437, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3956821661699185437, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f7e06198e46bb814aba35879aa2d081d, type: 3}
+    - target: {fileID: 4443482718953003666, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4630524104363275829, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_Colors.m_NormalColor.b
+      value: 0.6728373
+      objectReference: {fileID: 0}
+    - target: {fileID: 4630524104363275829, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_Colors.m_NormalColor.g
+      value: 0.6728373
+      objectReference: {fileID: 0}
+    - target: {fileID: 4630524104363275829, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_Colors.m_NormalColor.r
+      value: 0.754717
+      objectReference: {fileID: 0}
+    - target: {fileID: 7815793136311923274, guid: 782d7a39a709d3d4a81671133ee0ca92, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
