@@ -295,6 +295,18 @@ public class FeedbackBalls : MonoBehaviour
 
         string text = hitStreak > 1 ? $"+{totalPoints} (x{hitStreak})" : $"+{totalPoints}";
         Color color = hitStreak >= 3 ? new Color(1f, 0.85f, 0f) : Color.white;
+        switch (currentType)
+        {
+            case 0:
+                color = hitStreak >= 3 ? new Color(1f, 0f, 0f) : Color.white;
+                break;
+            case 1:
+                color = hitStreak >= 3 ? new Color(0f, 1f, 0f) : Color.white;
+                break;
+            case 2:
+                color = hitStreak >= 3 ? new Color(0f, 0f, 1f) : Color.white;
+                break;
+        }
 
         Vector3 spawnPos = transform.position + Vector3.up * 0.3f;
         FloatingText ft = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);

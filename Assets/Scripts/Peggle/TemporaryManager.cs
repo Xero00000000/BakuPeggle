@@ -246,7 +246,7 @@ public class TemporaryManager : MonoBehaviour
         if (player)
         {
             player2DamageToTake += points;
-            ShowPlayerPoints(1, player2DamageToTake);
+            ShowPlayerPoints(1, player2DamageToTake, type);
             abilityCharge += charge;
             if (abilityChargeBar != null)
                 abilityChargeBar.text = abilityCharge.ToString();
@@ -256,7 +256,7 @@ public class TemporaryManager : MonoBehaviour
         else
         {
             player1DamageToTake += points;
-            ShowPlayerPoints(2, player1DamageToTake);
+            ShowPlayerPoints(2, player1DamageToTake, type);
         }
     }
 
@@ -344,14 +344,29 @@ public class TemporaryManager : MonoBehaviour
         }
     }
 
-    private void ShowPlayerPoints(int playerNumber, int points)
+    private void ShowPlayerPoints(int playerNumber, int points, int type)
     {
         if (playerNumber == 1)
         {
             if (player1PointsCanvas == null) return;
 
             if (player1PointsText != null)
+            {
                 player1PointsText.text = "+" + points.ToString() + " PTS";
+                switch (type)
+                {
+                    case 0:
+                        player1PointsText.color = new Color(1f, 0f, 0f);
+                        break;
+                    case 1:
+                        player1PointsText.color = new Color(0f, 1f, 0f);
+                        break;
+                    case 2:
+                        player1PointsText.color = new Color(0f, 0f, 1f);
+                        break;
+                }
+            }
+                
 
             player1PointsCanvas.SetActive(true);
 
@@ -363,7 +378,21 @@ public class TemporaryManager : MonoBehaviour
             if (player2PointsCanvas == null) return;
 
             if (player2PointsText != null)
+            {
                 player2PointsText.text = "+" + points.ToString() + " PTS";
+                switch (type)
+                {
+                    case 0:
+                        player2PointsText.color = new Color(1f, 0f, 0f);
+                        break;
+                    case 1:
+                        player2PointsText.color = new Color(0f, 1f, 0f);
+                        break;
+                    case 2:
+                        player2PointsText.color = new Color(0f, 0f, 1f);
+                        break;
+                }
+            }
 
             player2PointsCanvas.SetActive(true);
 
@@ -424,6 +453,10 @@ public class TemporaryManager : MonoBehaviour
 
         Time.timeScale = 1f;
         isAbilityOn = false;
+        if (player1CurrentHP <= 0 || player2CurrentHP <= 0)
+        {
+            HandleGameOver();
+        }
     }
 
     private IEnumerator AnimateAbilityImages()
