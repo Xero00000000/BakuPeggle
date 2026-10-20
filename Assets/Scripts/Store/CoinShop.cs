@@ -1,20 +1,20 @@
-using NUnit.Framework;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 
 public class CoinShop : MonoBehaviour
 {
-    [SerializeField] int coins;
-    [SerializeField] int coinsToAdd;
-    [SerializeField] List<bool> stock;
+    [Header("Configuración de Victoria")]
+    [SerializeField] private int coinsToAdd = 100;          
+    [SerializeField] private TMP_Text rewardDisplayText;    
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (rewardDisplayText != null)
         {
-            coins += coinsToAdd;
+            rewardDisplayText.text = "+ " + coinsToAdd;
         }
+
+        ShopBuyManager.sessionCoins += coinsToAdd;
+        Debug.Log("¡Partida ganada! Monedas actuales en sesión: " + ShopBuyManager.sessionCoins);
     }
 }
