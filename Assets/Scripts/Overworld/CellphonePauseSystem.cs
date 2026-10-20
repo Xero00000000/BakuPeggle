@@ -21,13 +21,14 @@ public class CellphonePauseSystem : MonoBehaviour
     private Coroutine transitionCoroutine;
 
     private Vector2 initialCenterAnchoredPos;
-    private Vector3 fullScale = Vector3.one;
+    private Vector3 originalFullScale;
 
     void Awake()
     {
         if (phoneFullRect != null)
         {
             initialCenterAnchoredPos = phoneFullRect.anchoredPosition;
+            originalFullScale = phoneFullRect.localScale;
         }
     }
 
@@ -92,8 +93,8 @@ public class CellphonePauseSystem : MonoBehaviour
         Vector2 endPos = fromMiniToFull ? initialCenterAnchoredPos : targetMiniPos;
 
         Vector3 miniScale = new Vector3(0.2f, 0.2f, 1f);
-        Vector3 startScale = fromMiniToFull ? miniScale : fullScale;
-        Vector3 endScale = fromMiniToFull ? fullScale : miniScale;
+        Vector3 startScale = fromMiniToFull ? miniScale : originalFullScale;
+        Vector3 endScale = fromMiniToFull ? originalFullScale : miniScale;
 
         while (elapsed < animationDuration)
         {
@@ -131,6 +132,7 @@ public class CellphonePauseSystem : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(sceneToLoad);
     }
+
     public void AppGoToScene(string sceneName)
     {
         if (string.IsNullOrEmpty(sceneName))
