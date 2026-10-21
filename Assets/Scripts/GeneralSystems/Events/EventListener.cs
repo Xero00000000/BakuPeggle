@@ -13,6 +13,8 @@ public class CustomAAAEvent : UnityEvent<Component, object[]> { }
 public class CustomShotEvent : UnityEvent<Component, int> { }
 [System.Serializable]
 public class CustomPointsEvent : UnityEvent<Component, bool, int> { }
+[System.Serializable]
+public class TurnUpdateEvent : UnityEvent<Component, int[]> { }
 
 public abstract class EventListener : MonoBehaviour
 {

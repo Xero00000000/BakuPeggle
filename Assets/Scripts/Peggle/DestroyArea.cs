@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DestroyArea : MonoBehaviour
 {
-    [SerializeField] private TemporaryManager manager;
+    [SerializeField] private TurnManager manager;
     [SerializeField] bool playerArea;
 
     private void OnTriggerEnter2D(Collider2D collision)
