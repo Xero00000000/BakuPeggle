@@ -13,6 +13,11 @@ public class PeggleUIManager : MonoBehaviour
     private int player1DamageToTake;
     private int player2DamageToTake;
 
+    [SerializeField] private bool isDamageAbilityActive;
+
+    [Header("Event Channels")]
+    [SerializeField] private ShotEventChannel Continue;
+
     [Header("Habilidad & Indicador")]
     [SerializeField] private int abilityCharge;
     [SerializeField] private TextMeshProUGUI abilityChargeBar;
@@ -33,10 +38,6 @@ public class PeggleUIManager : MonoBehaviour
 
     [Header("Efecto de Daño HLSL (Pantalla Completa)")]
     [SerializeField] private DamageEffectManager damageEffectManager;
-
-    [Header("Event Channels")]//cambiar
-    [SerializeField] private ShotEventChannel _shoot;
-    [SerializeField] private VoidEventChannel _newTurn;
 
     [Header("Canvas de Juego (Win/Lose)")]
     [SerializeField] private GameObject winCanvas;
@@ -117,11 +118,20 @@ public class PeggleUIManager : MonoBehaviour
                 StartSetUp();
                 break;
             case 1: //other turns
-
+                StartCoroutine(EndTurnRoutine());
+                Debug.Log("eeeeeh");
+                break; 
+            case 2: //ability use
+                Debug.Log("ooooooh");
+                StartCoroutine(AbilityAnimSetActive());
                 break;
-            case 2: //other turnsability use
+            case 3: //reset turn
+                Debug.Log("uuuuuuh");
+                ShowTurnNoticeRoutine();
                 break;
         }
+
+        Debug.Log("aaaaah");
     }
 
     private void StartSetUp()
@@ -327,26 +337,21 @@ public class PeggleUIManager : MonoBehaviour
 
     private IEnumerator EndTurnRoutine()
     {
-        int player1DamageSaved = player1DamageToTake;
-        int player2DamageSaved = player2DamageToTake;
+        Debug.Log("whoop");
 
-        player1DamageToTake = 0;
-        player2DamageToTake = 0;
-
-        if (player2DamageSaved > 0)
+        if (player2DamageToTake > 0)
         {
-            player2CurrentHP -= player2DamageSaved;
             UpdateHealthUI();
 
             if (damageEffectManager != null) damageEffectManager.TriggerDamageEffect();
 
             if (damageRecapCanvasEnemy != null)
             {
-                yield return StartCoroutine(ShowDamageRecapRoutine(player2DamageSaved, damageRecapCanvasEnemy, damageRecapTextsEnemy, enemyRecapElements, enemyRecapOriginalPos));
+                yield return StartCoroutine(ShowDamageRecapRoutine(player2DamageToTake, damageRecapCanvasEnemy, damageRecapTextsEnemy, enemyRecapElements, enemyRecapOriginalPos));
             }
         }
 
-        if (player1DamageSaved > 0 && player2DamageSaved > 0)
+        if (player1DamageToTake > 0 && player2DamageToTake > 0)
         {
             yield return new WaitForSeconds(delayBetweenCanvases);
         }
@@ -355,27 +360,27 @@ public class PeggleUIManager : MonoBehaviour
             yield return new WaitForSeconds(delayBetweenDamages);
         }
 
-        if (player1DamageSaved > 0)
+        if (player1DamageToTake > 0)
         {
-            player1CurrentHP -= player1DamageSaved;
             UpdateHealthUI();
 
             if (damageEffectManager != null) damageEffectManager.TriggerDamageEffect();
 
             if (damageRecapCanvasPlayer != null)
             {
-                yield return StartCoroutine(ShowDamageRecapRoutine(player1DamageSaved, damageRecapCanvasPlayer, damageRecapTextsPlayer, playerRecapElements, playerRecapOriginalPos));
+                yield return StartCoroutine(ShowDamageRecapRoutine(player1DamageToTake, damageRecapCanvasPlayer, damageRecapTextsPlayer, playerRecapElements, playerRecapOriginalPos));
             }
         }
 
         if (player1CurrentHP <= 0 || player2CurrentHP <= 0)
         {
+            Debug.Log("wow");
             HandleGameOver();
         }
         else
         {
             yield return new WaitForSeconds(delayBeforeTurnNotice);
-            ResetTurn();
+            Continue.Raise(this, 1);
         }
     }
 
@@ -521,7 +526,6 @@ public class PeggleUIManager : MonoBehaviour
 
         if (player)
         {
-            player2DamageToTake += points;
             ShowPlayerPoints(1, player2DamageToTake);
             abilityCharge += charge;
             if (abilityChargeBar != null)
@@ -538,15 +542,15 @@ public class PeggleUIManager : MonoBehaviour
 
     private void UpdateAbilityImageInd()
     {
-        if (abilityCharge >= pointsToActivate && !animActive)
+        if (/*abilityCharge >= pointsToActivate &&*/ !animActive)
         {
             StartAbilityAnim();
         }
-        else if (abilityCharge < pointsToActivate && animActive)
+        else if (/*abilityCharge < pointsToActivate &&*/ animActive)
         {
             StopAbilitiAnim();
         }
-        else if (abilityCharge < pointsToActivate)
+        else //if (abilityCharge < pointsToActivate)
         {
             foreach (var img in imagesToAnimate)
             {
@@ -669,7 +673,6 @@ public class PeggleUIManager : MonoBehaviour
         Time.timeScale = 0f;
 
         // Resta la energía requerida por la habilidad activa (150 o 300)
-        abilityCharge -= pointsToActivate;
         if (abilityChargeBar != null)
             abilityChargeBar.text = abilityCharge.ToString();
 
@@ -684,17 +687,6 @@ public class PeggleUIManager : MonoBehaviour
 
         if (damageEffectManager != null) damageEffectManager.TriggerDamageEffect();
 
-        // Si la habilidad de daño está activa: Quita 100 de vida al enemigo (Player 2)
-        // Si está activa la de curación: Cura 150 de vida al Jugador 1
-        if (isDamageAbilityActive)
-        {
-            player2CurrentHP -= effectValue; // Resta 100
-        }
-        else
-        {
-            player1CurrentHP = Mathf.Min(player1MaxHP, player1CurrentHP + effectValue); // Cura 150 (sin pasar del máximo)
-        }
-
         UpdateHealthUI();
 
         yield return StartCoroutine(ShakeEnemyUI());
@@ -702,6 +694,8 @@ public class PeggleUIManager : MonoBehaviour
 
         Time.timeScale = 1f;
         isAbilityOn = false;
+
+        Continue.Raise(this, 2);
     }
 
     private IEnumerator AnimateAbilityImages()

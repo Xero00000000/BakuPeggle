@@ -483,7 +483,7 @@ PrefabInstance:
       objectReference: {fileID: 102900000, guid: 41a2fec26c297584bac03162c9a6d067, type: 3}
     - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: _scenesToUnload.Array.data[0].m_SceneName
-      value: Peggle
+      value: Peggle  2 Electric bogaloo
       objectReference: {fileID: 0}
     - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: _scenesToUnload.Array.data[1].m_SceneName
@@ -492,7 +492,7 @@ PrefabInstance:
     - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: _scenesToUnload.Array.data[0].m_SceneAsset
       value: 
-      objectReference: {fileID: 102900000, guid: 752e3a588dcebd9459ab25eb8e06cabb, type: 3}
+      objectReference: {fileID: 102900000, guid: aa07f283aad6c9b4ba889ddcc1288416, type: 3}
     - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: _scenesToUnload.Array.data[1].m_SceneAsset
       value: 
@@ -500,6 +500,10 @@ PrefabInstance:
     - target: {fileID: 4526100489876714376, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: m_Name
       value: SceneManager (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526100489876714376, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5017960546158884086, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1408,12 +1412,12 @@ Transform:
   m_GameObject: {fileID: 150006841}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 15}
+  m_LocalPosition: {x: 6, y: -61, z: -788}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 706036652}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1875739448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &161626545
 GameObject:
@@ -3223,6 +3227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shoot: {fileID: 11400000, guid: 1382fbfddabb6dc43806f6ca1d4c076c, type: 2}
   _newTurn: {fileID: 11400000, guid: 35149c0842fb421409f750e1e63a9451, type: 2}
+  _turnUpdateUI: {fileID: 11400000, guid: 3d68311f900a0ac4f95fe5af5b574939, type: 2}
   ball1Destroyed: 0
   ball2Destroyed: 0
   isPlayer2Turn: 1
@@ -3246,6 +3251,7 @@ MonoBehaviour:
   abilityWaitTime: 1
   abilityWaitToUnfreeze: 0.1
   abilityImageTransforms: []
+  variablesForUI: 
 --- !u!4 &327716227
 Transform:
   m_ObjectHideFlags: 0
@@ -5435,8 +5441,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   peggle:
-    m_SceneAsset: {fileID: 102900000, guid: 752e3a588dcebd9459ab25eb8e06cabb, type: 3}
-    m_SceneName: Peggle
+    m_SceneAsset: {fileID: 102900000, guid: aa07f283aad6c9b4ba889ddcc1288416, type: 3}
+    m_SceneName: Peggle  2 Electric bogaloo
   launchers:
     m_SceneAsset: {fileID: 102900000, guid: a2109864f2a3e0e4f8fe656383cfa033, type: 3}
     m_SceneName: PersistentGameplay
@@ -6859,7 +6865,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 16695ba5880a51b438a3164e1c174341, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 65190db36ab86c2498d0219de8ca6cda, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9067,6 +9073,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 792754420}
+  - component: {fileID: 792754422}
+  - component: {fileID: 792754421}
+  - component: {fileID: 792754423}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -9089,6 +9098,126 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &792754421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792754419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6bc3b9aa225be047bb0421a750ba1b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _eventChannel: {fileID: 11400000, guid: 3d68311f900a0ac4f95fe5af5b574939, type: 2}
+  _response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 792754422}
+        m_TargetAssemblyTypeName: PeggleUIManager, Assembly-CSharp
+        m_MethodName: AnimatingUI
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &792754422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792754419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f1a5ad1314565945b3a79049096cd6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDamageAbilityActive: 0
+  Continue: {fileID: 11400000, guid: 984e9096b6eacf341a817e0058a12f89, type: 2}
+  abilityCharge: 0
+  abilityChargeBar: {fileID: 1882161468}
+  imagesToAnimate:
+  - {fileID: 1430749026}
+  - {fileID: 791990833}
+  bounceScale: 1.25
+  animSpeed: 6
+  minOpacity: 0.611
+  maxOpacity: 1
+  player1HealthUI: {fileID: 85770131}
+  player2HealthUI: {fileID: 1791501639}
+  damageEffectManager: {fileID: 649039294}
+  winCanvas: {fileID: 1639582126}
+  loseCanvas: {fileID: 721482725}
+  player1PointsCanvas: {fileID: 858349490}
+  player1PointsText: {fileID: 1694052802}
+  player2PointsCanvas: {fileID: 858349490}
+  player2PointsText: {fileID: 893211858}
+  pointsDisplayDuration: 2.5
+  damageRecapCanvasPlayer: {fileID: 0}
+  damageRecapTextsPlayer: []
+  playerRecapElements: []
+  damageRecapCanvasEnemy: {fileID: 375036690}
+  damageRecapTextsEnemy:
+  - {fileID: 25760322}
+  - {fileID: 748884428}
+  enemyRecapElements: []
+  turnNoticeCanvas: {fileID: 2092424758}
+  turnNoticeText: {fileID: 462741510}
+  turnNoticeElements:
+  - {fileID: 315947326}
+  initialTurnDelay: 0.88
+  turnNoticeDuration: 1.15
+  damageRecapDuration: 0.95
+  delayBetweenDamages: 0.7
+  delayBetweenCanvases: 1
+  delayBeforeTurnNotice: 1.25
+  scriptToDisable: {fileID: 1792628575}
+  forcedAnimStyle: -1
+  abilityInDuration: 0.1
+  abilityWaitTime: 1
+  abilityWaitToUnfreeze: 0.1
+  abilityImageTransforms: []
+  abilityInSound: {fileID: 8300000, guid: f2a14880c4289f24baa7eebc3649b91d, type: 3}
+  hitSound: {fileID: 8300000, guid: cae0f46c9249b3340b57732f8d960f8a, type: 3}
+  enemyUIElementsToShake:
+  - {fileID: 1791501636}
+  - {fileID: 1174286379}
+  shakeIntensity: 15
+  shakeDuration: 0.3
+--- !u!114 &792754423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792754419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 121ff1a679d07a74c869ea5bd475a5f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _eventChannel: {fileID: 11400000, guid: 49dec7ca8445ee846bf9cea276179cc1, type: 2}
+  _response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 792754422}
+        m_TargetAssemblyTypeName: PeggleUIManager, Assembly-CSharp
+        m_MethodName: AddPoints
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &802745090
 GameObject:
   m_ObjectHideFlags: 0
@@ -9115,7 +9244,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 802745090}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &802745092
 Camera:
   m_ObjectHideFlags: 0
@@ -13213,7 +13342,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 16695ba5880a51b438a3164e1c174341, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 65190db36ab86c2498d0219de8ca6cda, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -20358,6 +20487,7 @@ RectTransform:
   m_Children:
   - {fileID: 1180829780}
   - {fileID: 595787414}
+  - {fileID: 150006845}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -23436,7 +23566,6 @@ SceneRoots:
   - {fileID: 30559795}
   - {fileID: 1712451287}
   - {fileID: 1875739448}
-  - {fileID: 150006845}
   - {fileID: 101104319}
   - {fileID: 1912571211}
   - {fileID: 1034704155}

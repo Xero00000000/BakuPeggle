@@ -75,14 +75,15 @@ public class TurnManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        
         player1CurrentHP = player1MaxHP;
         player2CurrentHP = player2MaxHP;
-        player1DamageToTake = 0;
-        player2DamageToTake = 0;
         abilityCharge = 0;
+
+
         variablesForUI = new int[] {0, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake};
         _turnUpdateUI.Raise(this, variablesForUI);
-        //ResetTurn();
+        
     }
 
     // Update is called once per frame
@@ -115,6 +116,9 @@ public class TurnManager : MonoBehaviour
 
         _newTurn.Raise(this);
         isPlayer2Turn = true;
+
+        variablesForUI = new int[] { 3, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake };
+        _turnUpdateUI.Raise(this, variablesForUI);
     }
     
     public void Continue(Component that, int variable)
@@ -124,11 +128,13 @@ public class TurnManager : MonoBehaviour
             case 0: HandleGameOver(); break;
             case 1: ResetTurn(); break;
             case 2: isAbilityOn = false; ; break;
+
         }
     }
 
     private void EndTurn()
     {
+        Debug.Log("iiiiiii");
         if (player2DamageToTake > 0)
             player2CurrentHP -= player2DamageToTake;
 
@@ -144,6 +150,8 @@ public class TurnManager : MonoBehaviour
     private void HandleGameOver()
     {
         isGameOver = true;
+        variablesForUI = new int[] { 4, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake };
+        _turnUpdateUI.Raise(this, variablesForUI);
         /*
         if (player1PointsCanvas != null) player1PointsCanvas.SetActive(false);
         if (player2PointsCanvas != null) player2PointsCanvas.SetActive(false);
