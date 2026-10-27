@@ -1,14 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class SettingsManager : MonoBehaviour
 {
     [Header("Referencias UI")]
     public Slider volumeSlider;
-
-    [Header("Configuración de Retorno")]
-    public string defaultReturnScene = "StreetScene";
 
     private void Awake()
     {
@@ -34,15 +30,6 @@ public class SettingsManager : MonoBehaviour
     public void OnVolumeChanged(float value)
     {
         AudioListener.volume = Mathf.Clamp01(value);
-    }
-
-    public void GoBack()
-    {
-        PlayerPrefs.SetFloat("MasterVolume", AudioListener.volume);
-        PlayerPrefs.Save();
-
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(defaultReturnScene);
     }
 
     private void OnDisable()

@@ -2427,7 +2427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &902116629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9692,7 +9692,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 1d367160637815447847f6e723f2633b, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.361
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -9790,9 +9790,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 1822337008}
   lowPassFilter: {fileID: 1822337011}
-  streetVolume: 0.15
-  approachVolume: 0.45
-  insideVolume: 0.85
+  streetVolume: 0.05
+  approachVolume: 0.282
+  insideVolume: 0.21
   fadeSpeed: 2
   streetCutoff: 1200
   approachCutoff: 3500
@@ -9805,7 +9805,7 @@ MonoBehaviour:
   dialoguePanel: {fileID: 0}
   voiceBasePitch: 0.78
   voicePitchVariation: 0.08
-  voiceVolume: 0.5
+  voiceVolume: 0.155
   blipCharacterFrequency: 1
   dialogues:
   - "\xA1Bienvenido a nuestra tienda! \xBFBusc\xE1s algo especial hoy?"
