@@ -2427,7 +2427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &902116629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9799,6 +9799,7 @@ MonoBehaviour:
   insideCutoff: 22000
   sfxSource: {fileID: 1822337007}
   doorChimeClip: {fileID: 8300000, guid: bdb1949c6d825bd43a3bdc4b13b493a8, type: 3}
+  doorChimeVolume: 0.055
   voiceSource: {fileID: 1822337006}
   voiceBlipClip: {fileID: 8300000, guid: 386d7a54cbb4e8c4b82920380c96fe96, type: 3}
   dialogueText: {fileID: 0}

@@ -11113,13 +11113,13 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.08
+    widthMultiplier: 0.3
     widthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 1
+        time: 0.0491333
+        value: 0.10457611
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -19507,7 +19507,7 @@ MonoBehaviour:
   snapAngle: 15
   ballPrefab: {fileID: 2717892554777837764, guid: 85401a63e7953954a816ac060cff60d6, type: 3}
   spawnPoint: {fileID: 276252716}
-  force: 60
+  force: 80
   audioClip: {fileID: 8300000, guid: bfa1b50caeaee23448156f683a3b952d, type: 3}
   audioSource: {fileID: 541041725}
   isTurn: 0
@@ -23166,8 +23166,8 @@ Transform:
   m_GameObject: {fileID: 2127058554}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.70710665, w: 0.707107}
-  m_LocalPosition: {x: 0.96, y: 0, z: 0}
-  m_LocalScale: {x: 0.2747, y: 1.2828, z: 1}
+  m_LocalPosition: {x: 1.392, y: -0, z: 0}
+  m_LocalScale: {x: 0.2747, y: 4.5502257, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 276252716}

@@ -24,6 +24,7 @@ public class ShopAudioAndDialogueManager : MonoBehaviour
     [Header("Efectos de Tienda")]
     public AudioSource sfxSource;
     public AudioClip doorChimeClip;
+    [Range(0f, 1f)] public float doorChimeVolume = 1.0f; // <--- NUEVO: Control de volumen del timbre
 
     [Header("Sistema de Diálogos")]
     public AudioSource voiceSource;
@@ -132,7 +133,7 @@ public class ShopAudioAndDialogueManager : MonoBehaviour
 
         if (sfxSource != null && doorChimeClip != null)
         {
-            sfxSource.PlayOneShot(doorChimeClip);
+            sfxSource.PlayOneShot(doorChimeClip, doorChimeVolume); 
         }
 
         StartDialogue();
