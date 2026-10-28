@@ -111,6 +111,7 @@ public class PeggleUIManager : MonoBehaviour
         player2MaxHP = variables[4];
         player1DamageToTake = variables[5];
         player2DamageToTake = variables[6];
+        abilityCharge = variables[7];
 
         switch (variables[0])
         {
@@ -169,7 +170,7 @@ public class PeggleUIManager : MonoBehaviour
         if (player1HealthUI != null) player1HealthUI.ShowHealthText();
         if (player2HealthUI != null) player2HealthUI.ShowHealthText();
 
-        abilityCharge = 0;
+        //
         if (abilityChargeBar != null) abilityChargeBar.text = abilityCharge.ToString();
 
         if (winCanvas != null) winCanvas.SetActive(false);

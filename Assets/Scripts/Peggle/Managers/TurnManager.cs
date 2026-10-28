@@ -42,7 +42,8 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private int multiplyCost = 150;
 
     [SerializeField] private int refreshCost = 300;
-    [SerializeField] private GameObject refreshArea;
+    //[SerializeField] private GameObject refreshArea;
+    [SerializeField] private BoxCollider refreshArea;
     [SerializeField] private GameObject pegPrefab;
     [SerializeField] private int refreshNumber;
  
@@ -108,7 +109,7 @@ public class TurnManager : MonoBehaviour
         currentBallsDestroyed = 0;
 
 
-        variablesForUI = new int[] {0, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake};
+        variablesForUI = new int[] {0, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge};
         _turnUpdateUI.Raise(this, variablesForUI);
         
     }
@@ -146,7 +147,7 @@ public class TurnManager : MonoBehaviour
         _newTurn.Raise(this);
         isPlayer2Turn = true;
 
-        variablesForUI = new int[] { 3, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake };
+        variablesForUI = new int[] { 3, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
         _turnUpdateUI.Raise(this, variablesForUI);
     }
     
@@ -170,7 +171,7 @@ public class TurnManager : MonoBehaviour
         if (player1DamageToTake > 0)
             player1CurrentHP -= player1DamageToTake;
 
-        variablesForUI = new int[] { 1, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake };
+        variablesForUI = new int[] { 1, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
 
         //Continue(this, 1);
         _turnUpdateUI.Raise(this, variablesForUI);
@@ -179,7 +180,7 @@ public class TurnManager : MonoBehaviour
     private void HandleGameOver()
     {
         isGameOver = true;
-        variablesForUI = new int[] { 4, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake };
+        variablesForUI = new int[] { 4, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
         _turnUpdateUI.Raise(this, variablesForUI);
     }
 
@@ -259,18 +260,14 @@ public class TurnManager : MonoBehaviour
             case 3:
                 for (int i = 0; i < refreshNumber; i++)
                 {
-                    new Vector3(
-        Random.Range(refreshArea.Bounds.min.x, bounds.max.x),
-        Random.Range(bounds.min.y, bounds.max.y),
-        Random.Range(bounds.min.z, bounds.max.z)
-    )
-                    var instance = Instantiate(pegPrefab, refreshArea.transform.position, Quaternion.identity);
+                    Vector3 spawnArea = new Vector3(Random.Range(refreshArea.bounds.min.x, refreshArea.bounds.max.x), Random.Range(refreshArea.bounds.min.y, refreshArea.bounds.max.y), 15);
+                    var instance = Instantiate(pegPrefab, spawnArea, Quaternion.identity);
                 }
                 break;
             default: break;
         };
 
-        variablesForUI = new int[] { 2, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake };
+        variablesForUI = new int[] { 2, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
         _turnUpdateUI.Raise(this, variablesForUI);
     }
 
