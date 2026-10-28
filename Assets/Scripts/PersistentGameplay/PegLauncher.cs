@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PegLauncher : MonoBehaviour
 {
@@ -17,9 +18,15 @@ public class PegLauncher : MonoBehaviour
 
     //temporal hasta que mejore los turnos
     [SerializeField] private bool isTurn;
+    [SerializeField] private bool outOfArea;
     [SerializeField] private ShotEventChannel _shoot;
 
     private GameObject currentBall;
+    [SerializeField] private TurnManager manager;
+
+    Ray ray;
+    RaycastHit hit;
+    [SerializeField] private LayerMask outArea;
 
     private void Start()
     {
@@ -46,11 +53,30 @@ public class PegLauncher : MonoBehaviour
         float clampedAngle = Mathf.Clamp(angle, minAngle, maxAngle);
         transform.rotation = Quaternion.Euler(0, 0, clampedAngle);
 
-        if (Input.GetMouseButtonDown(0) && isTurn == true)
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider.name == "OutOfArea")
+            {
+                outOfArea = true;
+            }
+            else
+            {
+                outOfArea = false;
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0) && isTurn == true && outOfArea == false)
         {
             audioSource.PlayOneShot(audioClip, 1f);
-            var instance = Instantiate(currentBall, spawnPoint.transform.position, Quaternion.identity);
-            instance.GetComponent<Rigidbody2D>().AddForce((direction) * force);
+            for (int i = 0; i < manager.maxBalls; i++)
+            {
+                var instance = Instantiate(currentBall, spawnPoint.transform.position, Quaternion.identity);
+                instance.GetComponent<Rigidbody2D>().AddForce((direction) * force);
+            }
+
+            /*var instance = Instantiate(currentBall, spawnPoint.transform.position, Quaternion.identity);
+        instance.GetComponent<Rigidbody2D>().AddForce((direction) * force);*/
             _shoot.Raise(this, 1);
             isTurn = false;
         }

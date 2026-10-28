@@ -82,10 +82,7 @@ public class FeedbackBalls : MonoBehaviour
         mainCamera = Camera.main;
 
         SetupVolumeReference();
-    }
 
-    public void Start()
-    {
         if (pegRenderer == null) pegRenderer = GetComponent<Renderer>();
         pegCollider = GetComponent<Collider2D>();
 

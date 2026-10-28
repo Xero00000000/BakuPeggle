@@ -1,7 +1,8 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class TurnManager : MonoBehaviour
@@ -40,15 +41,18 @@ public class TurnManager : MonoBehaviour
 
     [SerializeField] private int multiplyCost = 150;
 
-    [SerializeField] private int bombCost = 300;
-
+    [SerializeField] private int refreshCost = 300;
+    [SerializeField] private GameObject refreshArea;
+    [SerializeField] private GameObject pegPrefab;
+    [SerializeField] private int refreshNumber;
+ 
     // Propiedades dinámicas basadas en la habilidad seleccionada
     private int pointsToActivate => currentAbility switch
     {
         0 => damageCost,
         1 => healCost,
         2 => multiplyCost,
-        3 => bombCost,
+        3 => refreshCost,
         _ => 0
     };
     private int effectValue => currentAbility switch
@@ -252,7 +256,17 @@ public class TurnManager : MonoBehaviour
             case 0: player2CurrentHP -= effectValue; break;
             case 1: player1CurrentHP = Mathf.Min(player1MaxHP, player1CurrentHP + effectValue); break;
             case 2: maxBalls += 1; break;
-            case 3: break;
+            case 3:
+                for (int i = 0; i < refreshNumber; i++)
+                {
+                    new Vector3(
+        Random.Range(refreshArea.Bounds.min.x, bounds.max.x),
+        Random.Range(bounds.min.y, bounds.max.y),
+        Random.Range(bounds.min.z, bounds.max.z)
+    )
+                    var instance = Instantiate(pegPrefab, refreshArea.transform.position, Quaternion.identity);
+                }
+                break;
             default: break;
         };
 
