@@ -9,13 +9,17 @@ public class DestroyArea : MonoBehaviour
     {
         if (playerArea == true)
         {
-            manager.ball1Destroyed = true;
+            manager.currentBallsDestroyed += 1;
+            if (manager.currentBallsDestroyed >= manager.maxBalls)
+            {
+
+                manager.ball1Destroyed = true;
+            }
         }
         else
         {
             manager.ball2Destroyed = true;
         }
-
         Destroy(collision.gameObject);
     }
 }

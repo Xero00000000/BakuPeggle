@@ -16,16 +16,20 @@ public class TurnManager : MonoBehaviour
 
     public bool ball1Destroyed = false;
     public bool ball2Destroyed = false;
+    public int maxBalls;
+    public int currentBallsDestroyed;
 
     [SerializeField] private bool isPlayer2Turn;
 
     [Header("Selector de Habilidad Activa")]
     [Tooltip("True = Habilidad de Daño | False = Habilidad de Curación")]
-    [SerializeField] private bool isDamageAbilityActive = true;
+    [SerializeField] private int currentAbility;
 
     [Header("Configuración de Prefabs de Bolas")]
     [SerializeField] private GameObject damageBallPrefab; // Usado cuando la habilidad de daño está activa
     [SerializeField] private GameObject healBallPrefab;   // Usado cuando la habilidad de curación está activa
+    [SerializeField] private GameObject cloneBallPrefab;
+    [SerializeField] private GameObject bombBallPrefab;
 
     [Header("Configuración de Habilidades")]
     [SerializeField] private int damageCost = 150;
@@ -34,9 +38,26 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private int healCost = 300;
     [SerializeField] private int healEffectValue = 150;
 
+    [SerializeField] private int multiplyCost = 150;
+
+    [SerializeField] private int bombCost = 300;
+
     // Propiedades dinámicas basadas en la habilidad seleccionada
-    private int pointsToActivate => isDamageAbilityActive ? damageCost : healCost;
-    private int effectValue => isDamageAbilityActive ? damageEffectValue : healEffectValue;
+    private int pointsToActivate => currentAbility switch
+    {
+        0 => damageCost,
+        1 => healCost,
+        2 => multiplyCost,
+        3 => bombCost,
+        _ => 0
+    };
+    private int effectValue => currentAbility switch
+    {
+        0 => damageEffectValue,
+        1 => healEffectValue,
+        _ => 0
+    };
+
 
     [Header("Habilidad")]
     [SerializeField] private int abilityCharge;
@@ -79,6 +100,8 @@ public class TurnManager : MonoBehaviour
         player1CurrentHP = player1MaxHP;
         player2CurrentHP = player2MaxHP;
         abilityCharge = 0;
+        maxBalls = 1;
+        currentBallsDestroyed = 0;
 
 
         variablesForUI = new int[] {0, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake};
@@ -111,6 +134,8 @@ public class TurnManager : MonoBehaviour
         ball2Destroyed = false;
         isEndingTurn = false;
 
+        maxBalls = 1;
+        currentBallsDestroyed = 0;
         player1DamageToTake = 0;
         player2DamageToTake = 0;
 
@@ -152,21 +177,6 @@ public class TurnManager : MonoBehaviour
         isGameOver = true;
         variablesForUI = new int[] { 4, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake };
         _turnUpdateUI.Raise(this, variablesForUI);
-        /*
-        if (player1PointsCanvas != null) player1PointsCanvas.SetActive(false);
-        if (player2PointsCanvas != null) player2PointsCanvas.SetActive(false);
-        if (turnNoticeCanvas != null) turnNoticeCanvas.SetActive(false);
-        if (damageRecapCanvasPlayer != null) damageRecapCanvasPlayer.SetActive(false);
-        if (damageRecapCanvasEnemy != null) damageRecapCanvasEnemy.SetActive(false);
-
-        if (player1CurrentHP > player2CurrentHP)
-        {
-            if (winCanvas != null) winCanvas.SetActive(true);
-        }
-        else
-        {
-            if (loseCanvas != null) loseCanvas.SetActive(true);
-        }*/
     }
 
     public void WasShot(Component sender, int which)
@@ -212,7 +222,14 @@ public class TurnManager : MonoBehaviour
         spawnPoint.transform.rotation = Quaternion.Euler(0f, 0f, randomZ);
 
         // Selecciona el prefab de bola según la habilidad activa
-        GameObject prefabToSpawn = isDamageAbilityActive ? damageBallPrefab : healBallPrefab;
+        GameObject prefabToSpawn = currentAbility switch
+        {
+            0 => damageBallPrefab,
+            1 => healBallPrefab,
+            2 => cloneBallPrefab,
+            3 => bombBallPrefab,
+            _ => null
+        };
 
         if (prefabToSpawn != null)
         {
@@ -230,14 +247,14 @@ public class TurnManager : MonoBehaviour
 
         // Si la habilidad de daño está activa: Quita 100 de vida al enemigo (Player 2)
         // Si está activa la de curación: Cura 150 de vida al Jugador 1
-        if (isDamageAbilityActive)
+        switch (currentAbility)
         {
-            player2CurrentHP -= effectValue; // Resta 100
-        }
-        else
-        {
-            player1CurrentHP = Mathf.Min(player1MaxHP, player1CurrentHP + effectValue); // Cura 150 (sin pasar del máximo)
-        }
+            case 0: player2CurrentHP -= effectValue; break;
+            case 1: player1CurrentHP = Mathf.Min(player1MaxHP, player1CurrentHP + effectValue); break;
+            case 2: maxBalls += 1; break;
+            case 3: break;
+            default: break;
+        };
 
         variablesForUI = new int[] { 2, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake };
         _turnUpdateUI.Raise(this, variablesForUI);
@@ -245,16 +262,27 @@ public class TurnManager : MonoBehaviour
 
     public void SetDamageAbility()
     {
-        isDamageAbilityActive = true;
+        currentAbility = 0;
     }
-
     public void SetHealAbility()
     {
-        isDamageAbilityActive = false;
+        currentAbility = 1;
+    }
+    public void SetCloneAbility()
+    {
+        currentAbility = 2;
+    }
+    public void SetBombAbility()
+    {
+        currentAbility = 3;
     }
     public void ToggleAbility()
     {
-        isDamageAbilityActive = !isDamageAbilityActive;
+        currentAbility += 1;
+        if (currentAbility == 4)
+        {
+            currentAbility = 0;
+        }
     }
 
 

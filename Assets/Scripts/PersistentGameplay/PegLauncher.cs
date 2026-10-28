@@ -7,6 +7,9 @@ public class PegLauncher : MonoBehaviour
     [SerializeField] float maxAngle;
     [SerializeField] float snapAngle;
     [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private GameObject otherBallPrefab;
+    [SerializeField] private GameObject cloneBallPrefab;
+    [SerializeField] private GameObject bombBallPrefab;
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private float force;
     [SerializeField] private AudioClip audioClip;
@@ -16,9 +19,12 @@ public class PegLauncher : MonoBehaviour
     [SerializeField] private bool isTurn;
     [SerializeField] private ShotEventChannel _shoot;
 
+    private GameObject currentBall;
+
     private void Start()
     {
         isTurn = true;
+        currentBall = ballPrefab;
     }
 
     void Update()
@@ -43,7 +49,7 @@ public class PegLauncher : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && isTurn == true)
         {
             audioSource.PlayOneShot(audioClip, 1f);
-            var instance = Instantiate(ballPrefab, spawnPoint.transform.position, Quaternion.identity);
+            var instance = Instantiate(currentBall, spawnPoint.transform.position, Quaternion.identity);
             instance.GetComponent<Rigidbody2D>().AddForce((direction) * force);
             _shoot.Raise(this, 1);
             isTurn = false;
@@ -53,5 +59,16 @@ public class PegLauncher : MonoBehaviour
     public void NewTurn(Component that)
     {
         isTurn = true;
+    }
+
+    public void ChangeBall(int i)
+    {
+        switch (i)
+        {
+            default: currentBall = ballPrefab; break;
+            case 1: currentBall = otherBallPrefab; break;
+            case 2: currentBall = cloneBallPrefab; break;
+            case 3: currentBall = bombBallPrefab; break;
+        }
     }
 }
