@@ -11,14 +11,15 @@ public class ItemManager : MonoBehaviour
     [SerializeField] private PeggleUIManager UIManager;
     [SerializeField] private PegLauncher launcher;
 
+    [Header("Shop link")]
+    [SerializeField] private MarbeastItem[] marbeasts;   // drag all MarbeastItem assets here
+
     private int currentIndex = 0;
 
     void Start()
     {
         if (items.Count == 0)
-        {
-            items.AddRange(FindObjectsByType<ResizableItem>(FindObjectsSortMode.None));
-        }
+            items.AddRange(FindObjectsByType<ResizableItem>(FindObjectsInactive.Include, FindObjectsSortMode.None));
 
         for (int i = 0; i < items.Count; i++)
         {
@@ -29,6 +30,9 @@ public class ItemManager : MonoBehaviour
             }
         }
 
+        RefreshAvailability();
+        if (!IsAvailable(currentIndex)) currentIndex = FirstAvailable();
+
         UpdateSelection();
     }
 
@@ -36,25 +40,17 @@ public class ItemManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-            {
-                currentIndex--;
-                if (currentIndex < 0) currentIndex = items.Count - 1;
-            }
-            else
-            {
-                currentIndex++;
-                if (currentIndex >= items.Count) currentIndex = 0;
-            }
-
+            bool back = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            currentIndex = Step(currentIndex, back ? -1 : 1);
             UpdateSelection();
         }
     }
 
     public void SelectOnlyThis(ResizableItem selectedItem)
     {
+
         int index = items.IndexOf(selectedItem);
-        if (index != -1)
+        if (index != -1 && IsAvailable(index))
         {
             currentIndex = index;
             UpdateSelection();
@@ -126,5 +122,64 @@ public class ItemManager : MonoBehaviour
                 items[i].MakeNormal(); 
             }
         }
+    }
+
+    void OnEnable()
+    {
+        MarbeastSave.OnEquipChanged += HandleEquip;
+    }
+
+    void OnDisable()
+    {
+        MarbeastSave.OnEquipChanged -= HandleEquip;
+    }
+
+    // Is the item at this list index available to the player?
+    private bool IsAvailable(int index)
+    {
+        foreach (var m in marbeasts)
+            if (m != null && m.ballIndex == index)
+                return MarbeastSave.IsUnlocked(m);
+
+        return true;   // no marbeast asset for this slot -> always available
+    }
+
+    // Show unlocked items, hide locked ones
+    private void RefreshAvailability()
+    {
+        for (int i = 0; i < items.Count; i++)
+            if (items[i] != null)
+                items[i].gameObject.SetActive(IsAvailable(i));
+    }
+
+    // Fires when the shop buys/equips (or resets)
+    private void HandleEquip(int ballIndex)
+    {
+        RefreshAvailability();
+
+        if (ballIndex >= 0 && ballIndex < items.Count && IsAvailable(ballIndex))
+            currentIndex = ballIndex;
+        else
+            currentIndex = FirstAvailable();
+
+        UpdateSelection();
+    }
+
+    private int FirstAvailable()
+    {
+        for (int i = 0; i < items.Count; i++)
+            if (IsAvailable(i)) return i;
+        return 0;
+    }
+
+    // Next/previous available index, skipping locked ones
+    private int Step(int from, int dir)
+    {
+        for (int n = 0; n < items.Count; n++)
+        {
+            from = (from + dir + items.Count) % items.Count;
+            if (IsAvailable(from)) return from;
+        }
+        return from;
     }
 }

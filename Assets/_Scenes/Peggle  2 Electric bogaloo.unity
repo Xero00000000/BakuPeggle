@@ -11683,6 +11683,11 @@ MonoBehaviour:
   temporaryManager: {fileID: 327716226}
   UIManager: {fileID: 792754422}
   launcher: {fileID: 1792628575}
+  marbeasts:
+  - {fileID: 11400000, guid: c0d294407ba27e54d840a7003c372ca0, type: 2}
+  - {fileID: 11400000, guid: 68c6bb218ce3bb143865ab85d5e8c29d, type: 2}
+  - {fileID: 11400000, guid: 01db2480d5cfdaa46a3e17892b1a9379, type: 2}
+  - {fileID: 11400000, guid: ab5181351ea43e74ba9e64149b728b05, type: 2}
 --- !u!1001 &984887187
 PrefabInstance:
   m_ObjectHideFlags: 0

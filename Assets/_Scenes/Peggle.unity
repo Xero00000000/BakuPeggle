@@ -3736,7 +3736,7 @@ GameObject:
   - component: {fileID: 369573668}
   - component: {fileID: 369573667}
   m_Layer: 5
-  m_Name: Marbeast4
+  m_Name: bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8647,7 +8647,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7a487fdd67067842a49840863832e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 150006844}
+  manager: {fileID: 0}
   playerArea: 0
 --- !u!61 &782504196
 BoxCollider2D:
@@ -9022,7 +9022,7 @@ GameObject:
   - component: {fileID: 812826969}
   - component: {fileID: 812826968}
   m_Layer: 5
-  m_Name: Marbeast3
+  m_Name: clone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10498,7 +10498,16 @@ MonoBehaviour:
   items:
   - {fileID: 365890859}
   - {fileID: 533824905}
-  temporaryManager: {fileID: 150006844}
+  - {fileID: 812826968}
+  - {fileID: 369573667}
+  temporaryManager: {fileID: 0}
+  UIManager: {fileID: 0}
+  launcher: {fileID: 0}
+  marbeasts:
+  - {fileID: 11400000, guid: c0d294407ba27e54d840a7003c372ca0, type: 2}
+  - {fileID: 11400000, guid: 68c6bb218ce3bb143865ab85d5e8c29d, type: 2}
+  - {fileID: 11400000, guid: 01db2480d5cfdaa46a3e17892b1a9379, type: 2}
+  - {fileID: 11400000, guid: ab5181351ea43e74ba9e64149b728b05, type: 2}
 --- !u!1001 &984887187
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19173,12 +19182,20 @@ MonoBehaviour:
   maxAngle: 0
   snapAngle: 15
   ballPrefab: {fileID: 2717892554777837764, guid: 85401a63e7953954a816ac060cff60d6, type: 3}
+  otherBallPrefab: {fileID: 2717892554777837764, guid: 12bf4a82eb5c406419f8ae330154591b, type: 3}
+  cloneBallPrefab: {fileID: 2717892554777837764, guid: a43d08ea1fcdf924792dd7af3b2acc54, type: 3}
+  bombBallPrefab: {fileID: 2717892554777837764, guid: b7a2fd7745e41754d8d1da1f247a1e8e, type: 3}
   spawnPoint: {fileID: 276252716}
   force: 60
   audioClip: {fileID: 8300000, guid: bfa1b50caeaee23448156f683a3b952d, type: 3}
   audioSource: {fileID: 541041725}
   isTurn: 0
+  outOfArea: 0
   _shoot: {fileID: 11400000, guid: 1382fbfddabb6dc43806f6ca1d4c076c, type: 2}
+  manager: {fileID: 0}
+  outArea:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!23 &1792628577
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -19425,7 +19442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7a487fdd67067842a49840863832e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 150006844}
+  manager: {fileID: 0}
   playerArea: 1
 --- !u!114 &1796048435
 MonoBehaviour:
