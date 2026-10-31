@@ -109,10 +109,10 @@ public class CameraMove : MonoBehaviour
     {
         if (!isClose && !isTransitioning)
         {
+            if (!CameraLock.TryAcquire(this)) return;   // shop or gacha is in use
+
             Vector3 moveTowardsCamera = (oriPosition - transform.position).normalized;
-
             objPos = transform.position + (moveTowardsCamera * _closeDistance) + new Vector3(offsetX, offsetY, offsetZ);
-
             objRot = Quaternion.LookRotation(transform.position - objPos);
             isClose = true;
 
@@ -127,6 +127,9 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
+        // Someone else (shop / gacha) controls the camera -> do nothing
+        if (CameraLock.Owner != null && !CameraLock.IsOwner(this)) return;
+
         if (isClose)
         {
             MoveCamera(objPos, objRot);
@@ -148,6 +151,15 @@ public class CameraMove : MonoBehaviour
         else
         {
             MoveCamera(oriPosition, oriRotation);
+
+            // Back home and settled -> give the camera back
+            if (CameraLock.IsOwner(this) &&
+                (_camera.transform.position - oriPosition).sqrMagnitude < 0.0001f &&
+                Quaternion.Angle(_camera.transform.rotation, oriRotation) < 0.5f)
+            {
+                _camera.transform.SetPositionAndRotation(oriPosition, oriRotation);
+                CameraLock.Release(this);
+            }
         }
     }
 
@@ -190,5 +202,10 @@ public class CameraMove : MonoBehaviour
         }
 
         SceneManager.LoadScene(sceneName);
+    }
+
+    void OnDestroy()
+    {
+        CameraLock.Release(this);
     }
 }

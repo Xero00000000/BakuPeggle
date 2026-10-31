@@ -55,6 +55,8 @@ public class GachaCanvas : MonoBehaviour
     {
         if (transitionMaterial == null) return;
 
+        if (GameObject.Find("TransitionOverlayCanvas") != null) return;
+
         GameObject canvasObj = new GameObject("TransitionOverlayCanvas");
         Canvas canvas = canvasObj.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -75,6 +77,8 @@ public class GachaCanvas : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (!CameraLock.TryAcquire(this)) return;
+
         if (currentState == CameraState.Origin && targetStep1 != null)
         {
             ChangeState(CameraState.Step1_Target);
@@ -87,6 +91,8 @@ public class GachaCanvas : MonoBehaviour
 
     void Update()
     {
+        if (!CameraLock.IsOwner(this)) return;
+
         if (Input.GetKeyDown(cancelKey) || Input.GetMouseButtonDown(1))
         {
             RevertState();
@@ -115,6 +121,12 @@ public class GachaCanvas : MonoBehaviour
         }
 
         MoveCamera(targetPos, targetRot);
+
+        if (currentState == CameraState.Origin & (mainCamera.transform.position - oriPosition).sqrMagnitude < 0.0001f && Quaternion.Angle(mainCamera.transform.rotation, oriRotation) < 0.5f)
+        {
+            mainCamera.transform.SetPositionAndRotation(oriPosition, oriRotation);
+            CameraLock.Release(this);
+        }
     }
 
     void ChangeState(CameraState newState)
@@ -175,5 +187,10 @@ public class GachaCanvas : MonoBehaviour
     {
         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, finalPosition, Time.deltaTime * moveSpeed);
         mainCamera.transform.rotation = Quaternion.Slerp(mainCamera.transform.rotation, finalRotation, Time.deltaTime * moveSpeed);
+    }
+
+    void OnDestroy()
+    {
+        CameraLock.Release(this);
     }
 }
