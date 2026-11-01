@@ -70,6 +70,16 @@ public class FeedbackBalls : MonoBehaviour
     [SerializeField] private FloatingText floatingTextPrefab;
     [SerializeField] private int basePoints = 100;
 
+    [Tooltip("Color del texto para cada tipo (mismo orden que 'types'). Si está vacío, se usa el color del material.")]
+    [SerializeField] private Color[] typeTextColors;
+
+    [Tooltip("Brillo (Value en HSV) del primer golpe del combo. 1 = brillo máximo.")]
+    [SerializeField, Range(0.1f, 1f)] private float startBrightness = 0.55f;
+    [Tooltip("Cantidad de golpes de combo para llegar al brillo máximo.")]
+    [SerializeField] private int hitsToMaxBrightness = 8;
+    [Tooltip("Mezcla máxima de blanco en el combo más alto (0 = nunca se vuelve blanco).")]
+    [SerializeField, Range(0f, 0.5f)] private float maxWhiteMix = 0.1f;
+
     private static int hitStreak = 0;
     private static float lastHitTime = 0f;
     private static ChromaticAberration chromaticComponent;
@@ -291,11 +301,53 @@ public class FeedbackBalls : MonoBehaviour
         int totalPoints = basePoints * multiplier;
 
         string text = hitStreak > 1 ? $"+{totalPoints} (x{hitStreak})" : $"+{totalPoints}";
-        Color color = hitStreak >= 3 ? new Color(1f, 0.85f, 0f) : Color.white;
+        Color color = GetComboTextColor();
 
         Vector3 spawnPos = transform.position + Vector3.up * 0.3f;
         FloatingText ft = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
         ft.Setup(text, color);
+    }
+
+    private Color GetBaseTypeColor()
+    {
+        // 1) Color explícito por tipo
+        if (typeTextColors != null && currentType < typeTextColors.Length)
+            return typeTextColors[currentType];
+
+        // 2) Color del material del tipo
+        if (types != null && currentType < types.Length && types[currentType] != null
+            && types[currentType].HasProperty("_Color"))
+            return types[currentType].color;
+
+        // 3) Fallback al mismo esquema que usas para la imagen
+        switch (currentType)
+        {
+            case 0: return Color.red;
+            case 1: return Color.green;
+            case 2: return Color.blue;
+            default: return Color.white;
+        }
+    }
+
+    private Color GetComboTextColor()
+    {
+        Color baseColor = GetBaseTypeColor();
+
+        // 0 en el primer golpe, 1 al llegar a hitsToMaxBrightness
+        float comboSteps = Mathf.Max(0, hitStreak - 1);
+        float t = Mathf.Clamp01(comboSteps / Mathf.Max(1, hitsToMaxBrightness - 1));
+
+        // Mantener hue y saturación; solo subir el brillo (Value)
+        Color.RGBToHSV(baseColor, out float h, out float s, out float v);
+        float newV = Mathf.Lerp(v * startBrightness, v, t);
+
+        Color result = Color.HSVToRGB(h, s, newV);
+
+        // Un toque mínimo de blanco al final para dar sensación de "incandescente"
+        result = Color.Lerp(result, Color.white, t * maxWhiteMix);
+
+        result.a = baseColor.a;
+        return result;
     }
 
     private void UpdateComboState()

@@ -16,26 +16,19 @@ public class MarbeastShop : MonoBehaviour
         if (previewImage != null && marbeast.icon != null) previewImage.sprite = marbeast.icon;
         if (nameText != null) nameText.text = marbeast.displayName;
 
-        // Make sure the default marbeast is equipped on first run
-        if (marbeast.unlockedByDefault && !PlayerPrefs.HasKey(MarbeastSave.EQUIPPED_INDEX_KEY))
-            MarbeastSave.Equip(marbeast);
-
         actionButton.onClick.AddListener(OnClickAction);
         UpdateUI();
     }
 
     void OnClickAction()
     {
-        if (!MarbeastSave.IsUnlocked(marbeast))
-        {
-            if (!MarbeastSave.TryBuy(marbeast))
-            {
-                Debug.Log("Not enough coins.");
-                return;
-            }
-        }
+        if (MarbeastSave.IsUnlocked(marbeast)) return;
 
-        MarbeastSave.Equip(marbeast);
+        if (!MarbeastSave.TryBuy(marbeast))
+        {
+            Debug.Log("Not enough coins.");
+            return;
+        }
 
         foreach (var shop in FindObjectsByType<MarbeastShop>(FindObjectsSortMode.None))
             shop.UpdateUI();
@@ -43,19 +36,14 @@ public class MarbeastShop : MonoBehaviour
 
     public void UpdateUI()
     {
-        if (!MarbeastSave.IsUnlocked(marbeast))
+        if (MarbeastSave.IsUnlocked(marbeast))
         {
-            priceOrStatusText.text = "$" + marbeast.price;
-            actionButton.interactable = true;
-        }
-        else if (MarbeastSave.IsEquipped(marbeast))
-        {
-            priceOrStatusText.text = "Equipped";
+            priceOrStatusText.text = "Bought";
             actionButton.interactable = false;
         }
         else
         {
-            priceOrStatusText.text = "Select";
+            priceOrStatusText.text = "$" + marbeast.price;
             actionButton.interactable = true;
         }
     }
@@ -73,9 +61,6 @@ public class MarbeastShop : MonoBehaviour
 
     void HandleReset()
     {
-        if (marbeast.unlockedByDefault)
-            MarbeastSave.Equip(marbeast);   // normal marbeast equipped again
-
         UpdateUI();
     }
 }
