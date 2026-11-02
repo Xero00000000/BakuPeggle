@@ -7,6 +7,7 @@ public class SceneLoadManager : MonoBehaviour
 {
 
     private GameObject _player;
+    private bool busy;
 
     private void Awake()
     {
@@ -15,46 +16,69 @@ public class SceneLoadManager : MonoBehaviour
 
     public void SceneTransition(Component sender, SceneField[] scenesToLoad, SceneField[] scenesToUnload, object[] transitionEffects)
     {
-        LoadScenes(scenesToLoad);
-        UnLoadScenes(scenesToUnload);
+        if (busy) return;   // ignore double clicks
+        StartCoroutine(TransitionRoutine(scenesToLoad, scenesToUnload));
     }
 
-    private void LoadScenes(SceneField[] _scenesToLoad)
+    private IEnumerator TransitionRoutine(SceneField[] toLoad, SceneField[] toUnload)
     {
-        for (int i = 0; i < _scenesToLoad.Length; i++)
-        {
-            bool isSceneLoaded = false;
-            for (int j = 0; j < SceneManager.sceneCount; j++)
-            {
-                Scene loadedScene = SceneManager.GetSceneAt(j);
-                if (loadedScene.name == _scenesToLoad[i].SceneName)
-                {
-                    isSceneLoaded = true;
-                    break;
-                }
-            }
+        busy = true;
+        Time.timeScale = 1f;
 
-            if (!isSceneLoaded)
+        // 1. Load the new scenes first
+        var loadOps = new List<AsyncOperation>();
+        string firstNew = null;
+
+        if (toLoad != null)
+        {
+            foreach (var s in toLoad)
             {
-                SceneManager.LoadSceneAsync(_scenesToLoad[i], LoadSceneMode.Additive);
+                if (s == null || IsLoaded(s.SceneName)) continue;
+                var op = SceneManager.LoadSceneAsync(s.SceneName, LoadSceneMode.Additive);
+                if (op == null) continue;
+                loadOps.Add(op);
+                if (firstNew == null) firstNew = s.SceneName;
             }
         }
-    }
 
-    private void UnLoadScenes(SceneField[] _scenesToUnload)
-    {
-        for (int i = 0; i < _scenesToUnload.Length; i++)
+        while (loadOps.Exists(o => !o.isDone)) yield return null;
+
+        // 2. Make the first new scene active so Peggle is no longer the active/last scene
+        if (firstNew != null)
         {
-            for (int j = 0; j < SceneManager.sceneCount; j++)
+            Scene sc = SceneManager.GetSceneByName(firstNew);
+            if (sc.isLoaded) SceneManager.SetActiveScene(sc);
+        }
+
+        // 3. Now it's safe to unload
+        if (toUnload != null)
+        {
+            foreach (var s in toUnload)
             {
-                Scene loadedScene = SceneManager.GetSceneAt(j);
-                if (loadedScene.name == _scenesToUnload[i].SceneName)
+                if (s == null) continue;
+                Scene sc = SceneManager.GetSceneByName(s.SceneName);
+
+                if (!sc.isLoaded)
                 {
-                    SceneManager.UnloadSceneAsync(_scenesToUnload[i]);
+                    Debug.LogWarning($"Unload requested for '{s.SceneName}' but it isn't loaded. Check the SceneField.", this);
+                    continue;
                 }
+                if (SceneManager.UnloadSceneAsync(sc) == null)
+                    Debug.LogWarning($"Unity refused to unload '{s.SceneName}'.", this);
             }
         }
+
+        busy = false;
     }
+
+    private static bool IsLoaded(string name)
+    {
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+            if (SceneManager.GetSceneAt(i).name == name) return true;
+        return false;
+    }
+
+    
 
     //aca cosas probando para ver que me sale
     [SerializeField] private SceneField _Test1;

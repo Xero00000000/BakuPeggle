@@ -10471,8 +10471,12 @@ MonoBehaviour:
   - m_SceneAsset: {fileID: 102900000, guid: 41a2fec26c297584bac03162c9a6d067, type: 3}
     m_SceneName: Shopping
   scenesToUnload:
-  - m_SceneAsset: {fileID: 102900000, guid: 752e3a588dcebd9459ab25eb8e06cabb, type: 3}
-    m_SceneName: Peggle
+  - m_SceneAsset: {fileID: 102900000, guid: aa07f283aad6c9b4ba889ddcc1288416, type: 3}
+    m_SceneName: Peggle  2 Electric bogaloo
+  objectsToHide: []
+  onBeforeChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &903109334
 GameObject:
   m_ObjectHideFlags: 0
@@ -18175,9 +18179,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventToBroadcast: {fileID: 11400000, guid: 7ed4c0fc4b6aebf4e8cd8ee75cc3c325, type: 2}
   scenesToLoad:
-  - m_SceneAsset: {fileID: 0}
-    m_SceneName: 
-  scenesToUnload: []
+  - m_SceneAsset: {fileID: 102900000, guid: 41a2fec26c297584bac03162c9a6d067, type: 3}
+    m_SceneName: Shopping
+  scenesToUnload:
+  - m_SceneAsset: {fileID: 102900000, guid: aa07f283aad6c9b4ba889ddcc1288416, type: 3}
+    m_SceneName: Peggle  2 Electric bogaloo
+  objectsToHide: []
+  onBeforeChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1654745626
 PrefabInstance:
   m_ObjectHideFlags: 0
