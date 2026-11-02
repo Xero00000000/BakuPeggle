@@ -80,8 +80,14 @@ public class FeedbackBalls : MonoBehaviour
     [Tooltip("Mezcla máxima de blanco en el combo más alto (0 = nunca se vuelve blanco).")]
     [SerializeField, Range(0f, 0.5f)] private float maxWhiteMix = 0.1f;
 
-    private static int hitStreak = 0;
-    private static float lastHitTime = 0f;
+    private static int playerStreak = 0;
+    private static int enemyStreak = 0;
+    private static float playerLastHitTime = 0f;
+    private static float enemyLastHitTime = 0f;
+
+    // Streak of this peg's own side
+    private int hitStreak => playerPeg ? playerStreak : enemyStreak;
+
     private static ChromaticAberration chromaticComponent;
 
     private Camera mainCamera;
@@ -352,17 +358,20 @@ public class FeedbackBalls : MonoBehaviour
 
     private void UpdateComboState()
     {
-        if (Time.time - lastHitTime > comboResetTime)
+        ref int streak = ref (playerPeg ? ref playerStreak : ref enemyStreak);
+        ref float lastTime = ref (playerPeg ? ref playerLastHitTime : ref enemyLastHitTime);
+
+        if (Time.time - lastTime > comboResetTime)
         {
-            hitStreak = 0;
-            if (chromaticComponent != null)
+            streak = 0;
+            if (playerPeg && chromaticComponent != null)
             {
                 chromaticComponent.intensity.value = 0f;
             }
         }
 
-        lastHitTime = Time.time;
-        hitStreak++;
+        lastTime = Time.time;
+        streak++;
     }
 
     private void PlayEscalatingHitSound()

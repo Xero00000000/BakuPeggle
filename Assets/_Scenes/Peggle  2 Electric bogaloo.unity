@@ -3387,7 +3387,8 @@ MonoBehaviour:
   abilityInDuration: 0.1
   abilityWaitTime: 1
   abilityWaitToUnfreeze: 0.1
-  abilityImageTransforms: []
+  abilityImageTransforms:
+  - {fileID: 365066598}
   variablesForUI: 
 --- !u!4 &327716227
 Transform:
@@ -3858,7 +3859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &365066598
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4238,7 +4239,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &388106920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9536,7 +9537,8 @@ MonoBehaviour:
   abilityInDuration: 0.1
   abilityWaitTime: 1
   abilityWaitToUnfreeze: 0.1
-  abilityImageTransforms: []
+  abilityImageTransforms:
+  - {fileID: 365066598}
   abilityInSound: {fileID: 8300000, guid: f2a14880c4289f24baa7eebc3649b91d, type: 3}
   hitSound: {fileID: 8300000, guid: cae0f46c9249b3340b57732f8d960f8a, type: 3}
   enemyUIElementsToShake:
@@ -9544,6 +9546,7 @@ MonoBehaviour:
   - {fileID: 1174286379}
   shakeIntensity: 15
   shakeDuration: 0.3
+  turnManager: {fileID: 327716226}
 --- !u!114 &792754423
 MonoBehaviour:
   m_ObjectHideFlags: 0

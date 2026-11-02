@@ -97,6 +97,9 @@ public class PeggleUIManager : MonoBehaviour
     [SerializeField] private float shakeIntensity = 15f;
     [SerializeField] private float shakeDuration = 0.3f;
 
+    [Header("Referencias")]
+    [SerializeField] private TurnManager turnManager;
+
     private bool isAbilityOn = false;
 
     private List<Vector2> playerRecapOriginalPos = new List<Vector2>();
@@ -527,6 +530,7 @@ public class PeggleUIManager : MonoBehaviour
 
         if (player)
         {
+            player2DamageToTake += points;
             ShowPlayerPoints(1, player2DamageToTake);
             abilityCharge += charge;
             if (abilityChargeBar != null)
@@ -543,15 +547,18 @@ public class PeggleUIManager : MonoBehaviour
 
     private void UpdateAbilityImageInd()
     {
-        if (/*abilityCharge >= pointsToActivate &&*/ !animActive)
+        int required = turnManager != null ? turnManager.PointsToActivate : int.MaxValue;
+        bool canUse = abilityCharge >= required;
+
+        if (canUse && !animActive)
         {
             StartAbilityAnim();
         }
-        else if (/*abilityCharge < pointsToActivate &&*/ animActive)
+        else if (!canUse && animActive)
         {
             StopAbilitiAnim();
         }
-        else //if (abilityCharge < pointsToActivate)
+        else if (!canUse)
         {
             foreach (var img in imagesToAnimate)
             {

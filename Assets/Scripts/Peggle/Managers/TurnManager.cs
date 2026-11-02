@@ -56,6 +56,8 @@ public class TurnManager : MonoBehaviour
         3 => refreshCost,
         _ => 0
     };
+
+    public int PointsToActivate => pointsToActivate;
     private int effectValue => currentAbility switch
     {
         0 => damageEffectValue,
