@@ -14274,7 +14274,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: + 500
+  m_text: + 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5d8990b63b6eeaf47a66fc1df094dec9, type: 2}
   m_sharedMaterial: {fileID: 5672839596684973085, guid: 5d8990b63b6eeaf47a66fc1df094dec9, type: 2}
@@ -17976,6 +17976,7 @@ GameObject:
   - component: {fileID: 1639582128}
   - component: {fileID: 1639582127}
   - component: {fileID: 1639582132}
+  - component: {fileID: 1639582133}
   m_Layer: 5
   m_Name: WinCanvas
   m_TagString: Untagged
@@ -18188,6 +18189,20 @@ MonoBehaviour:
   onBeforeChange:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1639582133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639582126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b38169dca19e7c44b970c2ac3576291, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinsToAdd: 100
+  rewardDisplayText: {fileID: 495835614}
 --- !u!1001 &1654745626
 PrefabInstance:
   m_ObjectHideFlags: 0

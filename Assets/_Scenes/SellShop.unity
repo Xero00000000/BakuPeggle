@@ -2516,7 +2516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinText: {fileID: 687319095}
-  backgroundDisplayImage: {fileID: 581302777}
+  backgroundDisplayImage: {fileID: 0}
   wallpaperSprites: []
   wallpaperPrices: 6400000096000000c8000000
   shopButtons:
