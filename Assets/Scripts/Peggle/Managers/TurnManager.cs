@@ -46,7 +46,10 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private BoxCollider refreshArea;
     [SerializeField] private GameObject pegPrefab;
     [SerializeField] private int refreshNumber;
- 
+
+    [Header("Recompensa")]
+    [SerializeField] private int winReward = 100;
+
     // Propiedades dinámicas basadas en la habilidad seleccionada
     private int pointsToActivate => currentAbility switch
     {
@@ -181,7 +184,15 @@ public class TurnManager : MonoBehaviour
 
     private void HandleGameOver()
     {
+        if (isGameOver) return;
         isGameOver = true;
+
+        bool playerWon = player1CurrentHP > player2CurrentHP;
+        Debug.Log($"[Reward] Game over. P1={player1CurrentHP} P2={player2CurrentHP} won={playerWon}");
+
+        if (playerWon)
+            MarbeastSave.AddCoins(winReward);
+
         variablesForUI = new int[] { 4, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
         _turnUpdateUI.Raise(this, variablesForUI);
     }

@@ -11,10 +11,21 @@ public static class MarbeastSave
     public static event System.Action OnReset;
 
     public static event System.Action<int> OnEquipChanged;
+    public static event System.Action<int> OnCoinsAdded;   // NEW
+
     public static int Coins
     {
         get => PlayerPrefs.GetInt(COINS_KEY, DEFAULT_COINS);
         set => PlayerPrefs.SetInt(COINS_KEY, value);
+    }
+
+    // NEW: call this when the player wins
+    public static void AddCoins(int amount)
+    {
+        if (amount <= 0) return;
+        Coins += amount;
+        PlayerPrefs.Save();
+        OnCoinsAdded?.Invoke(amount);
     }
 
     public static bool IsUnlocked(MarbeastItem item) =>

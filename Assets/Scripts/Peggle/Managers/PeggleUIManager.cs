@@ -513,6 +513,8 @@ public class PeggleUIManager : MonoBehaviour
         {
             if (loseCanvas != null) loseCanvas.SetActive(true);
         }
+
+        Continue.Raise(this, 0);   // NEW: tells TurnManager the game is over
     }
 
     public void AddPoints(Component sender, bool player, int type)
