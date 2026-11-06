@@ -57,15 +57,18 @@ public class PeggleUIManager : MonoBehaviour
     private FloatingText activePlayerText;
     private FloatingText activeEnemyText;
 
-    [Header("Recuento de Daño - Jugador 1")]
-    [SerializeField] private GameObject damageRecapCanvasPlayer;
-    [SerializeField] private List<TextMeshProUGUI> damageRecapTextsPlayer;
-    [SerializeField] private List<RectTransform> playerRecapElements;
+    [Header("Daño Total (reemplaza los canvas de recuento)")]
+    [SerializeField] private DamageNumber damageNumberPrefab;
+    [SerializeField] private Color playerDamageColor = Color.white;   // damage the player deals
+    [SerializeField] private Color enemyDamageColor = Color.red;      // damage the player receives
+    [Tooltip("Opcional. Si está vacío se usa el transform del Player Health UI.")]
+    [SerializeField] private Transform player1HealthTarget;
+    [SerializeField] private Transform player2HealthTarget;
+    [SerializeField] private float holdBeforeFly = 0.6f;
 
-    [Header("Recuento de Daño - Jugador 2 / Enemigo")]
-    [SerializeField] private GameObject damageRecapCanvasEnemy;
-    [SerializeField] private List<TextMeshProUGUI> damageRecapTextsEnemy;
-    [SerializeField] private List<RectTransform> enemyRecapElements;
+    private DamageNumber pendingToEnemy;    // total the player deals
+    private DamageNumber pendingToPlayer;   // total the enemy deals
+    private int arrivalsPending;
 
     [Header("Configuración de Turnos y Tiempos")]
     [SerializeField] private GameObject turnNoticeCanvas;
@@ -73,9 +76,7 @@ public class PeggleUIManager : MonoBehaviour
     [SerializeField] private List<RectTransform> turnNoticeElements;
     [SerializeField] private float initialTurnDelay = 1.5f;
     [SerializeField] private float turnNoticeDuration = 1.5f;
-    [SerializeField] private float damageRecapDuration = 1.5f;
-    [SerializeField] private float delayBetweenDamages = 1.0f;
-    [SerializeField] private float delayBetweenCanvases = 0.5f;
+   
     [SerializeField] private float delayBeforeTurnNotice = 1.0f;
     [SerializeField] private MonoBehaviour scriptToDisable;
 
@@ -109,8 +110,7 @@ public class PeggleUIManager : MonoBehaviour
 
     private bool isAbilityOn = false;
 
-    private List<Vector2> playerRecapOriginalPos = new List<Vector2>();
-    private List<Vector2> enemyRecapOriginalPos = new List<Vector2>();
+    
     private List<Vector2> turnNoticeOriginalPos = new List<Vector2>();
     
     public void AnimatingUI(Component turnManager, int[] variables)
@@ -161,14 +161,7 @@ public class PeggleUIManager : MonoBehaviour
             }
         }
 
-        foreach (var rt in playerRecapElements)
-        {
-            if (rt != null) playerRecapOriginalPos.Add(rt.anchoredPosition);
-        }
-        foreach (var rt in enemyRecapElements)
-        {
-            if (rt != null) enemyRecapOriginalPos.Add(rt.anchoredPosition);
-        }
+        
 
         turnNoticeOriginalPos.Clear();
         foreach (var rt in turnNoticeElements)
@@ -188,8 +181,7 @@ public class PeggleUIManager : MonoBehaviour
         if (player1PointsCanvas != null) player1PointsCanvas.SetActive(false);
         if (player2PointsCanvas != null) player2PointsCanvas.SetActive(false);
         if (turnNoticeCanvas != null) turnNoticeCanvas.SetActive(false);
-        if (damageRecapCanvasPlayer != null) damageRecapCanvasPlayer.SetActive(false);
-        if (damageRecapCanvasEnemy != null) damageRecapCanvasEnemy.SetActive(false);
+       
 
         foreach (var img in abilityImageTransforms)
         {
@@ -348,44 +340,30 @@ public class PeggleUIManager : MonoBehaviour
 
     private IEnumerator EndTurnRoutine()
     {
-        Debug.Log("whoop");
+        // Make sure the numbers show the final totals
+        if (pendingToEnemy != null) pendingToEnemy.SetText(player2DamageToTake.ToString());
+        if (pendingToPlayer != null) pendingToPlayer.SetText(player1DamageToTake.ToString());
 
-        if (player2DamageToTake > 0)
+        if (pendingToEnemy != null || pendingToPlayer != null)
+            yield return new WaitForSeconds(holdBeforeFly);   // let the player read them
+
+        arrivalsPending = 0;
+        if (pendingToEnemy != null) FlyToHealth(pendingToEnemy, true);
+        if (pendingToPlayer != null) FlyToHealth(pendingToPlayer, false);
+
+        float timeout = 3f;
+        while (arrivalsPending > 0 && timeout > 0f)
         {
-            UpdateHealthUI();
-
-            if (damageEffectManager != null) damageEffectManager.TriggerDamageEffect();
-
-            if (damageRecapCanvasEnemy != null)
-            {
-                yield return StartCoroutine(ShowDamageRecapRoutine(player2DamageToTake, damageRecapCanvasEnemy, damageRecapTextsEnemy, enemyRecapElements, enemyRecapOriginalPos));
-            }
+            timeout -= Time.unscaledDeltaTime;
+            yield return null;
         }
 
-        if (player1DamageToTake > 0 && player2DamageToTake > 0)
-        {
-            yield return new WaitForSeconds(delayBetweenCanvases);
-        }
-        else
-        {
-            yield return new WaitForSeconds(delayBetweenDamages);
-        }
-
-        if (player1DamageToTake > 0)
-        {
-            UpdateHealthUI();
-
-            if (damageEffectManager != null) damageEffectManager.TriggerDamageEffect();
-
-            if (damageRecapCanvasPlayer != null)
-            {
-                yield return StartCoroutine(ShowDamageRecapRoutine(player1DamageToTake, damageRecapCanvasPlayer, damageRecapTextsPlayer, playerRecapElements, playerRecapOriginalPos));
-            }
-        }
+        pendingToEnemy = null;
+        pendingToPlayer = null;
+        UpdateHealthUI();   // safety net, in case a side had damage but no number
 
         if (player1CurrentHP <= 0 || player2CurrentHP <= 0)
         {
-            Debug.Log("wow");
             HandleGameOver();
         }
         else
@@ -395,102 +373,77 @@ public class PeggleUIManager : MonoBehaviour
         }
     }
 
-    private IEnumerator ShowDamageRecapRoutine(int damageAmount, GameObject targetCanvas, List<TextMeshProUGUI> targetTexts, List<RectTransform> elements, List<Vector2> originalPos)
+    public void ShowTotalDamage(bool fromPlayer, Vector3 worldPos)
     {
-        float calculatedFontSize = Mathf.Clamp(1f * (damageAmount / 2.2f), 100f, 450f);
+        if (isGameOver || damageNumberPrefab == null) return;
 
-        foreach (var txt in targetTexts)
+        int damage = fromPlayer ? player2DamageToTake : player1DamageToTake;
+        if (damage <= 0) return;
+
+        worldPos = ClampToScreen(worldPos);
+        float size = Mathf.Lerp(1f, 1.8f, Mathf.InverseLerp(30f, 300f, damage));
+
+        ref DamageNumber slot = ref (fromPlayer ? ref pendingToEnemy : ref pendingToPlayer);
+
+        if (slot == null)
+            slot = Instantiate(damageNumberPrefab, worldPos, Quaternion.identity);
+        else
+            slot.transform.position = worldPos;
+
+        slot.Show(damage.ToString(), fromPlayer ? playerDamageColor : enemyDamageColor, size);
+    }
+
+    private void FlyToHealth(DamageNumber num, bool toEnemy)
+    {
+        PlayerHealthUI ui = toEnemy ? player2HealthUI : player1HealthUI;
+        Transform target = toEnemy ? player2HealthTarget : player1HealthTarget;
+        if (target == null && ui != null) target = ui.transform;
+
+        if (target == null)
         {
-            if (txt != null)
+            Destroy(num.gameObject);
+            return;
+        }
+
+        Vector3 dest = GetTargetWorldPos(target, num.transform.position);
+        arrivalsPending++;
+
+        num.FlyTo(dest, () =>
+        {
+            if (ui != null)
             {
-                txt.text = "¡" + damageAmount + "!";
-                txt.fontSize = calculatedFontSize;
-                txt.transform.localScale = Vector3.one;
+                if (toEnemy) ui.UpdateHealth(player2CurrentHP, player2MaxHP);
+                else ui.UpdateHealth(player1CurrentHP, player1MaxHP);
             }
-        }
+            if (damageEffectManager != null) damageEffectManager.TriggerDamageEffect();
+            arrivalsPending--;
+        });
+    }
 
-        CanvasGroup canvasGroup = targetCanvas.GetComponent<CanvasGroup>();
-        if (canvasGroup == null) canvasGroup = targetCanvas.AddComponent<CanvasGroup>();
-        canvasGroup.alpha = 0f;
+    // Works for world objects and for UI elements (overlay, camera or world canvas)
+    private Vector3 GetTargetWorldPos(Transform target, Vector3 referenceWorldPos)
+    {
+        Camera cam = Camera.main;
+        Canvas canvas = target.GetComponentInParent<Canvas>();
+        if (canvas == null) return target.position;
 
-        targetCanvas.SetActive(true);
+        canvas = canvas.rootCanvas;
+        if (canvas.renderMode == RenderMode.WorldSpace) return target.position;
 
-        float slideDuration = 0.3f;
-        float elapsed = 0f;
-        float screenWidth = Screen.width;
+        Camera uiCam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+        Vector2 screen = RectTransformUtility.WorldToScreenPoint(uiCam, target.position);
+        float depth = cam.WorldToScreenPoint(referenceWorldPos).z;
+        return cam.ScreenToWorldPoint(new Vector3(screen.x, screen.y, depth));
+    }
 
-        while (elapsed < slideDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / slideDuration);
-            float easeT = 1f - Mathf.Pow(1f - t, 3f);
-
-            canvasGroup.alpha = Mathf.Lerp(0f, 1f, t);
-
-            for (int i = 0; i < elements.Count; i++)
-            {
-                if (elements[i] != null)
-                {
-                    float startX = originalPos[i].x - screenWidth;
-                    float currentX = Mathf.Lerp(startX, originalPos[i].x, easeT);
-                    elements[i].anchoredPosition = new Vector2(currentX, originalPos[i].y);
-                }
-            }
-            yield return null;
-        }
-
-        canvasGroup.alpha = 1f;
-        for (int i = 0; i < elements.Count; i++)
-        {
-            if (elements[i] != null) elements[i].anchoredPosition = originalPos[i];
-        }
-
-        float bounceIntensity = Mathf.Lerp(1.05f, 1.15f, (calculatedFontSize - 100f) / (450f - 100f));
-        float bounceElapsed = 0f;
-        float bounceDuration = 0.25f;
-
-        while (bounceElapsed < bounceDuration)
-        {
-            bounceElapsed += Time.deltaTime;
-            float bT = bounceElapsed / bounceDuration;
-            float scaleMultiplier = 1f + (Mathf.Sin(bT * Mathf.PI) * (bounceIntensity - 1f));
-
-            foreach (var el in elements)
-            {
-                if (el != null) el.localScale = Vector3.one * scaleMultiplier;
-            }
-
-            foreach (var txt in targetTexts)
-            {
-                if (txt != null) txt.transform.localScale = Vector3.one * scaleMultiplier;
-            }
-
-            yield return null;
-        }
-
-        foreach (var el in elements)
-        {
-            if (el != null) el.localScale = Vector3.one;
-        }
-        foreach (var txt in targetTexts)
-        {
-            if (txt != null) txt.transform.localScale = Vector3.one;
-        }
-
-        yield return new WaitForSeconds(damageRecapDuration);
-
-        float fadeOutElapsed = 0f;
-        float fadeOutDuration = 0.2f;
-        while (fadeOutElapsed < fadeOutDuration)
-        {
-            fadeOutElapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(fadeOutElapsed / fadeOutDuration);
-            canvasGroup.alpha = Mathf.Lerp(1f, 0f, t);
-            yield return null;
-        }
-
-        canvasGroup.alpha = 0f;
-        targetCanvas.SetActive(false);
+    // The ball lands at the very bottom, so keep the number inside the visible area
+    private Vector3 ClampToScreen(Vector3 worldPos)
+    {
+        Camera cam = Camera.main;
+        Vector3 v = cam.WorldToViewportPoint(worldPos);
+        v.x = Mathf.Clamp(v.x, 0.1f, 0.9f);
+        v.y = Mathf.Clamp(v.y, 0.15f, 0.9f);
+        return cam.ViewportToWorldPoint(v);
     }
 
     private void UpdateHealthUI()
@@ -509,8 +462,7 @@ public class PeggleUIManager : MonoBehaviour
         if (player1PointsCanvas != null) player1PointsCanvas.SetActive(false);
         if (player2PointsCanvas != null) player2PointsCanvas.SetActive(false);
         if (turnNoticeCanvas != null) turnNoticeCanvas.SetActive(false);
-        if (damageRecapCanvasPlayer != null) damageRecapCanvasPlayer.SetActive(false);
-        if (damageRecapCanvasEnemy != null) damageRecapCanvasEnemy.SetActive(false);
+        
 
         if (player1CurrentHP > player2CurrentHP)
         {

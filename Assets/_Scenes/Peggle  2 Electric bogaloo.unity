@@ -9198,6 +9198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 327716226}
+  uiManager: {fileID: 792754422}
   playerArea: 0
 --- !u!61 &782504196
 BoxCollider2D:
@@ -9515,23 +9516,21 @@ MonoBehaviour:
   player2PointsCanvas: {fileID: 858349490}
   player2PointsText: {fileID: 893211858}
   pointsDisplayDuration: 2.5
-  damageRecapCanvasPlayer: {fileID: 0}
-  damageRecapTextsPlayer: []
-  playerRecapElements: []
-  damageRecapCanvasEnemy: {fileID: 375036690}
-  damageRecapTextsEnemy:
-  - {fileID: 25760322}
-  - {fileID: 748884428}
-  enemyRecapElements: []
+  floatingTextPrefab: {fileID: 4739827811733754865, guid: afb617922e79649448821c7becd2050f, type: 3}
+  playerTextColor: {r: 1, g: 1, b: 1, a: 1}
+  enemyTextColor: {r: 1, g: 1, b: 1, a: 1}
+  damageNumberPrefab: {fileID: 7618555868973136083, guid: 59f3498f2a877d642b1ec420d5f6f2ea, type: 3}
+  playerDamageColor: {r: 1, g: 1, b: 1, a: 1}
+  enemyDamageColor: {r: 1, g: 1, b: 1, a: 1}
+  player1HealthTarget: {fileID: 1104480134}
+  player2HealthTarget: {fileID: 1174286379}
+  holdBeforeFly: 0.6
   turnNoticeCanvas: {fileID: 2092424758}
   turnNoticeText: {fileID: 462741510}
   turnNoticeElements:
   - {fileID: 315947326}
   initialTurnDelay: 0.88
   turnNoticeDuration: 1.15
-  damageRecapDuration: 0.95
-  delayBetweenDamages: 0.7
-  delayBetweenCanvases: 1
   delayBeforeTurnNotice: 1.25
   scriptToDisable: {fileID: 1792628575}
   forcedAnimStyle: -1
@@ -20223,6 +20222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 327716226}
+  uiManager: {fileID: 792754422}
   playerArea: 1
 --- !u!114 &1796048435
 MonoBehaviour:
