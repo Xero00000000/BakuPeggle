@@ -22,4 +22,17 @@ public class DestroyOnColision : MonoBehaviour
 
         Destroy(gameObject);
     }
+
+    public Color PegColor
+    {
+        get
+        {
+            if (pegRenderer == null) pegRenderer = GetComponent<Renderer>();
+            Material m = pegRenderer.sharedMaterial;
+            if (m == null) return Color.white;
+            if (m.HasProperty("_BaseColor")) return m.GetColor("_BaseColor"); // URP Lit
+            if (m.HasProperty("_Color")) return m.GetColor("_Color");     // Standard / unlit
+            return Color.white;
+        }
+    }
 }

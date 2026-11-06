@@ -50,6 +50,13 @@ public class PeggleUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI player2PointsText;
     [SerializeField] private float pointsDisplayDuration = 2f;
 
+    [Header("Floating Text")]
+    [SerializeField] private FloatingText floatingTextPrefab;
+    [SerializeField] private Color playerTextColor = Color.white;
+    [SerializeField] private Color enemyTextColor = Color.red;
+    private FloatingText activePlayerText;
+    private FloatingText activeEnemyText;
+
     [Header("Recuento de Daño - Jugador 1")]
     [SerializeField] private GameObject damageRecapCanvasPlayer;
     [SerializeField] private List<TextMeshProUGUI> damageRecapTextsPlayer;
@@ -530,21 +537,49 @@ public class PeggleUIManager : MonoBehaviour
             case 2: points = 60; charge += 15; break;
         }
 
+        int runningTotal;
         if (player)
         {
             player2DamageToTake += points;
-            ShowPlayerPoints(1, player2DamageToTake);
+            runningTotal = player2DamageToTake;
+            ShowPlayerPoints(1, runningTotal);
             abilityCharge += charge;
             if (abilityChargeBar != null)
                 abilityChargeBar.text = abilityCharge.ToString();
-
             UpdateAbilityImageInd();
         }
         else
         {
             player1DamageToTake += points;
-            ShowPlayerPoints(2, player1DamageToTake);
+            runningTotal = player1DamageToTake;
+            ShowPlayerPoints(2, runningTotal);
         }
+
+        Color textColor = player ? playerTextColor : enemyTextColor;
+        int streak = 1;
+
+        if (sender is FeedbackBalls fb)
+        {
+            textColor = fb.TextColor;
+            streak = fb.HitStreak;
+        }
+
+        string label = streak > 1 ? $"{runningTotal} (x{streak})" : runningTotal.ToString();
+        SpawnFloatingText(sender.transform.position, label, textColor, player);
+    }
+
+    private void SpawnFloatingText(Vector3 pos, string label, Color color, bool player)
+    {
+        if (floatingTextPrefab == null) return;
+
+        ref FloatingText slot = ref (player ? ref activePlayerText : ref activeEnemyText);
+
+        if (slot == null)
+            slot = Instantiate(floatingTextPrefab, pos, Quaternion.identity);
+        else
+            slot.transform.position = pos;
+
+        slot.Setup(label, color);
     }
 
     private void UpdateAbilityImageInd()

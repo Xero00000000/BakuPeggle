@@ -9,27 +9,26 @@ public class FloatingText : MonoBehaviour
 
     [Header("Configuración de la Sombra")]
     [SerializeField] private Color shadowColor = Color.black;
-    [Tooltip("Desplazamiento local de la sombra respecto al texto principal.")]
     [SerializeField] private Vector3 shadowOffset = new Vector3(0.03f, -0.03f, 0.01f);
 
     [Header("Configuración de Animación")]
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float fadeDuration = 0.5f;
 
+    private float timeLeft;
+    private Color mainColor = Color.white;
+
     public void Setup(string text, Color color)
     {
         if (textMesh == null) textMesh = GetComponent<TextMeshPro>();
-        if (textMesh != null)
-        {
-            textMesh.text = text;
-            textMesh.color = color;
-        }
+        mainColor = color;
+
+        if (textMesh != null) { textMesh.text = text; textMesh.color = color; }
 
         if (shadowTextMesh != null)
         {
             shadowTextMesh.text = text;
             shadowTextMesh.color = shadowColor;
-
             shadowTextMesh.transform.localPosition = shadowOffset;
             if (textMesh != null)
             {
@@ -39,23 +38,27 @@ public class FloatingText : MonoBehaviour
             }
         }
 
-        Destroy(gameObject, fadeDuration);
+        timeLeft = fadeDuration;
     }
 
     private void Update()
     {
         transform.position += Vector3.up * moveSpeed * Time.deltaTime;
+
+        timeLeft -= Time.deltaTime;
+        float a = Mathf.Clamp01(timeLeft / fadeDuration);
+
         if (textMesh != null)
         {
-            Color c = textMesh.color;
-            c.a -= Time.deltaTime / fadeDuration;
+            Color c = mainColor; c.a = mainColor.a * a;
             textMesh.color = c;
         }
         if (shadowTextMesh != null)
         {
-            Color sc = shadowTextMesh.color;
-            sc.a -= Time.deltaTime / fadeDuration;
+            Color sc = shadowColor; sc.a = shadowColor.a * a;
             shadowTextMesh.color = sc;
         }
+
+        if (timeLeft <= 0f) Destroy(gameObject);
     }
 }

@@ -69,6 +69,8 @@ public class FeedbackBalls : MonoBehaviour
     [Header("Texto Flotante")]
     [SerializeField] private FloatingText floatingTextPrefab;
     [SerializeField] private int basePoints = 100;
+    public Color TextColor => GetComboTextColor();
+    public int HitStreak => hitStreak;
 
     [Tooltip("Color del texto para cada tipo (mismo orden que 'types'). Si está vacío, se usa el color del material.")]
     [SerializeField] private Color[] typeTextColors;
@@ -150,17 +152,16 @@ public class FeedbackBalls : MonoBehaviour
         if (isHit) return;
         isHit = true;
 
+        UpdateComboState();   // before the event, so the UI reads the current streak
+
         if (_addPoints != null)
         {
             _addPoints.Raise(this, playerPeg, currentType);
         }
 
-        UpdateComboState();
         PlayEscalatingHitSound();
         VolumeApllications();
         StartParticles(collision);
-
-        SpawnFloatingText();
 
         if (pegCollider != null) pegCollider.enabled = false;
 
