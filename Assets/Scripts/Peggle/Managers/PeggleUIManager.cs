@@ -92,6 +92,10 @@ public class PeggleUIManager : MonoBehaviour
     private DamageNumber pendingToPlayer;   // total the enemy deals
     private int arrivalsPending;
 
+    [Header("Combo: color coincidente")]
+    [Tooltip("Tipo de peg que coincide con cada bola. Índice = habilidad (0 Damage, 1 Heal, 2 Duplicate, 3 Bomb). -1 = ninguno.")]
+    [SerializeField] private int[] abilityToPegType = new int[] { 0, 1, 2, -1 };
+
     [Header("Configuración de Turnos y Tiempos")]
     [SerializeField] private GameObject turnNoticeCanvas;
     [SerializeField] private TextMeshProUGUI turnNoticeText;
@@ -584,18 +588,26 @@ public class PeggleUIManager : MonoBehaviour
 
         Color textColor = player ? playerTextColor : enemyTextColor;
         int streak = 1;
+        bool matchesBall = false;
 
         if (sender is FeedbackBalls fb)
         {
             textColor = fb.TextColor;
             streak = fb.HitStreak;
+
+            if (turnManager != null)
+            {
+                int ability = turnManager.CurrentAbility;
+                if (abilityToPegType != null && ability >= 0 && ability < abilityToPegType.Length)
+                    matchesBall = abilityToPegType[ability] == fb.PegType;
+            }
         }
 
         string label = streak > 1 ? $"{runningTotal} (x{streak})" : runningTotal.ToString();
-        SpawnFloatingText(sender.transform.position, label, textColor, player);
+        SpawnFloatingText(sender.transform.position, label, textColor, player, matchesBall);
     }
 
-    private void SpawnFloatingText(Vector3 pos, string label, Color color, bool player)
+    private void SpawnFloatingText(Vector3 pos, string label, Color color, bool player, bool boosted)
     {
         if (floatingTextPrefab == null) return;
 
@@ -606,7 +618,7 @@ public class PeggleUIManager : MonoBehaviour
         else
             slot.transform.position = pos;
 
-        slot.Setup(label, color);
+        slot.Setup(label, color, boosted);
     }
 
     private void UpdateAbilityImageInd()

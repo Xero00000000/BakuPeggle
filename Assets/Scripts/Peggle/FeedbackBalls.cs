@@ -75,6 +75,7 @@ public class FeedbackBalls : MonoBehaviour
 
     [Tooltip("Color del texto para cada tipo (mismo orden que 'types'). Si está vacío, se usa el color del material.")]
     [SerializeField] private Color[] typeTextColors;
+    public int PegType => currentType;
 
     [Tooltip("Brillo (Value en HSV) del primer golpe del combo. 1 = brillo máximo.")]
     [SerializeField, Range(0.1f, 1f)] private float startBrightness = 0.55f;

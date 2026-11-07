@@ -9557,7 +9557,7 @@ MonoBehaviour:
   - {r: 0.14901961, g: 0.93725497, b: 0.20000002, a: 1}
   lightenAmount: 0.5
   barFadeSpeed: 8
-  abilityBarDefaultColor: {r: 1, g: 1, b: 1, a: 1}
+  abilityBarDefaultColor: {r: 0.101410165, g: 0.50980395, b: 0.08957814, a: 1}
   minOpacity: 0.611
   maxOpacity: 1
   player1HealthUI: {fileID: 85770131}
@@ -9581,6 +9581,7 @@ MonoBehaviour:
   holdBeforeFly: 0.6
   playerBoardArea: {fileID: 759005236}
   enemyBoardArea: {fileID: 1958041934}
+  abilityToPegType: 00000000010000000200000001000000
   turnNoticeCanvas: {fileID: 2092424758}
   turnNoticeText: {fileID: 462741510}
   turnNoticeElements:
