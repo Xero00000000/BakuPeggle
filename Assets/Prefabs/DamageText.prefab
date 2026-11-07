@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8053192605877531899}
   - component: {fileID: 4014818213888473707}
   - component: {fileID: 2175199316577318226}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sombra
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -186,7 +186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9020041656472666934}
   - component: {fileID: 7618555868973136083}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DamageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,9 +226,12 @@ MonoBehaviour:
   shadowTextMesh: {fileID: 2175199316577318226}
   shadowColor: {r: 0, g: 0, b: 0, a: 1}
   shadowOffset: {x: 0.03, y: -0.03, z: 0.01}
+  shadowStrength: 1
   popDuration: 0.25
   flyDuration: 0.5
   flyEndScale: 0.4
+  overlaySortingOrder: 500
+  bringToCameraDistance: 2
 --- !u!1 &8973771678068985939
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,7 +243,7 @@ GameObject:
   - component: {fileID: 8157822384980567953}
   - component: {fileID: 48751868099738142}
   - component: {fileID: 1589030894067425746}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FloatingText
   m_TagString: Untagged
   m_Icon: {fileID: 0}

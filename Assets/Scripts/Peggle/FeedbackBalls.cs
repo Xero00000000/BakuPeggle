@@ -33,6 +33,7 @@ public class FeedbackBalls : MonoBehaviour
     [SerializeField] private float pitchStep = 0.05f;
     [SerializeField] private float maxPitch = 2.0f;
     [SerializeField] private float comboResetTime = 2.0f;
+    [SerializeField] private bool resetByTime = false;
 
     [Header("Post Processing Feedback (Global Volume)")]
     [Tooltip("Referencia al Global Volume de la escena (si se deja vacío, se buscará en Awake).")]
@@ -300,20 +301,7 @@ public class FeedbackBalls : MonoBehaviour
         mainCamera.transform.localPosition = originalPos;
     }
 
-    private void SpawnFloatingText()
-    {
-        if (floatingTextPrefab == null) return;
-
-        int multiplier = Mathf.Max(1, hitStreak);
-        int totalPoints = basePoints * multiplier;
-
-        string text = hitStreak > 1 ? $"+{totalPoints} (x{hitStreak})" : $"+{totalPoints}";
-        Color color = GetComboTextColor();
-
-        Vector3 spawnPos = transform.position + Vector3.up * 0.3f;
-        FloatingText ft = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
-        ft.Setup(text, color);
-    }
+    
 
     private Color GetBaseTypeColor()
     {
@@ -357,12 +345,21 @@ public class FeedbackBalls : MonoBehaviour
         return result;
     }
 
+    public static void ResetCombos()
+    {
+        playerStreak = 0;
+        enemyStreak = 0;
+        playerLastHitTime = 0f;
+        enemyLastHitTime = 0f;
+        if (chromaticComponent != null) chromaticComponent.intensity.value = 0f;
+    }
+
     private void UpdateComboState()
     {
         ref int streak = ref (playerPeg ? ref playerStreak : ref enemyStreak);
         ref float lastTime = ref (playerPeg ? ref playerLastHitTime : ref enemyLastHitTime);
 
-        if (Time.time - lastTime > comboResetTime)
+        if (resetByTime && Time.time - lastTime > comboResetTime)   // <-- changed condition
         {
             streak = 0;
             if (playerPeg && chromaticComponent != null)

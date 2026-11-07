@@ -65,6 +65,8 @@ public class PeggleUIManager : MonoBehaviour
     [SerializeField] private Transform player1HealthTarget;
     [SerializeField] private Transform player2HealthTarget;
     [SerializeField] private float holdBeforeFly = 0.6f;
+    [SerializeField] private DamageTextArea playerBoardArea;   // board where the player's ball lands
+    [SerializeField] private DamageTextArea enemyBoardArea;
 
     private DamageNumber pendingToEnemy;    // total the player deals
     private DamageNumber pendingToPlayer;   // total the enemy deals
@@ -360,7 +362,8 @@ public class PeggleUIManager : MonoBehaviour
 
         pendingToEnemy = null;
         pendingToPlayer = null;
-        UpdateHealthUI();   // safety net, in case a side had damage but no number
+        UpdateHealthUI();
+        FeedbackBalls.ResetCombos();   // new turn, fresh streaks
 
         if (player1CurrentHP <= 0 || player2CurrentHP <= 0)
         {
@@ -381,6 +384,7 @@ public class PeggleUIManager : MonoBehaviour
         if (damage <= 0) return;
 
         worldPos = ClampToScreen(worldPos);
+
         float size = Mathf.Lerp(1f, 1.8f, Mathf.InverseLerp(30f, 300f, damage));
 
         ref DamageNumber slot = ref (fromPlayer ? ref pendingToEnemy : ref pendingToPlayer);
@@ -391,6 +395,15 @@ public class PeggleUIManager : MonoBehaviour
             slot.transform.position = worldPos;
 
         slot.Show(damage.ToString(), fromPlayer ? playerDamageColor : enemyDamageColor, size);
+
+
+        DamageTextArea area = fromPlayer ? playerBoardArea : enemyBoardArea;
+        if (area != null) slot.KeepInsideArea(area.WorldRect);
+
+        slot.BringToFront(Camera.main);
+
+
+
     }
 
     private void FlyToHealth(DamageNumber num, bool toEnemy)

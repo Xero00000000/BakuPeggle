@@ -17,13 +17,27 @@ public class FloatingText : MonoBehaviour
 
     private float timeLeft;
     private Color mainColor = Color.white;
+    private int baseSortingOrder;
+    private bool sortingCaptured;
 
     public void Setup(string text, Color color)
     {
         if (textMesh == null) textMesh = GetComponent<TextMeshPro>();
         mainColor = color;
 
-        if (textMesh != null) { textMesh.text = text; textMesh.color = color; }
+        // Capture the prefab's sorting order once, so repeated Setup calls don't compound it
+        if (!sortingCaptured && textMesh != null)
+        {
+            baseSortingOrder = textMesh.sortingOrder;
+            sortingCaptured = true;
+        }
+
+        if (textMesh != null)
+        {
+            textMesh.text = text;
+            textMesh.color = color;
+            textMesh.sortingOrder = baseSortingOrder + 1;   // main text above the shadow
+        }
 
         if (shadowTextMesh != null)
         {
@@ -35,6 +49,8 @@ public class FloatingText : MonoBehaviour
                 shadowTextMesh.fontSize = textMesh.fontSize;
                 shadowTextMesh.alignment = textMesh.alignment;
                 shadowTextMesh.fontStyle = textMesh.fontStyle;
+                shadowTextMesh.sortingLayerID = textMesh.sortingLayerID;
+                shadowTextMesh.sortingOrder = baseSortingOrder;   // shadow keeps the original order
             }
         }
 
