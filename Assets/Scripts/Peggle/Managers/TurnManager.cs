@@ -61,6 +61,8 @@ public class TurnManager : MonoBehaviour
     };
 
     public int PointsToActivate => pointsToActivate;
+    public bool PlayerCanAct => !isGameOver && !isEndingTurn && !isAbilityOn && !player1Shot;
+    public int CurrentAbility => currentAbility;   // 0 damage, 1 heal, 2 clone, 3 bomb
     private int effectValue => currentAbility switch
     {
         0 => damageEffectValue,

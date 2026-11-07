@@ -25,6 +25,26 @@ public class PeggleUIManager : MonoBehaviour
     [SerializeField] private float bounceScale = 1.2f;
     [SerializeField] private float animSpeed = 6f;
 
+    [Header("Barra de Habilidad")]
+    [SerializeField] private Graphic abilityBar;
+    [Tooltip("Color base de la barra por habilidad: 0 Damage, 1 Heal, 2 Duplicate, 3 Bomb")]
+    [SerializeField]
+    private Color[] abilityBarColors = new Color[]
+    {
+    new Color(0.85f, 0.15f, 0.15f),   // 0 damage
+    new Color(0.15f, 0.7f, 0.2f),     // 1 heal
+    new Color(0.2f, 0.6f, 0.9f),      // 2 duplicate
+    new Color(0.9f, 0.6f, 0.1f)       // 3 bomb
+    };
+    [SerializeField, Range(0f, 1f)] private float lightenAmount = 0.5f;
+    [SerializeField] private float barFadeSpeed = 8f;
+    [SerializeField] private Color abilityBarDefaultColor = new Color(0.15f, 0.7f, 0.2f);   // your normal green
+
+    private Color barNormalColor;
+    private Color barTargetColor;
+    private bool lastCanUse;
+    private int lastAbilityIndex = -1;
+
     [Range(0f, 1f)] [SerializeField] private float minOpacity = 0.3f;
     [Range(0f, 1f)] [SerializeField] private float maxOpacity = 1.0f;
 
@@ -114,7 +134,49 @@ public class PeggleUIManager : MonoBehaviour
 
     
     private List<Vector2> turnNoticeOriginalPos = new List<Vector2>();
-    
+
+
+    private void Awake()
+    {
+        if (abilityBar != null)
+        {
+            barNormalColor = GetBarBaseColor();
+            barTargetColor = barNormalColor;
+            abilityBar.color = barNormalColor;
+        }
+    }
+
+    private Color GetBarBaseColor()
+    {
+        return abilityBarDefaultColor;
+    }
+
+    private Color GetAbilityColor()
+    {
+        int idx = turnManager != null ? turnManager.CurrentAbility : 0;
+        if (abilityBarColors != null && idx >= 0 && idx < abilityBarColors.Length)
+            return abilityBarColors[idx];
+        return abilityBarDefaultColor;
+    }
+
+    private void Update()
+    {
+        if (abilityBar != null)
+            abilityBar.color = Color.Lerp(abilityBar.color, barTargetColor, Time.unscaledDeltaTime * barFadeSpeed);
+
+        bool canUse = turnManager != null && turnManager.PlayerCanAct
+                      && abilityCharge >= turnManager.PointsToActivate;
+        int abilityIndex = turnManager != null ? turnManager.CurrentAbility : 0;
+
+        // Refresh when the turn state changes or the player switches ball
+        if (canUse != lastCanUse || abilityIndex != lastAbilityIndex)
+        {
+            lastCanUse = canUse;
+            lastAbilityIndex = abilityIndex;
+            UpdateAbilityImageInd();
+        }
+    }
+
     public void AnimatingUI(Component turnManager, int[] variables)
     {
         player1CurrentHP = variables[1];
@@ -550,7 +612,15 @@ public class PeggleUIManager : MonoBehaviour
     private void UpdateAbilityImageInd()
     {
         int required = turnManager != null ? turnManager.PointsToActivate : int.MaxValue;
-        bool canUse = abilityCharge >= required;
+        bool hasCharge = abilityCharge >= required;
+        bool canUse = hasCharge && turnManager != null && turnManager.PlayerCanAct;
+
+        
+        // Default color while charging, the ball's color (lightened) once the ability can be used
+        barNormalColor = abilityBarDefaultColor;
+        barTargetColor = hasCharge
+            ? Color.Lerp(GetAbilityColor(), Color.white, lightenAmount)
+            : abilityBarDefaultColor;
 
         if (canUse && !animActive)
         {

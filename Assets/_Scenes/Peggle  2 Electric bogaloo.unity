@@ -1154,7 +1154,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &101104319
 Transform:
   m_ObjectHideFlags: 0
@@ -9549,6 +9549,15 @@ MonoBehaviour:
   - {fileID: 791990833}
   bounceScale: 1.25
   animSpeed: 6
+  abilityBar: {fileID: 2057265728}
+  abilityBarColors:
+  - {r: 0.8313726, g: 0, b: 0, a: 1}
+  - {r: 0.15, g: 0.9372549, b: 0.2, a: 1}
+  - {r: 0.14538093, g: 0.63195246, b: 0.9339623, a: 1}
+  - {r: 0.14901961, g: 0.93725497, b: 0.20000002, a: 1}
+  lightenAmount: 0.5
+  barFadeSpeed: 8
+  abilityBarDefaultColor: {r: 1, g: 1, b: 1, a: 1}
   minOpacity: 0.611
   maxOpacity: 1
   player1HealthUI: {fileID: 85770131}
@@ -9570,6 +9579,8 @@ MonoBehaviour:
   player1HealthTarget: {fileID: 1104480134}
   player2HealthTarget: {fileID: 1174286379}
   holdBeforeFly: 0.6
+  playerBoardArea: {fileID: 759005236}
+  enemyBoardArea: {fileID: 1958041934}
   turnNoticeCanvas: {fileID: 2092424758}
   turnNoticeText: {fileID: 462741510}
   turnNoticeElements:
@@ -20984,7 +20995,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1875739448
 RectTransform:
   m_ObjectHideFlags: 0
