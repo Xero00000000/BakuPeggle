@@ -15,17 +15,30 @@ public class PlayerHealthUI : MonoBehaviour
     [Tooltip("Velocidad con la que se reduce/llena la barra de vida")]
     [SerializeField] private float fillLerpSpeed = 8f;
 
+    [Header("Shake con poca vida")]
+    [SerializeField, Range(0f, 1f)] private float lowHealthThreshold = 0.3f;
+    [SerializeField] private float shakeIntensity = 4f;
+    [SerializeField] private float shakeSpeed = 40f;
+
     private float targetFill = 1f;
+    private bool isLow;
+    private RectTransform textRect;
+    private Vector2 textBasePos;
 
     private void Awake()
     {
         if (healthFillImage != null)
         {
+            healthFillImage.type = Image.Type.Filled;
+            healthFillImage.fillMethod = Image.FillMethod.Horizontal;
+            healthFillImage.fillOrigin = (int)Image.OriginHorizontal.Left;  // drains right -> left
             healthFillImage.fillAmount = 1f;
         }
 
         if (healthText != null)
         {
+            textRect = healthText.rectTransform;
+            textBasePos = textRect.anchoredPosition;
             healthText.gameObject.SetActive(true);
         }
     }
@@ -34,7 +47,18 @@ public class PlayerHealthUI : MonoBehaviour
     {
         if (healthFillImage != null)
         {
-            healthFillImage.fillAmount = Mathf.Lerp(healthFillImage.fillAmount, targetFill, Time.deltaTime * fillLerpSpeed);
+            // unscaled so the bar still animates while Time.timeScale = 0 (ability / turn notice)
+            healthFillImage.fillAmount = Mathf.Lerp(healthFillImage.fillAmount, targetFill, Time.unscaledDeltaTime * fillLerpSpeed);
+        }
+
+        if (isLow && textRect != null && healthText.gameObject.activeInHierarchy)
+        {
+            float t = Time.unscaledTime * shakeSpeed;
+            Vector2 offset = new Vector2(
+                Mathf.PerlinNoise(t, 0f) - 0.5f,
+                Mathf.PerlinNoise(0f, t) - 0.5f) * 2f * shakeIntensity;
+
+            textRect.anchoredPosition = textBasePos + offset;
         }
     }
 
@@ -46,7 +70,21 @@ public class PlayerHealthUI : MonoBehaviour
         {
             healthText.text = $"{currentHP}/{maxHP}";
         }
+
+        isLow = maxHP > 0 && currentHP > 0 && (float)currentHP / maxHP <= lowHealthThreshold;
+        if (!isLow) ResetTextPosition();
     }
+
+    private void ResetTextPosition()
+    {
+        if (textRect != null) textRect.anchoredPosition = textBasePos;
+    }
+
+    private void OnDisable()
+    {
+        ResetTextPosition();
+    }
+
     public void ShowHealthText()
     {
         if (healthText != null)
@@ -54,6 +92,7 @@ public class PlayerHealthUI : MonoBehaviour
             healthText.gameObject.SetActive(true);
         }
     }
+
     public void HideHealthText()
     {
         if (healthText != null)
