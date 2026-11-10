@@ -1031,6 +1031,9 @@ MonoBehaviour:
   healthFillImage: {fileID: 85770129}
   healthText: {fileID: 1104480135}
   fillLerpSpeed: 5
+  lowHealthThreshold: 0.3
+  shakeIntensity: 4
+  shakeSpeed: 40
 --- !u!1 &94423245
 GameObject:
   m_ObjectHideFlags: 0
@@ -14591,6 +14594,7 @@ GameObject:
   - component: {fileID: 1289832118}
   - component: {fileID: 1289832117}
   - component: {fileID: 1289832116}
+  - component: {fileID: 1289832119}
   m_Layer: 0
   m_Name: Roof
   m_TagString: Untagged
@@ -14712,6 +14716,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289832114}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!61 &1289832119
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289832114}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.001766026, y: -0.9761051}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.26528472, y: 2.9522102}
+  m_EdgeRadius: 0
 --- !u!1 &1304184337
 GameObject:
   m_ObjectHideFlags: 0
@@ -19982,6 +20032,9 @@ MonoBehaviour:
   healthFillImage: {fileID: 1791501637}
   healthText: {fileID: 1174286380}
   fillLerpSpeed: 8
+  lowHealthThreshold: 0.3
+  shakeIntensity: 4
+  shakeSpeed: 40
 --- !u!1 &1792628574
 GameObject:
   m_ObjectHideFlags: 0
