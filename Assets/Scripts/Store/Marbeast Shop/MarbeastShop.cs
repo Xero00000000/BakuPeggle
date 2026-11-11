@@ -11,6 +11,9 @@ public class MarbeastShop : MonoBehaviour
     [SerializeField] private TMP_Text priceOrStatusText;
     [SerializeField] private Button actionButton;
 
+    [SerializeField] private bool bakugan;
+    [SerializeField] private PersistentBullshit persistentBullshit;
+
     void Start()
     {
         if (previewImage != null && marbeast.icon != null) previewImage.sprite = marbeast.icon;
@@ -32,6 +35,15 @@ public class MarbeastShop : MonoBehaviour
 
         foreach (var shop in FindObjectsByType<MarbeastShop>(FindObjectsSortMode.None))
             shop.UpdateUI();
+
+        if (bakugan)
+        {
+            persistentBullshit.bakugan1 = true;
+        }
+        else
+        {
+            persistentBullshit.bakugan2 = true;
+        }
     }
 
     public void UpdateUI()

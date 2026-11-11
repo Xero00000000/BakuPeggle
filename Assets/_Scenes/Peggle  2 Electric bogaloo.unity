@@ -3339,6 +3339,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1ef2e366bb9ece49bda3239eb4e85cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  persistentBullshit: {fileID: 0}
+  bombShit: {fileID: 514079183}
+  duplicateShit: {fileID: 94423245}
   _shoot: {fileID: 11400000, guid: 1382fbfddabb6dc43806f6ca1d4c076c, type: 2}
   _newTurn: {fileID: 11400000, guid: 35149c0842fb421409f750e1e63a9451, type: 2}
   _turnUpdateUI: {fileID: 11400000, guid: 3d68311f900a0ac4f95fe5af5b574939, type: 2}

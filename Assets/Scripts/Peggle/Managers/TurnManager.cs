@@ -4,9 +4,14 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 public class TurnManager : MonoBehaviour
 {
+    [SerializeField] private GameObject persistentBullshit;
+    [SerializeField] private GameObject bombShit;
+    [SerializeField] private GameObject duplicateShit;
+
     [Header("Event Channels")]
     [SerializeField] private ShotEventChannel _shoot;
     [SerializeField] private VoidEventChannel _newTurn;
@@ -108,8 +113,34 @@ public class TurnManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
-        player1CurrentHP = player1MaxHP;
+        persistentBullshit = GameObject.Find("PersistentBullshit");
+
+        if (!persistentBullshit)
+        {
+            bombShit.SetActive(true);
+            duplicateShit.SetActive(true);
+        }
+        else
+        {
+            if(persistentBullshit.GetComponent<PersistentBullshit>().bakugan1 == true)
+            {
+                bombShit.SetActive (true);
+            }
+            else
+            {
+                bombShit.SetActive(false);
+            }
+            if (persistentBullshit.GetComponent<PersistentBullshit>().bakugan2 == true)
+            {
+                duplicateShit.SetActive(true);
+            }
+            else
+            {
+                duplicateShit.SetActive(false);
+            }
+        }
+
+            player1CurrentHP = player1MaxHP;
         player2CurrentHP = player2MaxHP;
         abilityCharge = 0;
         maxBalls = 1;
