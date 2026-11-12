@@ -6854,6 +6854,7 @@ MonoBehaviour:
   healthFillImage: {fileID: 550827588}
   healthText: {fileID: 1104480135}
   fillLerpSpeed: 5
+  drainsRightToLeft: 0
   lowHealthThreshold: 0.3
   shakeIntensity: 4
   shakeSpeed: 40
@@ -20166,6 +20167,7 @@ MonoBehaviour:
   healthFillImage: {fileID: 1791501637}
   healthText: {fileID: 1174286380}
   fillLerpSpeed: 8
+  drainsRightToLeft: 0
   lowHealthThreshold: 0.3
   shakeIntensity: 4
   shakeSpeed: 40

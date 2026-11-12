@@ -15,6 +15,9 @@ public class PlayerHealthUI : MonoBehaviour
     [Tooltip("Velocidad con la que se reduce/llena la barra de vida")]
     [SerializeField] private float fillLerpSpeed = 8f;
 
+    [Header("Dirección de la barra")]
+    [SerializeField] private bool drainsRightToLeft = true;
+
     [Header("Shake con poca vida")]
     [SerializeField, Range(0f, 1f)] private float lowHealthThreshold = 0.3f;
     [SerializeField] private float shakeIntensity = 4f;
@@ -25,13 +28,19 @@ public class PlayerHealthUI : MonoBehaviour
     private RectTransform textRect;
     private Vector2 textBasePos;
 
+
     private void Awake()
     {
         if (healthFillImage != null)
         {
             healthFillImage.type = Image.Type.Filled;
             healthFillImage.fillMethod = Image.FillMethod.Horizontal;
-            healthFillImage.fillOrigin = (int)Image.OriginHorizontal.Left;  // drains right -> left
+
+            // Origin Left = the bar shrinks toward the left = drains right -> left
+            healthFillImage.fillOrigin = drainsRightToLeft
+                ? (int)Image.OriginHorizontal.Left
+                : (int)Image.OriginHorizontal.Right;
+
             healthFillImage.fillAmount = 1f;
         }
 
