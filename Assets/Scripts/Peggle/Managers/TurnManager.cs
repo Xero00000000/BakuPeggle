@@ -90,8 +90,20 @@ public class TurnManager : MonoBehaviour
     [Header("Configuración del Enemigo")]
     [SerializeField] private GameObject spawnPoint;
     [SerializeField] private float force;
+    [SerializeField] private Collider enemyAimArea;   // box covering his half of the field
     [SerializeField] private float spawnPointMinRotation;
     [SerializeField] private float spawnPointMaxRotation;
+    [SerializeField] private float launchSpeed = 12f;
+
+    [Header("Rotación del lanzador enemigo")]
+    [SerializeField] private Transform enemyLauncher;           // the object that visually rotates (leave empty to rotate spawnPoint)
+    [SerializeField] private float launcherAngleOffset = -90f;  // -90 if the sprite points UP, 0 if it points RIGHT
+    [SerializeField] private float launcherRotateDuration = 0.35f;   // 0 = instant
+    [SerializeField] private float enemyMinAngle = -170f;   // world angle limits, downward only
+    [SerializeField] private float enemyMaxAngle = -10f;
+    private float launcherAngle;          // current handle angle, tracked by us
+    private bool launcherAngleReady;
+    private bool enemyShooting;
 
 
     private bool isGameOver = false;
@@ -105,6 +117,7 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private float abilityWaitTime = 0.5f;
     [SerializeField] private float abilityWaitToUnfreeze = 0.2f;
     [SerializeField] private List<RectTransform> abilityImageTransforms;
+
 
     private bool isAbilityOn = false;
 
@@ -269,10 +282,14 @@ public class TurnManager : MonoBehaviour
     {
         if (isGameOver || isAbilityOn || ignoreShootThisFrame) return;
 
-        float randomZ = Random.Range(spawnPointMinRotation, spawnPointMaxRotation);
-        spawnPoint.transform.rotation = Quaternion.Euler(0f, 0f, randomZ);
+        StartCoroutine(EnemyShootRoutine());
+    }
 
-        // Selecciona el prefab de bola según la habilidad activa
+    private IEnumerator EnemyShootRoutine()
+    {
+        if (enemyShooting) yield break;   // never run two at once
+        enemyShooting = true;
+
         GameObject prefabToSpawn = currentAbility switch
         {
             0 => damageBallPrefab,
@@ -282,13 +299,97 @@ public class TurnManager : MonoBehaviour
             _ => null
         };
 
-        if (prefabToSpawn != null)
+        if (prefabToSpawn == null)
         {
-            var instance = Instantiate(prefabToSpawn, spawnPoint.transform.position, Quaternion.identity);
-            instance.GetComponent<Rigidbody2D>().AddForce(spawnPoint.transform.up * force);
+            player2Shot = true;
+            enemyShooting = false;
+            yield break;
         }
 
+        // 1) Decide the shot first
+        Vector2 origin = spawnPoint.transform.position;
+        Vector2 vel;
+        Vector2 aimDir;
+
+        if (enemyAimArea != null)
+        {
+            Bounds b = enemyAimArea.bounds;
+            Vector2 target = new Vector2(
+                Random.Range(b.min.x, b.max.x),
+                Random.Range(b.min.y, b.max.y));
+
+            var prefabRb = prefabToSpawn.GetComponent<Rigidbody2D>();
+            float gravityScale = prefabRb != null ? prefabRb.gravityScale : 1f;
+
+            vel = SolveLaunchVelocity(origin, target, gravityScale);
+            aimDir = target - origin;
+        }
+        else
+        {
+            float randomZ = Random.Range(spawnPointMinRotation, spawnPointMaxRotation);
+            vel = Quaternion.Euler(0f, 0f, randomZ) * Vector3.up * launchSpeed;
+            aimDir = vel;
+        }
+
+        // 2) Rotate the handle: plain float interpolation, no wrapping possible
+        Transform pivot = enemyLauncher != null ? enemyLauncher : spawnPoint.transform;
+
+        if (!launcherAngleReady)
+        {
+            launcherAngle = Mathf.DeltaAngle(0f, pivot.eulerAngles.z);   // -180..180
+            launcherAngleReady = true;
+        }
+
+        float aimWorld = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
+        aimWorld = Mathf.Clamp(aimWorld, enemyMinAngle, enemyMaxAngle);
+        float targetAngle = aimWorld + launcherAngleOffset;   // -80..80 with offset 90
+
+        float startAngle = launcherAngle;
+
+        if (launcherRotateDuration > 0f)
+        {
+            float t = 0f;
+            while (t < launcherRotateDuration)
+            {
+                if (isGameOver) { enemyShooting = false; yield break; }
+
+                t += Time.deltaTime;
+                float eased = Mathf.SmoothStep(0f, 1f, t / launcherRotateDuration);
+                launcherAngle = Mathf.Lerp(startAngle, targetAngle, eased);
+                pivot.rotation = Quaternion.Euler(0f, 0f, launcherAngle);
+                yield return null;
+            }
+        }
+
+        launcherAngle = targetAngle;
+        pivot.rotation = Quaternion.Euler(0f, 0f, launcherAngle);
+
+        if (isGameOver) { enemyShooting = false; yield break; }
+
+        // 3) Fire
+        var instance = Instantiate(prefabToSpawn, spawnPoint.transform.position, Quaternion.identity);
+        instance.GetComponent<Rigidbody2D>().linearVelocity = vel;   // rb.velocity on Unity 2022 or older
+
         player2Shot = true;
+        enemyShooting = false;
+    }
+
+    private Vector2 SolveLaunchVelocity(Vector2 origin, Vector2 target, float gravityScale)
+    {
+        Vector2 straight = (target - origin).normalized * launchSpeed;
+
+        float G = -Physics2D.gravity.y * gravityScale;
+        float dx = Mathf.Abs(target.x - origin.x);
+        float dy = target.y - origin.y;
+        float v2 = launchSpeed * launchSpeed;
+        float disc = v2 * v2 - G * (G * dx * dx + 2f * dy * v2);
+
+        if (G <= 0f || dx < 0.01f || disc < 0f) return straight;
+
+        float angle = Mathf.Atan((v2 - Mathf.Sqrt(disc)) / (G * dx));
+        return new Vector2(
+            Mathf.Sign(target.x - origin.x) * Mathf.Cos(angle),
+            Mathf.Sin(angle)) * launchSpeed;
     }
 
     private void UseAbility()
