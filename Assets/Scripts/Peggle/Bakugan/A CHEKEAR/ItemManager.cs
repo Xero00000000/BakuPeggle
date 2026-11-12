@@ -14,6 +14,8 @@ public class ItemManager : MonoBehaviour
     [Header("Shop link")]
     [SerializeField] private MarbeastItem[] marbeasts;   // drag all MarbeastItem assets here
 
+    private bool CanChange => temporaryManager == null || temporaryManager.PlayerCanAct;
+
     private int currentIndex = 0;
 
     void Start()
@@ -36,8 +38,12 @@ public class ItemManager : MonoBehaviour
         UpdateSelection();
     }
 
+    
+
     void Update()
     {
+        if (!CanChange) return;
+
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             bool back = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
@@ -48,6 +54,7 @@ public class ItemManager : MonoBehaviour
 
     public void SelectOnlyThis(ResizableItem selectedItem)
     {
+        if (!CanChange) return;
 
         int index = items.IndexOf(selectedItem);
         if (index != -1 && IsAvailable(index))

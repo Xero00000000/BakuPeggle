@@ -204,10 +204,10 @@ public class TurnManager : MonoBehaviour
     {
         Debug.Log("iiiiiii");
         if (player2DamageToTake > 0)
-            player2CurrentHP -= player2DamageToTake;
+            player2CurrentHP = Mathf.Max(0, player2CurrentHP - player2DamageToTake);
 
         if (player1DamageToTake > 0)
-            player1CurrentHP -= player1DamageToTake;
+            player1CurrentHP = Mathf.Max(0, player1CurrentHP - player1DamageToTake);
 
         variablesForUI = new int[] { 1, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
 
@@ -300,7 +300,7 @@ public class TurnManager : MonoBehaviour
         // Si está activa la de curación: Cura 150 de vida al Jugador 1
         switch (currentAbility)
         {
-            case 0: player2CurrentHP -= effectValue; break;
+            case 0: player2CurrentHP = Mathf.Max(0, player2CurrentHP - effectValue); break;
             case 1: player1CurrentHP = Mathf.Min(player1MaxHP, player1CurrentHP + effectValue); break;
             case 2: maxBalls += 1; break;
             case 3:

@@ -536,6 +536,7 @@ public class PeggleUIManager : MonoBehaviour
 
     private void HandleGameOver()
     {
+        if (isGameOver) return;
         isGameOver = true;
 
         if (player1PointsCanvas != null) player1PointsCanvas.SetActive(false);
@@ -788,6 +789,14 @@ public class PeggleUIManager : MonoBehaviour
         isAbilityOn = false;
 
         Continue.Raise(this, 2);
+
+        Time.timeScale = 1f;
+        isAbilityOn = false;
+
+        Continue.Raise(this, 2);
+
+        if (player1CurrentHP <= 0 || player2CurrentHP <= 0)
+            HandleGameOver();
     }
 
     private IEnumerator AnimateAbilityImages()

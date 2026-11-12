@@ -64,12 +64,11 @@ public class PlayerHealthUI : MonoBehaviour
 
     public void UpdateHealth(int currentHP, int maxHP)
     {
-        targetFill = Mathf.Clamp01((float)currentHP / maxHP);
+        currentHP = Mathf.Max(0, currentHP);
+        targetFill = maxHP > 0 ? Mathf.Clamp01((float)currentHP / maxHP) : 0f;
 
         if (healthText != null)
-        {
             healthText.text = $"{currentHP}/{maxHP}";
-        }
 
         isLow = maxHP > 0 && currentHP > 0 && (float)currentHP / maxHP <= lowHealthThreshold;
         if (!isLow) ResetTextPosition();

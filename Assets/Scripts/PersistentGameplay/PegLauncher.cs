@@ -15,6 +15,7 @@ public class PegLauncher : MonoBehaviour
     [SerializeField] private float force;
     [SerializeField] private AudioClip audioClip;
     [SerializeField] private AudioSource audioSource;
+    public bool IsPlayerTurn => isTurn;
 
     //temporal hasta que mejore los turnos
     [SerializeField] private bool isTurn;
