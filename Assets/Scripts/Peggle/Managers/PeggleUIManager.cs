@@ -85,6 +85,7 @@ public class PeggleUIManager : MonoBehaviour
     [SerializeField] private Transform player1HealthTarget;
     [SerializeField] private Transform player2HealthTarget;
     [SerializeField] private float holdBeforeFly = 0.6f;
+    [SerializeField] private float flyEndScale = 0.25f;   // final size relative to the start
     [SerializeField] private DamageTextArea playerBoardArea;   // board where the player's ball lands
     [SerializeField] private DamageTextArea enemyBoardArea;
 
@@ -497,6 +498,8 @@ public class PeggleUIManager : MonoBehaviour
             if (damageEffectManager != null) damageEffectManager.TriggerDamageEffect();
             arrivalsPending--;
         });
+
+        StartCoroutine(ShrinkWhileFlying(num, dest));
     }
 
     // Works for world objects and for UI elements (overlay, camera or world canvas)
@@ -912,6 +915,26 @@ public class PeggleUIManager : MonoBehaviour
         {
             if (enemyUIElementsToShake[i] != null)
                 enemyUIElementsToShake[i].anchoredPosition = originalPositions[i];
+        }
+    }
+
+    private IEnumerator ShrinkWhileFlying(DamageNumber num, Vector3 dest)
+    {
+        if (num == null) yield break;
+
+        Vector3 startScale = num.transform.localScale;
+        float startDist = Vector3.Distance(num.transform.position, dest);
+        if (startDist < 0.001f) yield break;
+
+        float timeout = 3f;
+        while (num != null && timeout > 0f)
+        {
+            float remaining = Vector3.Distance(num.transform.position, dest);
+            float closeness = 1f - Mathf.Clamp01(remaining / startDist);   // 0 at start, 1 at the bar
+            num.transform.localScale = Vector3.Lerp(startScale, startScale * flyEndScale, closeness);
+
+            timeout -= Time.unscaledDeltaTime;
+            yield return null;
         }
     }
 

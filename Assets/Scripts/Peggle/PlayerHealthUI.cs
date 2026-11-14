@@ -24,6 +24,9 @@ public class PlayerHealthUI : MonoBehaviour
     [SerializeField] private float shakeSpeed = 40f;
 
     private float targetFill = 1f;
+    private int targetHP;
+    private int maxHPCached;
+    private int lastShownHP = -1;
     private bool isLow;
     private RectTransform textRect;
     private Vector2 textBasePos;
@@ -58,6 +61,7 @@ public class PlayerHealthUI : MonoBehaviour
         {
             // unscaled so the bar still animates while Time.timeScale = 0 (ability / turn notice)
             healthFillImage.fillAmount = Mathf.Lerp(healthFillImage.fillAmount, targetFill, Time.unscaledDeltaTime * fillLerpSpeed);
+            UpdateHealthText();
         }
 
         if (isLow && textRect != null && healthText.gameObject.activeInHierarchy)
@@ -74,13 +78,27 @@ public class PlayerHealthUI : MonoBehaviour
     public void UpdateHealth(int currentHP, int maxHP)
     {
         currentHP = Mathf.Max(0, currentHP);
+        targetHP = currentHP;
+        maxHPCached = maxHP;
         targetFill = maxHP > 0 ? Mathf.Clamp01((float)currentHP / maxHP) : 0f;
-
-        if (healthText != null)
-            healthText.text = $"{currentHP}/{maxHP}";
 
         isLow = maxHP > 0 && currentHP > 0 && (float)currentHP / maxHP <= lowHealthThreshold;
         if (!isLow) ResetTextPosition();
+    }
+
+    private void UpdateHealthText()
+    {
+        if (healthText == null || maxHPCached <= 0) return;
+
+        float fill = healthFillImage.fillAmount;
+
+        int shown = Mathf.Abs(fill - targetFill) < 0.002f
+            ? targetHP                                   // snap to the exact final value
+            : Mathf.RoundToInt(fill * maxHPCached);
+
+        if (shown == lastShownHP) return;                // avoid rebuilding the text every frame
+        lastShownHP = shown;
+        healthText.text = $"{shown}/{maxHPCached}";
     }
 
     private void ResetTextPosition()
