@@ -645,6 +645,7 @@ MonoBehaviour:
   pitchStep: 0.05
   maxPitch: 2
   comboResetTime: 2
+  resetByTime: 0
   globalVolume: {fileID: 0}
   chromaticStep: 0.15
   maxChromaticAberration: 0.8
@@ -664,6 +665,10 @@ MonoBehaviour:
   shakeDuration: 0.08
   floatingTextPrefab: {fileID: 4739827811733754865, guid: afb617922e79649448821c7becd2050f, type: 3}
   basePoints: 100
+  typeTextColors: []
+  startBrightness: 0.55
+  hitsToMaxBrightness: 8
+  maxWhiteMix: 0.1
 --- !u!58 &6107240070830430919
 CircleCollider2D:
   m_ObjectHideFlags: 0

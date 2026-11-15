@@ -9671,6 +9671,7 @@ MonoBehaviour:
   player1HealthTarget: {fileID: 1104480134}
   player2HealthTarget: {fileID: 1174286379}
   holdBeforeFly: 0.6
+  flyEndScale: 0.25
   playerBoardArea: {fileID: 759005236}
   enemyBoardArea: {fileID: 1958041934}
   abilityToPegType: 00000000010000000200000001000000

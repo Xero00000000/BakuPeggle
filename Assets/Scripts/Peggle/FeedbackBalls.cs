@@ -43,6 +43,10 @@ public class FeedbackBalls : MonoBehaviour
     [Tooltip("Límite máximo de Aberración Cromática.")]
     [SerializeField] private float maxChromaticAberration = 0.8f;
 
+    [Header("Square Peg")]
+    [Tooltip("If true, the peg scores on the first hit but stays solid until the ball that hit it is destroyed.")]
+    [SerializeField] private bool destroyWithBall = false;
+
     [Header("Hit")]
     [SerializeField] private GameObject pegg;
     [SerializeField] private GameObject peggBg;
@@ -51,6 +55,10 @@ public class FeedbackBalls : MonoBehaviour
     [SerializeField] private float popScaleFactor = 1.35f;
     [SerializeField] private float popDuration = 0.06f;
     [SerializeField] private float shrinkDuration = 0.12f;
+    [Tooltip("Brightness multiplier of the lit color (hue and saturation stay the same).")]
+    [SerializeField] private float litBrightness = 1.3f;
+    [Tooltip("Emission strength using the peg's own color. 0 = no glow.")]
+    [SerializeField] private float litGlow = 1.0f;
 
     [Header("Hit Flash")]
     [SerializeField] private Color hitFlashColor = new Color(1f, 1f, 1f, 0.8f);
@@ -163,6 +171,15 @@ public class FeedbackBalls : MonoBehaviour
 
         PlayEscalatingHitSound();
         VolumeApllications();
+
+        if (destroyWithBall)
+        {
+            // Light up, stay solid, explode only when the ball is gone
+            LightUp();
+            StartCoroutine(WaitForBallThenDestroy(collision.gameObject));
+            return;
+        }
+
         StartParticles(collision);
 
         if (pegCollider != null) pegCollider.enabled = false;
@@ -178,6 +195,55 @@ public class FeedbackBalls : MonoBehaviour
         }
 
         StartCoroutine(AnimatePopAndDestroy());
+    }
+
+    private IEnumerator WaitForBallThenDestroy(GameObject ball)
+    {
+        // A destroyed Unity object compares equal to null
+        while (ball != null)
+            yield return null;
+
+        // The "explosion" happens now
+        StartParticles(null);   // null collision -> spawns at the peg's position
+
+        if (pegCollider != null) pegCollider.enabled = false;
+
+        if (enableGhostOutline)
+        {
+            StartCoroutine(CreateGhostOutline());
+        }
+
+        if (enableCameraShake)
+        {
+            StartCoroutine(ApplyCameraShake());
+        }
+
+        yield return StartCoroutine(AnimatePopAndDestroy());
+    }
+
+    private void LightUp()
+    {
+        if (pegRenderer == null) return;
+
+        Material m = pegRenderer.material;   // instance, so other pegs aren't affected
+
+        Color baseColor = Color.white;
+        if (m.HasProperty("_BaseColor")) baseColor = m.GetColor("_BaseColor");
+        else if (m.HasProperty("_Color")) baseColor = m.GetColor("_Color");
+
+        // Same hue and saturation, only brighter
+        Color.RGBToHSV(baseColor, out float h, out float s, out float v);
+        Color lit = Color.HSVToRGB(h, s, Mathf.Clamp01(v * litBrightness));
+        lit.a = baseColor.a;
+
+        if (m.HasProperty("_BaseColor")) m.SetColor("_BaseColor", lit);
+        if (m.HasProperty("_Color")) m.SetColor("_Color", lit);
+
+        if (litGlow > 0f && m.HasProperty("_EmissionColor"))
+        {
+            m.EnableKeyword("_EMISSION");
+            m.SetColor("_EmissionColor", baseColor * litGlow);   // glow in the peg's own color, not white
+        }
     }
 
     private IEnumerator CreateGhostOutline()
