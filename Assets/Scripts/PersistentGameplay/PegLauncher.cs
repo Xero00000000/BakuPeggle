@@ -74,6 +74,9 @@ public class PegLauncher : MonoBehaviour
             {
                 var instance = Instantiate(currentBall, spawnPoint.transform.position, Quaternion.identity);
                 instance.GetComponent<Rigidbody2D>().AddForce((direction) * force);
+
+                var glow = instance.GetComponent<BallComboGlow>();
+                if (glow != null) glow.SetSide(true);
             }
 
             /*var instance = Instantiate(currentBall, spawnPoint.transform.position, Quaternion.identity);

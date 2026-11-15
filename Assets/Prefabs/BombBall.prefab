@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2103533315809516413}
   - component: {fileID: 6103604618230890363}
   - component: {fileID: 5201849460732664206}
+  - component: {fileID: 6584084033596036424}
   m_Layer: 3
   m_Name: BombBall
   m_TagString: Player
@@ -152,6 +153,25 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: -0.0000004777685, y: 0.0000005988404}
   m_Radius: 0.010001637
+--- !u!114 &6584084033596036424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2717892554777837764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9aed51ed55efae42bbbd64900dade80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPlayerBall: 1
+  glowColor: {r: 0.2627451, g: 1, b: 0.21176471, a: 1}
+  hitsToMax: 8
+  maxOutlineSize: 0.18
+  fadeSpeed: 8
+  pulseAmount: 0.03
+  pulseSpeed: 8
 --- !u!1 &4662780812166424183
 GameObject:
   m_ObjectHideFlags: 0

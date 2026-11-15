@@ -94,6 +94,8 @@ public class FeedbackBalls : MonoBehaviour
 
     private static int playerStreak = 0;
     private static int enemyStreak = 0;
+    public static int PlayerStreak => playerStreak;
+    public static int EnemyStreak => enemyStreak;
     private static float playerLastHitTime = 0f;
     private static float enemyLastHitTime = 0f;
 

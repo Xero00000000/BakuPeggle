@@ -370,6 +370,9 @@ public class TurnManager : MonoBehaviour
         var instance = Instantiate(prefabToSpawn, spawnPoint.transform.position, Quaternion.identity);
         instance.GetComponent<Rigidbody2D>().linearVelocity = vel;   // rb.velocity on Unity 2022 or older
 
+        var glow = instance.GetComponent<BallComboGlow>();
+        if (glow != null) glow.SetSide(false);
+
         player2Shot = true;
         enemyShooting = false;
     }

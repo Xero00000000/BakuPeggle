@@ -22,6 +22,12 @@ public class FloatingText : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float glowPower = 0.7f;
     [SerializeField, Range(0f, 1f)] private float glowWhiteMix = 0.35f;
 
+    [Header("Evitar la barra de marbeasts")]
+    [Tooltip("Left edge of the screen (0 to 1) that the LEFT EDGE of the text can't go past.")]
+    [SerializeField, Range(0f, 0.6f)] private float minViewportX = 0.2f;
+    [Tooltip("Right edge of the screen (0 to 1) that the RIGHT EDGE of the text can't go past.")]
+    [SerializeField, Range(0.5f, 1f)] private float maxViewportX = 0.97f;
+
     private float timeLeft;
     private Color mainColor = Color.white;
     private int baseSortingOrder;
@@ -33,6 +39,8 @@ public class FloatingText : MonoBehaviour
     private float punchLeft;
     private Material textMat;
 
+    private Vector3 basePos;   // where the text wants to be, before the clamp shifts it
+
     private void CaptureBase()
     {
         if (!scaleCaptured)
@@ -42,12 +50,35 @@ public class FloatingText : MonoBehaviour
         }
     }
 
+    // Uses the text's real bounds (scale included) so a bigger text is pushed further in
+    private void ClampToPlayArea()
+    {
+        Camera cam = Camera.main;
+        if (cam == null || textMesh == null) return;
+
+        Bounds b = textMesh.renderer.bounds;   // world-space bounds of the text mesh at its current scale
+
+        float depth = cam.WorldToViewportPoint(b.center).z;
+        float leftLimit = cam.ViewportToWorldPoint(new Vector3(minViewportX, 0.5f, depth)).x;
+        float rightLimit = cam.ViewportToWorldPoint(new Vector3(maxViewportX, 0.5f, depth)).x;
+
+        float shift = 0f;
+        if (b.min.x < leftLimit) shift = leftLimit - b.min.x;
+        else if (b.max.x > rightLimit) shift = rightLimit - b.max.x;
+
+        if (shift != 0f)
+            transform.position += new Vector3(shift, 0f, 0f);
+    }
+
     public void Setup(string text, Color color, bool boost = false)
     {
         CaptureBase();
         if (textMesh == null) textMesh = GetComponent<TextMeshPro>();
         mainColor = color;
         boosted = boost;
+
+        // PeggleUIManager sets the position before calling Setup
+        basePos = transform.position;
 
         if (!sortingCaptured && textMesh != null)
         {
@@ -61,6 +92,7 @@ public class FloatingText : MonoBehaviour
             textMesh.color = color;
             textMesh.sortingOrder = baseSortingOrder + 1;
             ApplyGlow(boost, color);
+            textMesh.ForceMeshUpdate();   // so the bounds match the new text right away
         }
 
         if (shadowTextMesh != null)
@@ -108,7 +140,8 @@ public class FloatingText : MonoBehaviour
 
     private void Update()
     {
-        transform.position += Vector3.up * moveSpeed * Time.deltaTime;
+        basePos += Vector3.up * moveSpeed * Time.deltaTime;
+        transform.position = basePos;   // clamp runs after scaling, in LateUpdate
 
         timeLeft -= Time.deltaTime;
         float a = Mathf.Clamp01(timeLeft / fadeDuration);
@@ -140,5 +173,11 @@ public class FloatingText : MonoBehaviour
         }
 
         if (timeLeft <= 0f) Destroy(gameObject);
+    }
+
+    private void LateUpdate()
+    {
+        // After Update has set position and scale for this frame
+        ClampToPlayArea();
     }
 }
