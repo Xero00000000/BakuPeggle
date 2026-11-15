@@ -169,7 +169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -465,7 +465,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -804,7 +804,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -1100,7 +1100,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -1341,6 +1341,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 889142823769953118, guid: 345f3646c3846f34299255f682d40785, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060118067248975097, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: playerPeg
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7616273831579344739, guid: 345f3646c3846f34299255f682d40785, type: 3}
@@ -1898,6 +1902,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 889142823769953118, guid: 345f3646c3846f34299255f682d40785, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060118067248975097, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: playerPeg
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7616273831579344739, guid: 345f3646c3846f34299255f682d40785, type: 3}
@@ -2843,7 +2851,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -3547,7 +3555,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -4422,7 +4430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -4508,7 +4516,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -4791,7 +4799,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -5060,7 +5068,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -5282,7 +5290,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -6055,7 +6063,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -7621,7 +7629,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -8235,7 +8243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -9152,6 +9160,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 889142823769953118, guid: 345f3646c3846f34299255f682d40785, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060118067248975097, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: playerPeg
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7616273831579344739, guid: 345f3646c3846f34299255f682d40785, type: 3}
@@ -10111,7 +10123,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -10471,7 +10483,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -10557,7 +10569,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -11081,7 +11093,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -11300,7 +11312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -11461,7 +11473,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -11853,7 +11865,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -12884,6 +12896,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3060118067248975097, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: playerPeg
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7616273831579344739, guid: 345f3646c3846f34299255f682d40785, type: 3}
       propertyPath: m_Name
       value: Square peg (9)
@@ -12948,7 +12964,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -13881,7 +13897,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -13967,7 +13983,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -15475,7 +15491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -16582,7 +16598,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -16668,7 +16684,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -17676,6 +17692,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3060118067248975097, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: playerPeg
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7616273831579344739, guid: 345f3646c3846f34299255f682d40785, type: 3}
       propertyPath: m_Name
       value: Square peg (3)
@@ -17740,7 +17760,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -18444,7 +18464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -19974,6 +19994,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 889142823769953118, guid: 345f3646c3846f34299255f682d40785, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060118067248975097, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: playerPeg
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7616273831579344739, guid: 345f3646c3846f34299255f682d40785, type: 3}
@@ -21665,6 +21689,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3060118067248975097, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: playerPeg
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7616273831579344739, guid: 345f3646c3846f34299255f682d40785, type: 3}
       propertyPath: m_Name
       value: Square peg (8)
@@ -21737,6 +21765,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 889142823769953118, guid: 345f3646c3846f34299255f682d40785, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060118067248975097, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: playerPeg
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7616273831579344739, guid: 345f3646c3846f34299255f682d40785, type: 3}
@@ -22026,7 +22058,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -22610,6 +22642,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3060118067248975097, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: playerPeg
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7616273831579344739, guid: 345f3646c3846f34299255f682d40785, type: 3}
       propertyPath: m_Name
       value: Square peg (1)
@@ -22749,7 +22785,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -23221,6 +23257,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3060118067248975097, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: playerPeg
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7616273831579344739, guid: 345f3646c3846f34299255f682d40785, type: 3}
       propertyPath: m_Name
       value: Square peg (4)
@@ -23552,7 +23592,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled
@@ -23638,7 +23678,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3060118067248975097, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: playerPeg
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4500000191866649959, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
       propertyPath: m_Enabled

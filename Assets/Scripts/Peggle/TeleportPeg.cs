@@ -17,6 +17,7 @@ public class TeleportPeg : MonoBehaviour
 
     [Header("Feedback")]
     [SerializeField] private AudioClip teleportSound;
+    [SerializeField, Range(0f, 1f)] private float teleportVolume = 1f;
     [SerializeField] private float pulseScale = 1.3f;
     [SerializeField] private float pulseDuration = 0.15f;
 
@@ -87,7 +88,18 @@ public class TeleportPeg : MonoBehaviour
     public void PlayFeedback()
     {
         if (teleportSound != null)
-            AudioSource.PlayClipAtPoint(teleportSound, transform.position);
+        {
+            GameObject soundObj = new GameObject("TempTeleportAudio");
+            soundObj.transform.position = transform.position;
+
+            AudioSource src = soundObj.AddComponent<AudioSource>();
+            src.clip = teleportSound;
+            src.spatialBlend = 0f;           // 0 = fully 2D, no distance falloff
+            src.volume = teleportVolume;
+            src.Play();
+
+            Destroy(soundObj, teleportSound.length);
+        }
 
         StopAllCoroutines();
         StartCoroutine(Pulse());
