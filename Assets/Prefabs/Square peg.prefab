@@ -638,6 +638,11 @@ MonoBehaviour:
   useRandomType: 1
   currentType: 0
   _addPoints: {fileID: 11400000, guid: 49dec7ca8445ee846bf9cea276179cc1, type: 2}
+  hitsToBreak: 2
+  laterHitPointsMultiplier: 0.5
+  hitCooldown: 0.1
+  litBrightness: 1.3
+  litGlow: 1
   impactVFXPrefab: {fileID: 8340111098024245670}
   vfxColorPropertyName: Color
   hitSound: {fileID: 8300000, guid: d05722332818a1b4a8adf9ea9031e345, type: 3}
@@ -649,14 +654,11 @@ MonoBehaviour:
   globalVolume: {fileID: 0}
   chromaticStep: 0.15
   maxChromaticAberration: 0.8
-  destroyWithBall: 1
   pegg: {fileID: 2350069763700822914}
   peggBg: {fileID: 9100348245289469032}
   popScaleFactor: 1.35
   popDuration: 0.06
   shrinkDuration: 0.12
-  litBrightness: 1.3
-  litGlow: 1
   hitFlashColor: {r: 1, g: 1, b: 1, a: 0.8}
   flashDuration: 0.05
   enableGhostOutline: 1

@@ -54,6 +54,9 @@ public class TurnManager : MonoBehaviour
 
     [Header("Recompensa")]
     [SerializeField] private int winReward = 100;
+    [Header("Nivel")]
+    [Tooltip("Number of this level (1, 2, 3...). Winning it unlocks the next one.")]
+    [SerializeField] private int levelNumber = 1;
 
     // Propiedades dinámicas basadas en la habilidad seleccionada
     private int pointsToActivate => currentAbility switch
@@ -237,7 +240,10 @@ public class TurnManager : MonoBehaviour
         Debug.Log($"[Reward] Game over. P1={player1CurrentHP} P2={player2CurrentHP} won={playerWon}");
 
         if (playerWon)
+        {
             MarbeastSave.AddCoins(winReward);
+            LevelProgress.CompleteLevel(levelNumber);   // unlocks the next level
+        }
 
         variablesForUI = new int[] { 4, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
         _turnUpdateUI.Raise(this, variablesForUI);
@@ -265,6 +271,13 @@ public class TurnManager : MonoBehaviour
             case 0: points = 15; charge += 15; break;
             case 1: points = 30; charge += 30; break;
             case 2: points = 60; charge += 15; break;
+        }
+
+        // Multi-hit pegs (the squares) give less on every hit after the first
+        if (sender is FeedbackBalls hitPeg)
+        {
+            points = Mathf.RoundToInt(points * hitPeg.PointsMultiplier);
+            charge = Mathf.RoundToInt(charge * hitPeg.PointsMultiplier);
         }
 
         if (player)

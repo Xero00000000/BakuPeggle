@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -20,6 +19,28 @@ public class FeedbackBalls : MonoBehaviour
     [SerializeField] private int currentType;
 
     [SerializeField] private PointsEventChannel _addPoints;
+
+    [Header("Multi-hit Peg")]
+    [Tooltip("1 = normal peg. 2 = square peg that breaks on its second hit.")]
+    [SerializeField, Min(1)] private int hitsToBreak = 1;
+    [Tooltip("Points and charge multiplier for every hit after the first (0.5 = half).")]
+    [SerializeField, Range(0f, 1f)] private float laterHitPointsMultiplier = 0.5f;
+    [Tooltip("Ignores repeated contacts from the same bounce, so one touch can't count as two hits.")]
+    [SerializeField] private float hitCooldown = 0.1f;
+
+    [Header("Lit (after the first hit of a multi-hit peg)")]
+    [Tooltip("Brightness multiplier of the lit color (hue and saturation stay the same).")]
+    [SerializeField] private float litBrightness = 1.3f;
+    [Tooltip("Emission strength using the peg's own color. 0 = no glow.")]
+    [SerializeField] private float litGlow = 1.0f;
+
+    private int hitsTaken = 0;
+    private float lastHitTime = -10f;
+    private float pointsMultiplier = 1f;
+    private bool isBreaking = false;
+
+    // Read by the managers when the points event is raised
+    public float PointsMultiplier => pointsMultiplier;
 
     [Header("Efecto de VFX")]
     [Tooltip("Asigna aquí un Prefab que contenga un componente VisualEffect.")]
@@ -43,10 +64,6 @@ public class FeedbackBalls : MonoBehaviour
     [Tooltip("Límite máximo de Aberración Cromática.")]
     [SerializeField] private float maxChromaticAberration = 0.8f;
 
-    [Header("Square Peg")]
-    [Tooltip("If true, the peg scores on the first hit but stays solid until the ball that hit it is destroyed.")]
-    [SerializeField] private bool destroyWithBall = false;
-
     [Header("Hit")]
     [SerializeField] private GameObject pegg;
     [SerializeField] private GameObject peggBg;
@@ -55,10 +72,6 @@ public class FeedbackBalls : MonoBehaviour
     [SerializeField] private float popScaleFactor = 1.35f;
     [SerializeField] private float popDuration = 0.06f;
     [SerializeField] private float shrinkDuration = 0.12f;
-    [Tooltip("Brightness multiplier of the lit color (hue and saturation stay the same).")]
-    [SerializeField] private float litBrightness = 1.3f;
-    [Tooltip("Emission strength using the peg's own color. 0 = no glow.")]
-    [SerializeField] private float litGlow = 1.0f;
 
     [Header("Hit Flash")]
     [SerializeField] private Color hitFlashColor = new Color(1f, 1f, 1f, 0.8f);
@@ -94,10 +107,11 @@ public class FeedbackBalls : MonoBehaviour
 
     private static int playerStreak = 0;
     private static int enemyStreak = 0;
-    public static int PlayerStreak => playerStreak;
-    public static int EnemyStreak => enemyStreak;
     private static float playerLastHitTime = 0f;
     private static float enemyLastHitTime = 0f;
+
+    public static int PlayerStreak => playerStreak;
+    public static int EnemyStreak => enemyStreak;
 
     // Streak of this peg's own side
     private int hitStreak => playerPeg ? playerStreak : enemyStreak;
@@ -105,7 +119,6 @@ public class FeedbackBalls : MonoBehaviour
     private static ChromaticAberration chromaticComponent;
 
     private Camera mainCamera;
-    private bool isHit = false;
 
     private void Awake()
     {
@@ -161,8 +174,13 @@ public class FeedbackBalls : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (isHit) return;
-        isHit = true;
+        if (isBreaking) return;
+        if (hitsToBreak > 1 && Time.time - lastHitTime < hitCooldown) return;
+        lastHitTime = Time.time;
+
+        hitsTaken++;
+        bool finalHit = hitsTaken >= hitsToBreak;
+        pointsMultiplier = hitsTaken == 1 ? 1f : laterHitPointsMultiplier;
 
         UpdateComboState();   // before the event, so the UI reads the current streak
 
@@ -174,13 +192,14 @@ public class FeedbackBalls : MonoBehaviour
         PlayEscalatingHitSound();
         VolumeApllications();
 
-        if (destroyWithBall)
+        if (!finalHit)
         {
-            // Light up, stay solid, explode only when the ball is gone
-            LightUp();
-            StartCoroutine(WaitForBallThenDestroy(collision.gameObject));
+            // First hit: light up and stay solid. The explosion waits for the final hit.
+            if (hitsTaken == 1) LightUp();
             return;
         }
+
+        isBreaking = true;
 
         StartParticles(collision);
 
@@ -197,30 +216,6 @@ public class FeedbackBalls : MonoBehaviour
         }
 
         StartCoroutine(AnimatePopAndDestroy());
-    }
-
-    private IEnumerator WaitForBallThenDestroy(GameObject ball)
-    {
-        // A destroyed Unity object compares equal to null
-        while (ball != null)
-            yield return null;
-
-        // The "explosion" happens now
-        StartParticles(null);   // null collision -> spawns at the peg's position
-
-        if (pegCollider != null) pegCollider.enabled = false;
-
-        if (enableGhostOutline)
-        {
-            StartCoroutine(CreateGhostOutline());
-        }
-
-        if (enableCameraShake)
-        {
-            StartCoroutine(ApplyCameraShake());
-        }
-
-        yield return StartCoroutine(AnimatePopAndDestroy());
     }
 
     private void LightUp()
@@ -370,8 +365,6 @@ public class FeedbackBalls : MonoBehaviour
         mainCamera.transform.localPosition = originalPos;
     }
 
-    
-
     private Color GetBaseTypeColor()
     {
         // 1) Color explícito por tipo
@@ -428,7 +421,7 @@ public class FeedbackBalls : MonoBehaviour
         ref int streak = ref (playerPeg ? ref playerStreak : ref enemyStreak);
         ref float lastTime = ref (playerPeg ? ref playerLastHitTime : ref enemyLastHitTime);
 
-        if (resetByTime && Time.time - lastTime > comboResetTime)   // <-- changed condition
+        if (resetByTime && Time.time - lastTime > comboResetTime)
         {
             streak = 0;
             if (playerPeg && chromaticComponent != null)

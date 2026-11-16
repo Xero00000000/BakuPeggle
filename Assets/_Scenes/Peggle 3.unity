@@ -527,7 +527,7 @@ PrefabInstance:
       objectReference: {fileID: 102900000, guid: 41a2fec26c297584bac03162c9a6d067, type: 3}
     - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: _scenesToUnload.Array.data[0].m_SceneName
-      value: Peggle  2 Electric bogaloo
+      value: Peggle 3
       objectReference: {fileID: 0}
     - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: _scenesToUnload.Array.data[1].m_SceneName
@@ -536,7 +536,7 @@ PrefabInstance:
     - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: _scenesToUnload.Array.data[0].m_SceneAsset
       value: 
-      objectReference: {fileID: 102900000, guid: aa07f283aad6c9b4ba889ddcc1288416, type: 3}
+      objectReference: {fileID: 102900000, guid: e56cb1cee68c1fc4288ed32627e922ef, type: 3}
     - target: {fileID: 843370959420517734, guid: c18331e0b1daf9246b6e760fefb9ad20, type: 3}
       propertyPath: _scenesToUnload.Array.data[1].m_SceneAsset
       value: 
@@ -3324,6 +3324,7 @@ MonoBehaviour:
   pegPrefab: {fileID: 7616273831579344739, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
   refreshNumber: 5
   winReward: 100
+  levelNumber: 2
   abilityCharge: 0
   player1MaxHP: 1000
   player2MaxHP: 1000

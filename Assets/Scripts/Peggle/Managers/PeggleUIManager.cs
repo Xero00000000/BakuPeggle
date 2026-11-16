@@ -572,6 +572,13 @@ public class PeggleUIManager : MonoBehaviour
             case 2: points = 60; charge += 15; break;
         }
 
+        // Multi-hit pegs (the squares) give less on every hit after the first
+        if (sender is FeedbackBalls hitPeg)
+        {
+            points = Mathf.RoundToInt(points * hitPeg.PointsMultiplier);
+            charge = Mathf.RoundToInt(charge * hitPeg.PointsMultiplier);
+        }
+
         int runningTotal;
         if (player)
         {

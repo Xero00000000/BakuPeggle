@@ -70,52 +70,64 @@ public class SceneChanger : MonoBehaviour
         rect.sizeDelta = Vector2.zero;
     }
 
+    // Still works for anything already using it
     public void NewLoad()
     {
-        if (isLoading) return;
-        StartCoroutine(LoadMultipleScenesAsyncCoroutine());
+        LoadScenes(_scenesToLoad, _scenesToUnload);
     }
 
-    private IEnumerator LoadMultipleScenesAsyncCoroutine()
+    // Used by the level buttons: each one passes its own scenes
+    public void LoadScenes(SceneField[] toLoad, SceneField[] toUnload)
+    {
+        if (isLoading) return;
+        StartCoroutine(LoadMultipleScenesAsyncCoroutine(toLoad, toUnload));
+    }
+
+    private IEnumerator LoadMultipleScenesAsyncCoroutine(SceneField[] toLoad, SceneField[] toUnload)
     {
         isLoading = true;
         float halfDuration = transitionDuration / 2f;
 
-        // 1. Ocultar la escena actual (Shader 0 a 1)
+        // 1. Hide the current scene (shader 0 to 1)
         yield return StartCoroutine(AnimateTransition(0f, 1f, halfDuration));
 
-        // 2. Preparar lista de descarga
+        // 2. Unload list
         List<AsyncOperation> unloadOperations = new List<AsyncOperation>();
 
-        foreach (SceneField scene in _scenesToUnload)
+        if (toUnload != null)
         {
-            if (scene != null && !string.IsNullOrEmpty(scene.SceneName))
+            foreach (SceneField scene in toUnload)
             {
-                Scene loadedScene = SceneManager.GetSceneByName(scene.SceneName);
-                if (loadedScene.isLoaded)
+                if (scene != null && !string.IsNullOrEmpty(scene.SceneName))
                 {
-                    AsyncOperation op = SceneManager.UnloadSceneAsync(loadedScene);
-                    if (op != null) unloadOperations.Add(op);
+                    Scene loadedScene = SceneManager.GetSceneByName(scene.SceneName);
+                    if (loadedScene.isLoaded)
+                    {
+                        AsyncOperation op = SceneManager.UnloadSceneAsync(loadedScene);
+                        if (op != null) unloadOperations.Add(op);
+                    }
                 }
             }
         }
 
-        // 3. Cargar las nuevas escenas
+        // 3. Load the new scenes
         List<AsyncOperation> loadOperations = new List<AsyncOperation>();
-        foreach (SceneField scene in _scenesToLoad)
+        if (toLoad != null)
         {
-            if (scene != null && !string.IsNullOrEmpty(scene.SceneName))
+            foreach (SceneField scene in toLoad)
             {
-                AsyncOperation op = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
-                if (op != null)
+                if (scene != null && !string.IsNullOrEmpty(scene.SceneName))
                 {
-                    op.allowSceneActivation = false;
-                    loadOperations.Add(op);
+                    AsyncOperation op = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
+                    if (op != null)
+                    {
+                        op.allowSceneActivation = false;
+                        loadOperations.Add(op);
+                    }
                 }
             }
         }
 
-        // Esperar a que carguen al 90%
         bool allLoaded = false;
         while (!allLoaded)
         {
@@ -127,14 +139,11 @@ public class SceneChanger : MonoBehaviour
             yield return null;
         }
 
-        // Activar escenas
         foreach (var op in loadOperations) op.allowSceneActivation = true;
 
         while (loadOperations.Exists(op => !op.isDone)) yield return null;
 
-        // 4. Finalmente, descargar la escena de origen. 
-        // ¡Atención! Esta escena y este script SE DESTRUIRÁN en la siguiente línea.
-        // La nueva escena (que tiene su propio SceneChanger) ejecutará su Start() y hará el Fade Out.
+        // 4. Unload the origin scene (this script goes with it)
         Scene currentScene = gameObject.scene;
         if (currentScene.isLoaded)
         {

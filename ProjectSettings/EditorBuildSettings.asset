@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Peggle  2 Electric bogaloo.unity
     guid: aa07f283aad6c9b4ba889ddcc1288416
+  - enabled: 1
+    path: Assets/_Scenes/Peggle 3.unity
+    guid: e56cb1cee68c1fc4288ed32627e922ef
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
