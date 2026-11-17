@@ -3365,7 +3365,6 @@ MonoBehaviour:
   pegPrefab: {fileID: 7616273831579344739, guid: 0941071f9e5f07745946ac8802d3c290, type: 3}
   refreshNumber: 5
   winReward: 100
-  levelNumber: 1
   abilityCharge: 0
   player1MaxHP: 1000
   player2MaxHP: 1000
@@ -9336,7 +9335,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 327716226}
-  uiManager: {fileID: 0}
+  uiManager: {fileID: 792754422}
   playerArea: 0
 --- !u!61 &782504196
 BoxCollider2D:
@@ -10399,7 +10398,7 @@ GameObject:
   - component: {fileID: 903109338}
   - component: {fileID: 903109337}
   - component: {fileID: 903109336}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13206,7 +13205,7 @@ GameObject:
   - component: {fileID: 1163889667}
   - component: {fileID: 1163889666}
   - component: {fileID: 1163889665}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19500,7 +19499,7 @@ GameObject:
   - component: {fileID: 1761064428}
   - component: {fileID: 1761064427}
   - component: {fileID: 1761064430}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20471,7 +20470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 327716226}
-  uiManager: {fileID: 0}
+  uiManager: {fileID: 792754422}
   playerArea: 1
 --- !u!114 &1796048435
 MonoBehaviour:
