@@ -11,8 +11,8 @@ public class MarbeastShop : MonoBehaviour
     [SerializeField] private TMP_Text priceOrStatusText;
     [SerializeField] private Button actionButton;
 
-    [SerializeField] private bool bakugan;
-    [SerializeField] private PersistentBullshit persistentBullshit;
+    [Header("3D sphere in the shelf")]
+    [SerializeField] private MarbeastSphereVanish sphere;
 
     void Start()
     {
@@ -21,6 +21,7 @@ public class MarbeastShop : MonoBehaviour
 
         actionButton.onClick.AddListener(OnClickAction);
         UpdateUI();
+        SyncSphere();
     }
 
     void OnClickAction()
@@ -33,17 +34,10 @@ public class MarbeastShop : MonoBehaviour
             return;
         }
 
+        if (sphere != null) sphere.Play();
+
         foreach (var shop in FindObjectsByType<MarbeastShop>(FindObjectsSortMode.None))
             shop.UpdateUI();
-
-        if (bakugan)
-        {
-            persistentBullshit.bakugan1 = true;
-        }
-        else
-        {
-            persistentBullshit.bakugan2 = true;
-        }
     }
 
     public void UpdateUI()
@@ -60,10 +54,24 @@ public class MarbeastShop : MonoBehaviour
         }
     }
 
+    // Bought (and not a free default) -> sphere gone. Otherwise -> sphere visible.
+    void SyncSphere()
+    {
+        if (sphere == null || marbeast == null) return;
+
+        bool shouldBeGone = MarbeastSave.IsUnlocked(marbeast) && !marbeast.unlockedByDefault;
+        if (shouldBeGone) sphere.SetVanished();
+        else sphere.Restore();
+    }
+
     void OnEnable()
     {
         MarbeastSave.OnReset += HandleReset;
-        if (marbeast != null && actionButton != null) UpdateUI();
+        if (marbeast != null && actionButton != null)
+        {
+            UpdateUI();
+            SyncSphere();
+        }
     }
 
     void OnDisable()
@@ -74,5 +82,6 @@ public class MarbeastShop : MonoBehaviour
     void HandleReset()
     {
         UpdateUI();
+        SyncSphere();
     }
 }
