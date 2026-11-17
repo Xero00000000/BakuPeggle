@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6103604618230890363}
   - component: {fileID: 5201849460732664206}
   - component: {fileID: 6584084033596036424}
+  - component: {fileID: 3275874758482584645}
   m_Layer: 3
   m_Name: BombBall
   m_TagString: Player
@@ -172,6 +173,58 @@ MonoBehaviour:
   fadeSpeed: 8
   pulseAmount: 0.03
   pulseSpeed: 8
+--- !u!114 &3275874758482584645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2717892554777837764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 208c9f949a5348d4392a9ce3c5d9484c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorSource: 0
+  manualColor: {r: 0.54901963, g: 1, b: 0.49803925, a: 1}
+  colorIntensity: 1
+  vfxColorProperties:
+  - Color
+  tintWallHit: 0
+  wallHitVFXPrefab: {fileID: 1764355303812025106, guid: a9840b6c3bc202049a3ff7d6f08d4af6, type: 3}
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  alignToNormal: 1
+  wallHitCooldown: 0.08
+  wallVFXLifetime: 1
+  shrinkDuration: 0.25
+  shrinkCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  vanishVFXPrefab: {fileID: 1167898515540898059, guid: 584f902f76aab4843937f23ce4a8fea4, type: 3}
+  vanishVFXLifetime: 1.5
 --- !u!1 &4662780812166424183
 GameObject:
   m_ObjectHideFlags: 0

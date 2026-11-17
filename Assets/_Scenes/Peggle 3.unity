@@ -10757,8 +10757,8 @@ MonoBehaviour:
   - m_SceneAsset: {fileID: 102900000, guid: 41a2fec26c297584bac03162c9a6d067, type: 3}
     m_SceneName: Shopping
   scenesToUnload:
-  - m_SceneAsset: {fileID: 102900000, guid: aa07f283aad6c9b4ba889ddcc1288416, type: 3}
-    m_SceneName: Peggle  2 Electric bogaloo
+  - m_SceneAsset: {fileID: 102900000, guid: e56cb1cee68c1fc4288ed32627e922ef, type: 3}
+    m_SceneName: Peggle 3
   objectsToHide: []
   onBeforeChange:
     m_PersistentCalls:
@@ -10775,7 +10775,7 @@ GameObject:
   - component: {fileID: 903109338}
   - component: {fileID: 903109337}
   - component: {fileID: 903109336}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13088,7 +13088,7 @@ GameObject:
   - component: {fileID: 1163889667}
   - component: {fileID: 1163889666}
   - component: {fileID: 1163889665}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19038,7 +19038,7 @@ GameObject:
   - component: {fileID: 1761064428}
   - component: {fileID: 1761064427}
   - component: {fileID: 1761064430}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
