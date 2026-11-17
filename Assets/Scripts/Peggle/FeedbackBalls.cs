@@ -1,4 +1,4 @@
-Ôªøusing System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -13,7 +13,7 @@ public class FeedbackBalls : MonoBehaviour
     private Collider2D pegCollider;
     [SerializeField] private Image image;
 
-    [Header("Configuraci√≥n de Tipos / Colores")]
+    [Header("ConfiguraciÛn de Tipos / Colores")]
     [SerializeField] private Material[] types;
     [SerializeField] private bool useRandomType = true;
     [SerializeField] private int currentType;
@@ -43,28 +43,12 @@ public class FeedbackBalls : MonoBehaviour
     public float PointsMultiplier => pointsMultiplier;
 
     [Header("Efecto de VFX")]
-    [Tooltip("Asigna aqu√≠ un Prefab que contenga un componente VisualEffect.")]
+    [Tooltip("Asigna aquÌ un Prefab que contenga un componente VisualEffect.")]
     [SerializeField] private VisualEffect impactVFXPrefab;
-    [Tooltip("Nombre del par√°metro Exposed Color definido en el VFX Graph.")]
+    [Tooltip("Nombre del par·metro Exposed Color definido en el VFX Graph.")]
     [SerializeField] private string vfxColorPropertyName = "Color";
 
-    [Header("Combo ‚Üí VFX")]
-    [Tooltip("Streak at which the effect reaches its maximum. You can set it equal to Hits To Max Brightness to keep them in sync.")]
-    [SerializeField, Min(2)] private int vfxMaxCombo = 10;
-    [SerializeField] private AnimationCurve vfxComboCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-    [Tooltip("Value at combo 1 (x) and at max combo (y).")]
-    [SerializeField] private Vector2 vfxSizeMultiplier = new Vector2(1f, 2.5f);
-    [SerializeField] private Vector2 vfxLifetimeMultiplier = new Vector2(1f, 3f);
-    [SerializeField] private Vector2 vfxFloatStrength = new Vector2(0f, 6f);
-    [Tooltip("Longest lifetime in the graph at multiplier 1, in seconds. Used to know when to destroy the instance.")]
-    [SerializeField] private float vfxBaseLifetime = 1f;
-    [SerializeField] private float vfxExtraLinger = 0.5f;
-
-    private static readonly int ComboSizeId = Shader.PropertyToID("ComboSize");
-    private static readonly int ComboLifetimeId = Shader.PropertyToID("ComboLifetime");
-    private static readonly int ComboFloatId = Shader.PropertyToID("ComboFloat");
-
-    [Header("Configuraci√≥n de Sonido & Combo Pitch")]
+    [Header("ConfiguraciÛn de Sonido & Combo Pitch")]
     [SerializeField] private AudioClip hitSound;
     [SerializeField] private float basePitch = 1.0f;
     [SerializeField] private float pitchStep = 0.05f;
@@ -73,11 +57,11 @@ public class FeedbackBalls : MonoBehaviour
     [SerializeField] private bool resetByTime = false;
 
     [Header("Post Processing Feedback (Global Volume)")]
-    [Tooltip("Referencia al Global Volume de la escena (si se deja vac√≠o, se buscar√° en Awake).")]
+    [Tooltip("Referencia al Global Volume de la escena (si se deja vacÌo, se buscar· en Awake).")]
     [SerializeField] private Volume globalVolume;
-    [Tooltip("Incremento de Aberraci√≥n Crom√°tica por golpe.")]
+    [Tooltip("Incremento de AberraciÛn Crom·tica por golpe.")]
     [SerializeField] private float chromaticStep = 0.15f;
-    [Tooltip("L√≠mite m√°ximo de Aberraci√≥n Crom√°tica.")]
+    [Tooltip("LÌmite m·ximo de AberraciÛn Crom·tica.")]
     [SerializeField] private float maxChromaticAberration = 0.8f;
 
     [Header("Hit")]
@@ -110,15 +94,15 @@ public class FeedbackBalls : MonoBehaviour
     public Color TextColor => GetComboTextColor();
     public int HitStreak => hitStreak;
 
-    [Tooltip("Color del texto para cada tipo (mismo orden que 'types'). Si est√° vac√≠o, se usa el color del material.")]
+    [Tooltip("Color del texto para cada tipo (mismo orden que 'types'). Si est· vacÌo, se usa el color del material.")]
     [SerializeField] private Color[] typeTextColors;
     public int PegType => currentType;
 
-    [Tooltip("Brillo (Value en HSV) del primer golpe del combo. 1 = brillo m√°ximo.")]
+    [Tooltip("Brillo (Value en HSV) del primer golpe del combo. 1 = brillo m·ximo.")]
     [SerializeField, Range(0.1f, 1f)] private float startBrightness = 0.55f;
-    [Tooltip("Cantidad de golpes de combo para llegar al brillo m√°ximo.")]
+    [Tooltip("Cantidad de golpes de combo para llegar al brillo m·ximo.")]
     [SerializeField] private int hitsToMaxBrightness = 8;
-    [Tooltip("Mezcla m√°xima de blanco en el combo m√°s alto (0 = nunca se vuelve blanco).")]
+    [Tooltip("Mezcla m·xima de blanco en el combo m·s alto (0 = nunca se vuelve blanco).")]
     [SerializeField, Range(0f, 0.5f)] private float maxWhiteMix = 0.1f;
 
     private static int playerStreak = 0;
@@ -383,7 +367,7 @@ public class FeedbackBalls : MonoBehaviour
 
     private Color GetBaseTypeColor()
     {
-        // 1) Color expl√≠cito por tipo
+        // 1) Color explÌcito por tipo
         if (typeTextColors != null && currentType < typeTextColors.Length)
             return typeTextColors[currentType];
 
@@ -410,13 +394,13 @@ public class FeedbackBalls : MonoBehaviour
         float comboSteps = Mathf.Max(0, hitStreak - 1);
         float t = Mathf.Clamp01(comboSteps / Mathf.Max(1, hitsToMaxBrightness - 1));
 
-        // Mantener hue y saturaci√≥n; solo subir el brillo (Value)
+        // Mantener hue y saturaciÛn; solo subir el brillo (Value)
         Color.RGBToHSV(baseColor, out float h, out float s, out float v);
         float newV = Mathf.Lerp(v * startBrightness, v, t);
 
         Color result = Color.HSVToRGB(h, s, newV);
 
-        // Un toque m√≠nimo de blanco al final para dar sensaci√≥n de "incandescente"
+        // Un toque mÌnimo de blanco al final para dar sensaciÛn de "incandescente"
         result = Color.Lerp(result, Color.white, t * maxWhiteMix);
 
         result.a = baseColor.a;
@@ -503,20 +487,8 @@ public class FeedbackBalls : MonoBehaviour
         }
 
         vfxInstance.SetVector4(vfxColorPropertyName, targetColor);
-
-        // Combo scaling: hitStreak is already updated by UpdateComboState() before this runs
-        float k = vfxComboCurve.Evaluate(Mathf.InverseLerp(1, vfxMaxCombo, hitStreak));
-        float sizeMult = Mathf.Lerp(vfxSizeMultiplier.x, vfxSizeMultiplier.y, k);
-        float lifetimeMult = Mathf.Lerp(vfxLifetimeMultiplier.x, vfxLifetimeMultiplier.y, k);
-        float floatForce = Mathf.Lerp(vfxFloatStrength.x, vfxFloatStrength.y, k);
-
-        if (vfxInstance.HasFloat(ComboSizeId)) vfxInstance.SetFloat(ComboSizeId, sizeMult);
-        if (vfxInstance.HasFloat(ComboLifetimeId)) vfxInstance.SetFloat(ComboLifetimeId, lifetimeMult);
-        if (vfxInstance.HasFloat(ComboFloatId)) vfxInstance.SetFloat(ComboFloatId, floatForce);
-
         vfxInstance.Play();
 
-        // Longer combos live longer, so the destroy delay has to grow with them
-        Destroy(vfxInstance.gameObject, vfxBaseLifetime * lifetimeMult + vfxExtraLinger);
+        Destroy(vfxInstance.gameObject, 2f);
     }
 }
