@@ -711,6 +711,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CeluCanva 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7297890731952959106, guid: 7da52d18f24ed5c448790a9db01b2a5d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8021277895948624332, guid: 7da52d18f24ed5c448790a9db01b2a5d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
