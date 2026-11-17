@@ -10,6 +10,7 @@ using UnityEditor;
 
 public class CameraMove : MonoBehaviour
 {
+
     [Header("Camara")]
     public Camera _camera;
     public float _closeDistance = 2f;
