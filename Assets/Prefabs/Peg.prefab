@@ -638,8 +638,43 @@ MonoBehaviour:
   useRandomType: 1
   currentType: 0
   _addPoints: {fileID: 11400000, guid: 49dec7ca8445ee846bf9cea276179cc1, type: 2}
+  hitsToBreak: 1
+  laterHitPointsMultiplier: 0.5
+  hitCooldown: 0.1
+  litBrightness: 1.3
+  litGlow: 1
   impactVFXPrefab: {fileID: 8340111098024245670}
   vfxColorPropertyName: Color
+  vfxMaxCombo: 10
+  vfxComboCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  vfxSizeMultiplier: {x: 1, y: 2.5}
+  vfxLifetimeMultiplier: {x: 1, y: 3}
+  vfxFloatStrength: {x: 0, y: 6}
+  vfxBaseLifetime: 1
+  vfxExtraLinger: 0.5
   hitSound: {fileID: 8300000, guid: d05722332818a1b4a8adf9ea9031e345, type: 3}
   basePitch: 1
   pitchStep: 0.05
@@ -717,6 +752,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Explosion Prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 3009900033438102574, guid: b228e9ebaa987954e9e9174d75af639c, type: 3}
+      propertyPath: m_Asset
+      value: 
+      objectReference: {fileID: 8926484042661614526, guid: 2b7c6091145dcf6488ccaef798de63d7, type: 3}
     - target: {fileID: 6078388707800551688, guid: b228e9ebaa987954e9e9174d75af639c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

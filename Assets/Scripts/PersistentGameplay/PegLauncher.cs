@@ -67,7 +67,7 @@ public class PegLauncher : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0) && isTurn == true && outOfArea == false)
+        if (Input.GetMouseButtonDown(0) && isTurn == true && outOfArea == false && (manager == null || !manager.IsGameOver))
         {
             audioSource.PlayOneShot(audioClip, 1f);
             for (int i = 0; i < manager.maxBalls; i++)

@@ -18,6 +18,8 @@ public class ItemManager : MonoBehaviour
 
     private int currentIndex = 0;
 
+    private bool Locked => temporaryManager != null && temporaryManager.IsGameOver;
+
     void Start()
     {
         if (items.Count == 0)
@@ -38,11 +40,11 @@ public class ItemManager : MonoBehaviour
         UpdateSelection();
     }
 
-    
+
 
     void Update()
     {
-        if (!CanChange) return;
+        if (Locked) return;
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
@@ -54,7 +56,7 @@ public class ItemManager : MonoBehaviour
 
     public void SelectOnlyThis(ResizableItem selectedItem)
     {
-        if (!CanChange) return;
+        if (Locked) return;
 
         int index = items.IndexOf(selectedItem);
         if (index != -1 && IsAvailable(index))
