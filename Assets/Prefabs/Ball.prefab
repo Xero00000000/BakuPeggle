@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayerBall: 1
+  outlineMaterialAsset: {fileID: 2100000, guid: a74038a027612f04a95adf4523f0783e, type: 2}
   glowColor: {r: 1, g: 0, b: 0, a: 1}
   hitsToMax: 8
   maxOutlineSize: 0.18

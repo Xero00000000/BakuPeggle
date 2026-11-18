@@ -8,6 +8,8 @@ public class BallComboGlow : MonoBehaviour
     [SerializeField] private bool isPlayerBall = true;
 
     [Header("Outline")]
+    [Tooltip("Drag BallOutlineMat here (URP Unlit, Render Face = Back). A material asset keeps the shader in builds.")]
+    [SerializeField] private Material outlineMaterialAsset;
     [Tooltip("Set this per ball prefab to match that ball's color. Mixing in some white hides chromatic aberration fringing better.")]
     [ColorUsage(true, true)]
     [SerializeField] private Color glowColor = Color.red;
@@ -24,7 +26,7 @@ public class BallComboGlow : MonoBehaviour
     // Mesh outline
     private MeshRenderer outlineMesh;
     private Material outlineMat;
-    private Vector3 meshCenter;   // center of the mesh in local space, so scaling is centered on the sphere and not the pivot
+    private Vector3 meshCenter;
 
     // Sprite outline (fallback)
     private SpriteRenderer ballSprite;
@@ -56,6 +58,13 @@ public class BallComboGlow : MonoBehaviour
 
     private void BuildMeshOutline(MeshFilter mf)
     {
+        if (outlineMaterialAsset == null)
+        {
+            Debug.LogError($"{name}: assign Outline Material Asset on BallComboGlow (Shader.Find is unreliable in builds).", this);
+            enabled = false;
+            return;
+        }
+
         GameObject go = new GameObject("ComboOutline");
         outline = go.transform;
         outline.SetParent(transform, false);
@@ -65,12 +74,8 @@ public class BallComboGlow : MonoBehaviour
         go.AddComponent<MeshFilter>().sharedMesh = mf.sharedMesh;
         outlineMesh = go.AddComponent<MeshRenderer>();
 
-        Shader sh = Shader.Find("Universal Render Pipeline/Unlit");
-        if (sh == null) sh = Shader.Find("Unlit/Color");
-
-        outlineMat = new Material(sh);
-        outlineMat.SetFloat("_Cull", (float)CullMode.Front);   // draw back faces only -> rim around the ball
-        outlineMat.doubleSidedGI = false;
+        outlineMat = new Material(outlineMaterialAsset);   // per-ball instance
+        outlineMat.SetFloat("_Cull", (float)CullMode.Front);   // safety: back faces only
 
         outlineMesh.sharedMaterial = outlineMat;
         outlineMesh.shadowCastingMode = ShadowCastingMode.Off;
@@ -110,7 +115,6 @@ public class BallComboGlow : MonoBehaviour
         float s = 1f + size;
         outline.localScale = Vector3.one * s;
 
-        // Scale around the mesh center, not the pivot, so the rim stays centered on the ball
         if (outlineMesh != null)
             outline.localPosition = meshCenter * (1f - s);
 
