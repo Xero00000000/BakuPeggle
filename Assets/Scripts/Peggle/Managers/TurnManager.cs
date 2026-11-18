@@ -35,7 +35,7 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private GameObject damageBallPrefab; // Usado cuando la habilidad de daño está activa
     [SerializeField] private GameObject healBallPrefab;   // Usado cuando la habilidad de curación está activa
     [SerializeField] private GameObject cloneBallPrefab;
-    [SerializeField] private GameObject bombBallPrefab;
+    [SerializeField] private GameObject refreshBallPrefab;
 
     [Header("Configuración de Habilidades")]
     [SerializeField] private int damageCost = 150;
@@ -310,7 +310,7 @@ public class TurnManager : MonoBehaviour
             0 => damageBallPrefab,
             1 => healBallPrefab,
             2 => cloneBallPrefab,
-            3 => bombBallPrefab,
+            3 => refreshBallPrefab,
             _ => null
         };
 
@@ -448,7 +448,7 @@ public class TurnManager : MonoBehaviour
     {
         currentAbility = 2;
     }
-    public void SetBombAbility()
+    public void SetRefreshAbility()
     {
         currentAbility = 3;
     }

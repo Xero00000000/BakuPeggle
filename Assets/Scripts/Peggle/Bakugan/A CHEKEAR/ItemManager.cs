@@ -92,7 +92,7 @@ public class ItemManager : MonoBehaviour
                             temporaryManager.SetCloneAbility();
                             break;
                         case 3:
-                            temporaryManager.SetBombAbility();
+                            temporaryManager.SetRefreshAbility();
                             break;
                     };
                 }

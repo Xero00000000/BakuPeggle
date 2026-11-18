@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6584084033596036424}
   - component: {fileID: 3275874758482584645}
   m_Layer: 3
-  m_Name: BombBall
+  m_Name: RefreshBall
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
