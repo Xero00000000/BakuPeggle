@@ -110,6 +110,9 @@ public class FeedbackBalls : MonoBehaviour
     public Color TextColor => GetComboTextColor();
     public int HitStreak => hitStreak;
 
+    [Tooltip("Same order as 'types'. Swapped in on the first hit. Each one should be a copy of its type's material with Emission ticked in the asset.")]
+    [SerializeField] private Material[] litTypes;
+
     [Tooltip("Color del texto para cada tipo (mismo orden que 'types'). Si está vacío, se usa el color del material.")]
     [SerializeField] private Color[] typeTextColors;
     public int PegType => currentType;
@@ -238,6 +241,14 @@ public class FeedbackBalls : MonoBehaviour
     {
         if (pegRenderer == null) return;
 
+        // Build-safe path: swap to a material that already has emission set in the asset
+        if (litTypes != null && currentType < litTypes.Length && litTypes[currentType] != null)
+        {
+            pegRenderer.material = new Material(litTypes[currentType]);
+            return;
+        }
+
+        // Fallback: runtime tweak (can be stripped in builds)
         Material m = pegRenderer.material;   // instance, so other pegs aren't affected
 
         Color baseColor = Color.white;
@@ -255,7 +266,8 @@ public class FeedbackBalls : MonoBehaviour
         if (litGlow > 0f && m.HasProperty("_EmissionColor"))
         {
             m.EnableKeyword("_EMISSION");
-            m.SetColor("_EmissionColor", baseColor * litGlow);   // glow in the peg's own color, not white
+            m.globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive;
+            m.SetColor("_EmissionColor", baseColor * litGlow);
         }
     }
 

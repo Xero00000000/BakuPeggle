@@ -594,7 +594,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2567245120545879471, guid: 8fb6869e3d397c3458f27f71fcd60f05, type: 3}
+  - {fileID: 2100000, guid: e45f6bba2658f814bb2bf010d3d6b865, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -634,7 +634,7 @@ MonoBehaviour:
   types:
   - {fileID: 2100000, guid: f20b040c70922ad4ca3a1cf66359b65a, type: 2}
   - {fileID: 2100000, guid: adbae6f9ee3de9a44ba052dee40628ac, type: 2}
-  - {fileID: 2100000, guid: e2ae148c46a397240b45113fd2927a92, type: 2}
+  - {fileID: 2100000, guid: 1718d7ced325f7146a5505fcd78ce1c8, type: 2}
   useRandomType: 1
   currentType: 0
   _addPoints: {fileID: 11400000, guid: 49dec7ca8445ee846bf9cea276179cc1, type: 2}
@@ -645,6 +645,36 @@ MonoBehaviour:
   litGlow: 1
   impactVFXPrefab: {fileID: 8340111098024245670}
   vfxColorPropertyName: Color
+  vfxMaxCombo: 10
+  vfxComboCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  vfxSizeMultiplier: {x: 1, y: 2.5}
+  vfxLifetimeMultiplier: {x: 1, y: 3}
+  vfxFloatStrength: {x: 0, y: 6}
+  vfxBaseLifetime: 1
+  vfxExtraLinger: 0.5
   hitSound: {fileID: 8300000, guid: d05722332818a1b4a8adf9ea9031e345, type: 3}
   basePitch: 1
   pitchStep: 0.05
@@ -670,6 +700,10 @@ MonoBehaviour:
   shakeDuration: 0.08
   floatingTextPrefab: {fileID: 4739827811733754865, guid: afb617922e79649448821c7becd2050f, type: 3}
   basePoints: 100
+  litTypes:
+  - {fileID: 2100000, guid: 429f7c516c2236147b0f9c31ed7f531b, type: 2}
+  - {fileID: 2100000, guid: ad14b3c8e32468940977208224ebac18, type: 2}
+  - {fileID: 2100000, guid: e2ae148c46a397240b45113fd2927a92, type: 2}
   typeTextColors: []
   startBrightness: 0.55
   hitsToMaxBrightness: 8
