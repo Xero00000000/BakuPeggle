@@ -23,14 +23,14 @@ public class PlayerHealthUI : MonoBehaviour
     [SerializeField] private float shakeIntensity = 4f;
     [SerializeField] private float shakeSpeed = 40f;
 
-    private float targetFill = 1f;
     private int targetHP;
     private int maxHPCached;
-    private int lastShownHP = -1;
+    private float displayedHP;      // animated value, can go below 0
+    private bool hasValue;
+    private int lastShownHP = int.MinValue;
     private bool isLow;
     private RectTransform textRect;
     private Vector2 textBasePos;
-
 
     private void Awake()
     {
@@ -57,10 +57,15 @@ public class PlayerHealthUI : MonoBehaviour
 
     private void Update()
     {
-        if (healthFillImage != null)
+        if (hasValue)
         {
-            // unscaled so the bar still animates while Time.timeScale = 0 (ability / turn notice)
-            healthFillImage.fillAmount = Mathf.Lerp(healthFillImage.fillAmount, targetFill, Time.unscaledDeltaTime * fillLerpSpeed);
+            // unscaled so it still animates while Time.timeScale = 0 (ability / turn notice)
+            displayedHP = Mathf.Lerp(displayedHP, targetHP, Time.unscaledDeltaTime * fillLerpSpeed);
+            if (Mathf.Abs(displayedHP - targetHP) < 0.5f) displayedHP = targetHP;
+
+            if (healthFillImage != null && maxHPCached > 0)
+                healthFillImage.fillAmount = Mathf.Clamp01(displayedHP / maxHPCached);   // the bar stops at empty
+
             UpdateHealthText();
         }
 
@@ -77,10 +82,15 @@ public class PlayerHealthUI : MonoBehaviour
 
     public void UpdateHealth(int currentHP, int maxHP)
     {
-        currentHP = Mathf.Max(0, currentHP);
+        // No clamp: negative values are shown as they are
+        if (!hasValue)
+        {
+            displayedHP = currentHP;
+            hasValue = true;
+        }
+
         targetHP = currentHP;
         maxHPCached = maxHP;
-        targetFill = maxHP > 0 ? Mathf.Clamp01((float)currentHP / maxHP) : 0f;
 
         isLow = maxHP > 0 && currentHP > 0 && (float)currentHP / maxHP <= lowHealthThreshold;
         if (!isLow) ResetTextPosition();
@@ -90,13 +100,9 @@ public class PlayerHealthUI : MonoBehaviour
     {
         if (healthText == null || maxHPCached <= 0) return;
 
-        float fill = healthFillImage.fillAmount;
+        int shown = Mathf.RoundToInt(displayedHP);
 
-        int shown = Mathf.Abs(fill - targetFill) < 0.002f
-            ? targetHP                                   // snap to the exact final value
-            : Mathf.RoundToInt(fill * maxHPCached);
-
-        if (shown == lastShownHP) return;                // avoid rebuilding the text every frame
+        if (shown == lastShownHP) return;   // avoid rebuilding the text every frame
         lastShownHP = shown;
         healthText.text = $"{shown}/{maxHPCached}";
     }

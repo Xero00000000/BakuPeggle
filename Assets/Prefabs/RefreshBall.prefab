@@ -199,6 +199,15 @@ MonoBehaviour:
   alignToNormal: 1
   wallHitCooldown: 0.08
   wallVFXLifetime: 1
+  squashOnWall: 1
+  squashAmount: 0.45
+  sidewaysBulge: 0.5
+  squashDuration: 1.5
+  wobbles: 1
+  minImpactSpeed: 2
+  fullImpactSpeed: 12
+  squashCooldown: 0.05
+  keepColliderSize: 1
   shrinkDuration: 0.25
   shrinkCurve:
     serializedVersion: 2

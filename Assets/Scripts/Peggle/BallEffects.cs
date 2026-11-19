@@ -25,6 +25,23 @@ public class BallEffects : MonoBehaviour
     [SerializeField] private float wallHitCooldown = 0.08f;
     [SerializeField] private float wallVFXLifetime = 1f;
 
+    [Header("Wall bounce squash")]
+    [SerializeField] private bool squashOnWall = true;
+    [Tooltip("How much the ball flattens against the wall at full impact (0.3 = 30%).")]
+    [SerializeField, Range(0f, 0.8f)] private float squashAmount = 0.3f;
+    [Tooltip("How much it bulges sideways while squashed (0 = not at all, 1 = same as the squash).")]
+    [SerializeField, Range(0f, 1f)] private float sidewaysBulge = 0.5f;
+    [SerializeField] private float squashDuration = 0.3f;
+    [Tooltip("How many times it wobbles back and forth before settling.")]
+    [SerializeField, Min(0.5f)] private float wobbles = 1f;
+    [Tooltip("Hits slower than this don't squash at all.")]
+    [SerializeField] private float minImpactSpeed = 2f;
+    [Tooltip("Hits at or above this speed squash the full amount.")]
+    [SerializeField] private float fullImpactSpeed = 12f;
+    [SerializeField] private float squashCooldown = 0.05f;
+    [Tooltip("Keeps the physics collider the same size while the visual squashes.")]
+    [SerializeField] private bool keepColliderSize = true;
+
     [Header("Shrink + vanish")]
     [SerializeField] private float shrinkDuration = 0.25f;
     [SerializeField] private AnimationCurve shrinkCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
@@ -34,6 +51,12 @@ public class BallEffects : MonoBehaviour
     public bool IsVanishing { get; private set; }
 
     private float lastWallVFXTime = -10f;
+    private float lastSquashTime = -10f;
+
+    private Coroutine squashRoutine;
+    private Vector3 restScale;
+    private float restRadius;
+    private CircleCollider2D circle;
 
     // ---------- Color ----------
     private Color ResolveColor()
@@ -68,19 +91,23 @@ public class BallEffects : MonoBehaviour
     // ---------- Wall hit ----------
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (IsVanishing || wallHitVFXPrefab == null) return;
+        if (IsVanishing) return;
         if (!IsWall(collision.collider)) return;
+
+        Vector2 normal = Vector2.up;
+        if (collision.contactCount > 0) normal = collision.GetContact(0).normal;
+
+        if (squashOnWall) TrySquash(collision.relativeVelocity.magnitude, normal);
+
+        if (wallHitVFXPrefab == null) return;
         if (Time.time - lastWallVFXTime < wallHitCooldown) return;
         lastWallVFXTime = Time.time;
 
         Vector3 pos = transform.position;
-        Vector3 normal = Vector3.up;
-
         if (collision.contactCount > 0)
         {
             ContactPoint2D contact = collision.GetContact(0);
             pos = new Vector3(contact.point.x, contact.point.y, transform.position.z);
-            normal = contact.normal;
         }
 
         Quaternion rot = alignToNormal ? Quaternion.FromToRotation(Vector3.up, normal) : Quaternion.identity;
@@ -96,10 +123,90 @@ public class BallEffects : MonoBehaviour
             && other.GetComponentInParent<BallEffects>() == null;
     }
 
+    // ---------- Squash and stretch ----------
+    private void TrySquash(float impactSpeed, Vector2 worldNormal)
+    {
+        if (impactSpeed < minImpactSpeed) return;
+        if (Time.time - lastSquashTime < squashCooldown) return;
+        lastSquashTime = Time.time;
+
+        float strength = Mathf.Lerp(0.35f, 1f, Mathf.InverseLerp(minImpactSpeed, fullImpactSpeed, impactSpeed));
+
+        // The ball spins, so work out the wall direction in the ball's own axes
+        Vector3 local = transform.InverseTransformDirection(new Vector3(worldNormal.x, worldNormal.y, 0f));
+        float nx2 = local.x * local.x;
+        float ny2 = local.y * local.y;
+        float sum = nx2 + ny2;
+        if (sum < 0.0001f) { nx2 = 0.5f; ny2 = 0.5f; }
+        else { nx2 /= sum; ny2 /= sum; }
+
+        // If a squash is already running, keep its original rest size instead of the squashed one
+        if (squashRoutine == null)
+        {
+            restScale = transform.localScale;
+            circle = GetComponent<CircleCollider2D>();
+            if (circle != null) restRadius = circle.radius;
+        }
+        else
+        {
+            StopCoroutine(squashRoutine);
+        }
+
+        squashRoutine = StartCoroutine(SquashRoutine(nx2, ny2, squashAmount * strength));
+    }
+
+    private IEnumerator SquashRoutine(float nx2, float ny2, float amplitude)
+    {
+        float t = 0f;
+        float restMax = Mathf.Max(Mathf.Abs(restScale.x), Mathf.Abs(restScale.y));
+
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime / Mathf.Max(0.05f, squashDuration);
+            float k = Mathf.Clamp01(t);
+
+            // Starts squashed, overshoots into a stretch, and settles
+            float d = amplitude * Mathf.Exp(-4f * k) * Mathf.Cos(k * Mathf.PI * 2f * wobbles);
+
+            float along = 1f - d;                    // against the wall
+            float side = 1f + d * sidewaysBulge;     // perpendicular to it
+
+            float sx = Mathf.Lerp(side, along, nx2);
+            float sy = Mathf.Lerp(side, along, ny2);
+
+            Vector3 s = new Vector3(restScale.x * sx, restScale.y * sy, restScale.z * side);
+            transform.localScale = s;
+
+            // A circle collider follows the biggest scale axis, so shrink the radius to cancel that out
+            if (keepColliderSize && circle != null)
+            {
+                float curMax = Mathf.Max(Mathf.Abs(s.x), Mathf.Abs(s.y));
+                if (curMax > 0.0001f) circle.radius = restRadius * restMax / curMax;
+            }
+
+            yield return null;
+        }
+
+        ResetSquash();
+    }
+
+    // Public so other scripts (teleport, vanish) can cancel it before they touch the ball's scale
+    public void ResetSquash()
+    {
+        if (squashRoutine == null) return;
+
+        StopCoroutine(squashRoutine);
+        squashRoutine = null;
+
+        transform.localScale = restScale;
+        if (circle != null) circle.radius = restRadius;
+    }
+
     // ---------- Shrink + vanish ----------
     public void ShrinkAndVanish()
     {
         if (IsVanishing) return;
+        ResetSquash();
         IsVanishing = true;
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
