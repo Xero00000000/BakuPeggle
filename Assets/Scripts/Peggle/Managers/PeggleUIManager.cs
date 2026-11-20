@@ -125,6 +125,9 @@ public class PeggleUIManager : MonoBehaviour
     [SerializeField] private float abilityWaitToUnfreeze = 0.2f;
     [SerializeField] private List<RectTransform> abilityImageTransforms;
 
+    [Header("Ability Feedback")]
+    [SerializeField] private AbilityFeedbackPlayer abilityFeedback;
+
     [Header("Sonidos y Shake")]
     [SerializeField] private AudioClip abilityInSound;
     [SerializeField] private AudioClip hitSound;
@@ -775,34 +778,37 @@ public class PeggleUIManager : MonoBehaviour
         isAbilityOn = true;
         Time.timeScale = 0f;
 
-        // Resta la energía requerida por la habilidad activa (150 o 300)
-        if (abilityChargeBar != null)
-            abilityChargeBar.text = abilityCharge.ToString();
-
+        if (abilityChargeBar != null) abilityChargeBar.text = abilityCharge.ToString();
         UpdateAbilityImageInd();
-        PlaySoundUnscaled(abilityInSound);
 
-        yield return StartCoroutine(AnimateAbilityImages());
-        yield return new WaitForSecondsRealtime(abilityWaitTime);
-        yield return StartCoroutine(AnimateAbilityImagesOut());
+        int index = turnManager != null ? turnManager.CurrentAbility : 0;
+        AbilityFeedbackData fx = abilityFeedback != null ? abilityFeedback.Get(index) : null;
 
-        PlaySoundUnscaled(hitSound);
+        if (fx != null)
+        {
+            yield return StartCoroutine(abilityFeedback.PlayIntro(fx, abilityImageTransforms));
+            yield return new WaitForSecondsRealtime(fx.holdTime);
+            yield return StartCoroutine(AnimateAbilityImagesOut());
+            yield return StartCoroutine(abilityFeedback.PlayImpact(fx, UpdateHealthUI));
+        }
+        else
+        {
+            // old behaviour as a fallback
+            PlaySoundUnscaled(abilityInSound);
+            yield return StartCoroutine(AnimateAbilityImages());
+            yield return new WaitForSecondsRealtime(abilityWaitTime);
+            yield return StartCoroutine(AnimateAbilityImagesOut());
+            PlaySoundUnscaled(hitSound);
+            if (damageEffectManager != null) damageEffectManager.TriggerDamageEffect();
+            UpdateHealthUI();
+            yield return StartCoroutine(ShakeEnemyUI());
+            FeedbackBalls.ReleaseSpawnPops(0.02f);
+        }
 
-        if (damageEffectManager != null) damageEffectManager.TriggerDamageEffect();
-
-        UpdateHealthUI();
-
-        yield return StartCoroutine(ShakeEnemyUI());
         yield return new WaitForSecondsRealtime(abilityWaitToUnfreeze);
 
         Time.timeScale = 1f;
         isAbilityOn = false;
-
-        Continue.Raise(this, 2);
-
-        Time.timeScale = 1f;
-        isAbilityOn = false;
-
         Continue.Raise(this, 2);
 
         if (player1CurrentHP <= 0 || player2CurrentHP <= 0)

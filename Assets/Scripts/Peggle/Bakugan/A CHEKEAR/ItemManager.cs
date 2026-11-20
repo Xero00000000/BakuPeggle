@@ -11,6 +11,7 @@ public class ItemManager : MonoBehaviour
     [SerializeField] private PeggleUIManager UIManager;
     [SerializeField] private PegLauncher launcher;
 
+
     [Header("Shop link")]
     [SerializeField] private MarbeastItem[] marbeasts;   // drag all MarbeastItem assets here
 
@@ -40,11 +41,9 @@ public class ItemManager : MonoBehaviour
         UpdateSelection();
     }
 
-
-
     void Update()
     {
-        if (Locked) return;
+        if (!CanChange) return;
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
@@ -56,7 +55,7 @@ public class ItemManager : MonoBehaviour
 
     public void SelectOnlyThis(ResizableItem selectedItem)
     {
-        if (Locked) return;
+        if (!CanChange) return;
 
         int index = items.IndexOf(selectedItem);
         if (index != -1 && IsAvailable(index))
@@ -65,6 +64,10 @@ public class ItemManager : MonoBehaviour
             UpdateSelection();
         }
     }
+
+
+
+
 
     private void UpdateSelection()
     {

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b41f65f3f8371644b8a24d22c5a6b62, type: 3}
+  m_Name: Damage
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.6556604, b: 0.6556604, a: 1}
+  slideFrom: 0
+  slideInDuration: 0.12
+  holdTime: 0.35
+  anticipationPause: 0.05
+  flashAlpha: 0
+  flashDuration: 0.15
+  shake: 0.12
+  effectDuration: 0.3
+  useLines: 1
+  lineIntensity: 1
+  aberrationPeak: 0.6
+  aberrationDuration: 0.35
+  zoomPunch: 0.04
+  zoomDuration: 0.2
+  uiReaction: 1
+  uiShakePixels: 15
+  uiDuration: 0.3
+  pegPopStagger: 0.02
+  introSound: {fileID: 8300000, guid: 3e5275a0150c92c46b33b78361898e77, type: 3}
+  impactSound: {fileID: 8300000, guid: 94fa9f347a5132145ba6af7ac8d70fe9, type: 3}

@@ -415,8 +415,6 @@ public class TurnManager : MonoBehaviour
         isAbilityOn = true;
         abilityCharge -= pointsToActivate;
 
-        // Si la habilidad de daño está activa: Quita 100 de vida al enemigo (Player 2)
-        // Si está activa la de curación: Cura 150 de vida al Jugador 1
         switch (currentAbility)
         {
             case 0: player2CurrentHP -= effectValue; break;
@@ -425,12 +423,18 @@ public class TurnManager : MonoBehaviour
             case 3:
                 for (int i = 0; i < refreshNumber; i++)
                 {
-                    Vector3 spawnArea = new Vector3(Random.Range(refreshArea.bounds.min.x, refreshArea.bounds.max.x), Random.Range(refreshArea.bounds.min.y, refreshArea.bounds.max.y), 15);
+                    Vector3 spawnArea = new Vector3(
+                        Random.Range(refreshArea.bounds.min.x, refreshArea.bounds.max.x),
+                        Random.Range(refreshArea.bounds.min.y, refreshArea.bounds.max.y),
+                        15);
+
                     var instance = Instantiate(pegPrefab, spawnArea, Quaternion.identity);
+                    var fb = instance.GetComponent<FeedbackBalls>();
+                    if (fb != null) fb.HoldForSpawnPop();
                 }
                 break;
             default: break;
-        };
+        }
 
         variablesForUI = new int[] { 2, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
         _turnUpdateUI.Raise(this, variablesForUI);

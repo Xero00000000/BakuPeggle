@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -38,6 +39,10 @@ public class FeedbackBalls : MonoBehaviour
     private float lastHitTime = -10f;
     private float pointsMultiplier = 1f;
     private bool isBreaking = false;
+
+    private static readonly List<FeedbackBalls> pendingSpawn = new List<FeedbackBalls>();
+    private Vector3 spawnScale;
+    private bool spawnHeld;
 
     // Read by the managers when the points event is raised
     public float PointsMultiplier => pointsMultiplier;
@@ -530,5 +535,54 @@ public class FeedbackBalls : MonoBehaviour
 
         // Longer combos live longer, so the destroy delay has to grow with them
         Destroy(vfxInstance.gameObject, vfxBaseLifetime * lifetimeMult + vfxExtraLinger);
+    }
+
+    public void HoldForSpawnPop()
+    {
+        spawnScale = transform.localScale;
+        transform.localScale = Vector3.zero;
+        spawnHeld = true;
+        pendingSpawn.Add(this);
+        StartCoroutine(SpawnSafetyRelease());
+    }
+
+    private IEnumerator SpawnSafetyRelease()   // never leave a peg invisible
+    {
+        yield return new WaitForSecondsRealtime(2f);
+        if (spawnHeld)
+        {
+            spawnHeld = false;
+            pendingSpawn.Remove(this);
+            transform.localScale = spawnScale;
+        }
+    }
+
+    public static void ReleaseSpawnPops(float stagger)
+    {
+        for (int i = 0; i < pendingSpawn.Count; i++)
+        {
+            FeedbackBalls peg = pendingSpawn[i];
+            if (peg != null && peg.spawnHeld)
+                peg.StartCoroutine(peg.SpawnPopRoutine(i * stagger));
+        }
+        pendingSpawn.Clear();
+    }
+
+    private IEnumerator SpawnPopRoutine(float delay)
+    {
+        spawnHeld = false;
+        if (delay > 0f) yield return new WaitForSecondsRealtime(delay);
+
+        const float dur = 0.18f;
+        float t = 0f;
+        while (t < dur)
+        {
+            t += Time.unscaledDeltaTime;
+            float k = Mathf.Clamp01(t / dur) - 1f;
+            float s = 1f + 2.70158f * k * k * k + 1.70158f * k * k;   // ease-out-back (overshoot)
+            transform.localScale = spawnScale * s;
+            yield return null;
+        }
+        transform.localScale = spawnScale;
     }
 }

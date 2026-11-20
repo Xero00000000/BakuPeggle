@@ -24,6 +24,12 @@ public class DamageEffectManager : MonoBehaviour
     [Tooltip("Intensidad del movimiento de la cámara (un valor entre 0.05 y 0.2 es un temblor leve)")]
     [SerializeField] private float shakeMagnitude = 0.12f;
 
+    [Header("Per-ability overrides")]
+    [Tooltip("Color property on the Custom/Damage shader (_Color, _Tint...). Leave empty if it has none.")]
+    [SerializeField] private string tintPropertyName = "_Color";
+    private Color defaultTint = Color.white;
+    private bool hasTint;
+
     private Material instantiatedMaterial;
     private Coroutine lightningCoroutine;
     private Coroutine shakeCoroutine;
@@ -47,6 +53,8 @@ public class DamageEffectManager : MonoBehaviour
             // Instanciar el material para no modificar el archivo original en el proyecto
             instantiatedMaterial = new Material(lightningMaterial);
             fullScreenDamageImage.material = instantiatedMaterial;
+            hasTint = !string.IsNullOrEmpty(tintPropertyName) && instantiatedMaterial.HasProperty(tintPropertyName);
+            if (hasTint) defaultTint = instantiatedMaterial.GetColor(tintPropertyName);
 
             // Iniciar apagado y ocultar la imagen
             instantiatedMaterial.SetFloat(progressPropertyName, 0f);
@@ -127,6 +135,58 @@ public class DamageEffectManager : MonoBehaviour
         }
 
         // Asegurar que la cámara regrese exactamente a su posición original
+        mainCamera.transform.localPosition = originalCameraPosition;
+    }
+
+    public void TriggerCustom(Color tint, float intensity, float duration, float shake)
+    {
+        if (instantiatedMaterial != null && fullScreenDamageImage != null && intensity > 0f)
+        {
+            if (lightningCoroutine != null) StopCoroutine(lightningCoroutine);
+            lightningCoroutine = StartCoroutine(LightningCustom(tint, intensity, duration));
+        }
+
+        if (mainCamera != null && shake > 0f)
+        {
+            if (shakeCoroutine != null)
+            {
+                StopCoroutine(shakeCoroutine);
+                mainCamera.transform.localPosition = originalCameraPosition;
+            }
+            shakeCoroutine = StartCoroutine(ShakeCustom(shake, duration));
+        }
+    }
+
+    private IEnumerator LightningCustom(Color tint, float intensity, float duration)
+    {
+        if (hasTint) instantiatedMaterial.SetColor(tintPropertyName, tint);
+        fullScreenDamageImage.gameObject.SetActive(true);
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float p = Mathf.Sin(Mathf.Clamp01(elapsed / duration) * Mathf.PI) * intensity * maxIntensity;
+            instantiatedMaterial.SetFloat(progressPropertyName, p);
+            yield return null;
+        }
+
+        instantiatedMaterial.SetFloat(progressPropertyName, 0f);
+        if (hasTint) instantiatedMaterial.SetColor(tintPropertyName, defaultTint);
+        fullScreenDamageImage.gameObject.SetActive(false);
+    }
+
+    private IEnumerator ShakeCustom(float magnitude, float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float damp = 1f - Mathf.Clamp01(elapsed / duration);
+            Vector2 r = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * magnitude * damp;
+            mainCamera.transform.localPosition = originalCameraPosition + new Vector3(r.x, r.y, 0f);
+            yield return null;
+        }
         mainCamera.transform.localPosition = originalCameraPosition;
     }
 
