@@ -58,6 +58,12 @@ public class TurnManager : MonoBehaviour
     [Tooltip("Number of this level (1, 2, 3...). Winning it unlocks the next one.")]
     [SerializeField] private int levelNumber = 1;
 
+    // FIX: safety net so a turn can never hang forever
+    [Header("Safety")]
+    [Tooltip("If a turn takes longer than this after the player shoots, it is forced to end. 0 = disabled.")]
+    [SerializeField] private float turnTimeout = 20f;
+    private float player1ShotTime;
+
     // Propiedades dinámicas basadas en la habilidad seleccionada
     private int pointsToActivate => currentAbility switch
     {
@@ -140,9 +146,9 @@ public class TurnManager : MonoBehaviour
         }
         else
         {
-            if(persistentBullshit.GetComponent<PersistentBullshit>().bakugan1 == true)
+            if (persistentBullshit.GetComponent<PersistentBullshit>().bakugan1 == true)
             {
-                bombShit.SetActive (true);
+                bombShit.SetActive(true);
             }
             else
             {
@@ -158,22 +164,33 @@ public class TurnManager : MonoBehaviour
             }
         }
 
-            player1CurrentHP = player1MaxHP;
+        player1CurrentHP = player1MaxHP;
         player2CurrentHP = player2MaxHP;
         abilityCharge = 0;
         maxBalls = 1;
         currentBallsDestroyed = 0;
 
 
-        variablesForUI = new int[] {0, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge};
+        variablesForUI = new int[] { 0, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
         _turnUpdateUI.Raise(this, variablesForUI);
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
         if (isGameOver || isEndingTurn) return;
+
+        // FIX: safety net. If the turn never resolves (stuck ball, missed event...), force it to end.
+        if (turnTimeout > 0f && player1Shot && Time.time - player1ShotTime > turnTimeout)
+        {
+            Debug.LogWarning("[TurnManager] Turn timed out, forcing it to end.");
+            player2Shot = true;
+            ball1Destroyed = true;
+            ball2Destroyed = true;
+            enemyShooting = false;
+            StopAllCoroutines();
+        }
 
         if (player1Shot && player2Shot && ball1Destroyed && ball2Destroyed)
         {
@@ -194,6 +211,7 @@ public class TurnManager : MonoBehaviour
         ball1Destroyed = false;
         ball2Destroyed = false;
         isEndingTurn = false;
+        enemyShooting = false;   // FIX: never carry a stuck flag into the next turn
 
         maxBalls = 1;
         currentBallsDestroyed = 0;
@@ -206,14 +224,14 @@ public class TurnManager : MonoBehaviour
         variablesForUI = new int[] { 3, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
         _turnUpdateUI.Raise(this, variablesForUI);
     }
-    
+
     public void Continue(Component that, int variable)
     {
         switch (variable)
         {
             case 0: HandleGameOver(); break;
             case 1: ResetTurn(); break;
-            case 2: isAbilityOn = false; ; break;
+            case 2: isAbilityOn = false; break;
 
         }
     }
@@ -258,6 +276,7 @@ public class TurnManager : MonoBehaviour
         if (which == 1)
         {
             player1Shot = true;
+            player1ShotTime = Time.time;   // FIX: start the safety timer
         }
         ShootEnemyBall();
     }
@@ -381,9 +400,12 @@ public class TurnManager : MonoBehaviour
 
         if (isGameOver) { enemyShooting = false; yield break; }
 
-        // 3) Fire
+        // 3) Fire (FIX: defensive, so a missing component can't leave the turn hanging)
         var instance = Instantiate(prefabToSpawn, spawnPoint.transform.position, Quaternion.identity);
-        instance.GetComponent<Rigidbody2D>().linearVelocity = vel;   // rb.velocity on Unity 2022 or older
+
+        var rb = instance.GetComponent<Rigidbody2D>();
+        if (rb != null) rb.linearVelocity = vel;   // rb.velocity on Unity 2022 or older
+        else Debug.LogError($"Enemy prefab {prefabToSpawn.name} has no Rigidbody2D!");
 
         var glow = instance.GetComponent<BallComboGlow>();
         if (glow != null) glow.SetSide(false);
@@ -464,6 +486,4 @@ public class TurnManager : MonoBehaviour
             currentAbility = 0;
         }
     }
-
-
 }

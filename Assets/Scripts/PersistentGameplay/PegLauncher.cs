@@ -37,17 +37,6 @@ public class PegLauncher : MonoBehaviour
 
     void Update()
     {
-        /*
-        Vector3 direction = new Vector3(mousePos.x, mousePos.z, mousePos.y) - transform.position;
-        //direction.y = 0f;
-
-
-        if (direction != Vector3.zero)
-        {
-            Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Euler(0f, 0f, lookRotation.eulerAngles.y);
-        }*/
-
         Vector2 direction = mousePos - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         //float snappedAngle = Mathf.Round(angle / snapAngle) * snapAngle;
@@ -67,20 +56,24 @@ public class PegLauncher : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0) && isTurn == true && outOfArea == false && (manager == null || !manager.IsGameOver))
+        // FIX: PlayerCanAct covers game over, ability animation, turn ending and "already shot".
+        // This stops the launcher from firing while TurnManager would ignore the shot.
+        if (Input.GetMouseButtonDown(0) && isTurn && !outOfArea
+            && manager != null && manager.PlayerCanAct)
         {
             audioSource.PlayOneShot(audioClip, 1f);
             for (int i = 0; i < manager.maxBalls; i++)
             {
                 var instance = Instantiate(currentBall, spawnPoint.transform.position, Quaternion.identity);
-                instance.GetComponent<Rigidbody2D>().AddForce((direction) * force);
+
+                var rb = instance.GetComponent<Rigidbody2D>();
+                if (rb != null) rb.AddForce(direction * force);
+                else Debug.LogError($"Player prefab {currentBall.name} has no Rigidbody2D!");
 
                 var glow = instance.GetComponent<BallComboGlow>();
                 if (glow != null) glow.SetSide(true);
             }
 
-            /*var instance = Instantiate(currentBall, spawnPoint.transform.position, Quaternion.identity);
-        instance.GetComponent<Rigidbody2D>().AddForce((direction) * force);*/
             _shoot.Raise(this, 1);
             isTurn = false;
         }
