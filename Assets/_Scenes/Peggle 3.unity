@@ -740,6 +740,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3096320522423016841, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: move
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3096320522423016841, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: area2D
+      value: 
+      objectReference: {fileID: 1761064430}
+    - target: {fileID: 3096320522423016841, guid: 345f3646c3846f34299255f682d40785, type: 3}
+      propertyPath: areaCollider
+      value: 
+      objectReference: {fileID: 1163889665}
     - target: {fileID: 7616273831579344739, guid: 345f3646c3846f34299255f682d40785, type: 3}
       propertyPath: m_Name
       value: Square peg (4)
@@ -16047,7 +16059,7 @@ MonoBehaviour:
     slotAccentColor: {r: 0, g: 0.9013953, b: 1, a: 1}
   - label: Refresh
     itemReference: {fileID: 514079184}
-    slotAccentColor: {r: 1, g: 0.8821015, b: 0.023584902, a: 1}
+    slotAccentColor: {r: 0.21568629, g: 1, b: 0.07058824, a: 1}
 --- !u!4 &1435239383
 Transform:
   m_ObjectHideFlags: 0
