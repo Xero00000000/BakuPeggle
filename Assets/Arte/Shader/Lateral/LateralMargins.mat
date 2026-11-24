@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: LateralMargins
+  m_Shader: {fileID: 4800000, guid: 7b86ea16737005e43b322251b8a58b96, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _EFFECTSIDE_ALL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TileTex:
+        m_Texture: {fileID: 2800000, guid: 0077dc18d3963fe4bba4f2a9210a7400, type: 3}
+        m_Scale: {x: 1, y: 0.67}
+        m_Offset: {x: 0, y: 0}
+    - _TopTex:
+        m_Texture: {fileID: 2800000, guid: 9326839cf3a848246869a00d2fd5066b, type: 3}
+        m_Scale: {x: 1, y: 0.79}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BorderThickness: 0.1186
+    - _EdgeSoftness: 0.0233
+    - _EffectRotation: 0
+    - _EffectSide: 0
+    - _FullPerimeterGlow: 0
+    - _GlowIntensity: 0.81
+    - _InnerMargin: 0.056
+    - _LavaDistortion: 0.215
+    - _LavaScale: 4
+    - _LavaSmoothness: 0.12
+    - _LavaThreshold: 0.35
+    - _ObjectWobbleAngle: 1.15
+    - _ObjectWobbleSpeed: 2
+    - _OuterBorderSize: 0
+    - _OuterBorderSoftness: 0.08
+    - _PulseCount: 1.95
+    - _PulseSharpness: 1
+    - _RandomSpeed: 1.2
+    - _RespectInnerMarginTop: 0.318
+    - _SideFalloff: 1
+    - _TopOpacity: 0.372
+    - _TopRandomSpeed: 1.4
+    - _TravelSpeed: 1.5
+    m_Colors:
+    - _Color: {r: 0.5471698, g: 0.04903879, b: 0.25801277, a: 1}
+    - _GlowColor: {r: 0.8113208, g: 0, b: 0, a: 1}
+    - _LavaFlowSpeed: {r: 0.08, g: 0.02, b: 0, a: 0}
+    - _ObjectFloatAmount: {r: 0.03, g: 0.05, b: 0, a: 0}
+    - _ObjectFloatSpeed: {r: 0.06, g: 0.93, b: 0, a: 0}
+    - _OffsetMax: {r: 0.25, g: 0.25, b: 0, a: 0}
+    - _OffsetMin: {r: -0.25, g: -0.25, b: 0, a: 0}
+    - _OuterBorderColor: {r: 0, g: 0, b: 0, a: 1}
+    - _TileMax: {r: 1, g: 1.6, b: 0, a: 0}
+    - _TileMin: {r: 0.8, g: 0.8, b: 0, a: 0}
+    - _TileScrollSpeed: {r: 0.28, g: 0.08, b: -0.89, a: 0.85}
+    - _TileTint: {r: 0.4551731, g: 0.27140442, b: 0.5377358, a: 1}
+    - _TopOffsetMax: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - _TopOffsetMin: {r: -0.2, g: -0.2, b: 0, a: 0}
+    - _TopScrollSpeed: {r: 0, g: 0, b: 0, a: 0}
+    - _TopTileMax: {r: 1.5, g: 1.5, b: 0, a: 0}
+    - _TopTileMin: {r: 0.9, g: 0.9, b: 0, a: 0}
+    - _TopTint: {r: 1, g: 0, b: 0.69230795, a: 0.1764706}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
