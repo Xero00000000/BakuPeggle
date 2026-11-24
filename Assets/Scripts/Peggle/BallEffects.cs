@@ -5,6 +5,7 @@ using UnityEngine.VFX;
 public class BallEffects : MonoBehaviour
 {
     public enum ColorSource { Manual, FromBallRenderer }
+    public enum SideFilter { None, LeftOfX, RightOfX }
 
     [Header("VFX color")]
     [Tooltip("Manual = use the color below. FromBallRenderer = read it from the ball's sprite/material.")]
@@ -24,6 +25,16 @@ public class BallEffects : MonoBehaviour
     [SerializeField] private bool alignToNormal = true;
     [SerializeField] private float wallHitCooldown = 0.08f;
     [SerializeField] private float wallVFXLifetime = 1f;
+
+    [Header("Wall hit SFX")]
+    [SerializeField] private bool onlyWhenPlayerBall = true;
+    [SerializeField] private SideFilter sideFilter = SideFilter.None;
+    [SerializeField] private float splitX = 0f;
+    [SerializeField] private AudioSource wallHitAudioSource;
+    [SerializeField] private AudioClip wallHitClip;
+    [SerializeField, Range(0f, 1f)] private float wallHitVolume = 1f;
+    [Tooltip("0 = full clip duration. > 0 = stops the sound after X seconds.")]
+    [SerializeField, Range(0f, 2f)] private float wallHitMaxDuration = 0f;
 
     [Header("Wall bounce squash")]
     [SerializeField] private bool squashOnWall = true;
@@ -54,9 +65,15 @@ public class BallEffects : MonoBehaviour
     private float lastSquashTime = -10f;
 
     private Coroutine squashRoutine;
+    private Coroutine wallHitStopRoutine;
     private Vector3 restScale;
     private float restRadius;
     private CircleCollider2D circle;
+
+    public void SetOnlyWhenPlayerBall(bool value)
+    {
+        onlyWhenPlayerBall = value;
+    }
 
     // ---------- Color ----------
     private Color ResolveColor()
@@ -99,9 +116,12 @@ public class BallEffects : MonoBehaviour
 
         if (squashOnWall) TrySquash(collision.relativeVelocity.magnitude, normal);
 
-        if (wallHitVFXPrefab == null) return;
         if (Time.time - lastWallVFXTime < wallHitCooldown) return;
         lastWallVFXTime = Time.time;
+
+        PlayWallHitSound();
+
+        if (wallHitVFXPrefab == null) return;
 
         Vector3 pos = transform.position;
         if (collision.contactCount > 0)
@@ -112,6 +132,54 @@ public class BallEffects : MonoBehaviour
 
         Quaternion rot = alignToNormal ? Quaternion.FromToRotation(Vector3.up, normal) : Quaternion.identity;
         Spawn(wallHitVFXPrefab, pos, rot, wallVFXLifetime, tintWallHit);
+    }
+
+    private bool IsPlayerBallBySide()
+    {
+        if (sideFilter == SideFilter.LeftOfX)
+            return transform.position.x < splitX;
+        if (sideFilter == SideFilter.RightOfX)
+            return transform.position.x > splitX;
+        return true;
+    }
+
+    private void PlayWallHitSound()
+    {
+        if (!onlyWhenPlayerBall) return;
+        if (!IsPlayerBallBySide()) return;
+        if (wallHitClip == null) return;
+
+        AudioSource source = wallHitAudioSource != null ? wallHitAudioSource : GetComponent<AudioSource>();
+        if (source == null) return;
+
+        if (wallHitStopRoutine != null)
+        {
+            StopCoroutine(wallHitStopRoutine);
+            wallHitStopRoutine = null;
+        }
+
+        source.Stop();
+        source.clip = wallHitClip;
+        source.volume = Mathf.Clamp01(wallHitVolume);
+        source.Play();
+
+        if (wallHitMaxDuration > 0f)
+        {
+            wallHitStopRoutine = StartCoroutine(StopWallHitSoundAfter(source, wallHitMaxDuration));
+        }
+    }
+
+    private IEnumerator StopWallHitSoundAfter(AudioSource source, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        if (source != null)
+        {
+            source.Stop();
+            source.clip = null;
+        }
+
+        wallHitStopRoutine = null;
     }
 
     private bool IsWall(Collider2D other)
