@@ -3266,12 +3266,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 60
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 60
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -8699,12 +8699,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 60
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 60
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -11223,7 +11223,7 @@ MonoBehaviour:
   dialogueLines:
   - Oye...
   - Me contaron que eres bueno
-  - Vamos a pelear pinche pendejo
+  - 'Vamos a pelear '
   voiceAudioSource: {fileID: 1816609826}
   voiceEntries:
   - clip: {fileID: 8300000, guid: aa4b1001faf6796428dc5080911bc504, type: 3}
@@ -11236,16 +11236,16 @@ MonoBehaviour:
   tensionAudioSource: {fileID: 1816609826}
   tensionSound:
     clip: {fileID: 8300000, guid: 89f85f177bb70784da21097e9feef589, type: 3}
-    volume: 0.293
+    volume: 0.008
     maxDuration: 0
   choiceAudioSource: {fileID: 0}
   acceptSound:
     clip: {fileID: 8300000, guid: 6bd53c2cf48bbfd4b92dd91093af04a7, type: 3}
-    volume: 0.897
+    volume: 0.0558
     maxDuration: 0
   declineSound:
     clip: {fileID: 8300000, guid: 849d1e40933331946ba0d62ba726f50f, type: 3}
-    volume: 0.331
+    volume: 0.0169
     maxDuration: 0.5
   combatChoicePanel: {fileID: 2121157279}
   combatSceneName: Peggle 3
