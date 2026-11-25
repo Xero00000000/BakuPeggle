@@ -50,7 +50,7 @@ Material:
     - _LavaSmoothness: 0.12
     - _LavaThreshold: 0.35
     - _ObjectWobbleAngle: 1.15
-    - _ObjectWobbleSpeed: 2
+    - _ObjectWobbleSpeed: 0.01
     - _OuterBorderSize: 0
     - _OuterBorderSoftness: 0.08
     - _PulseCount: 1.95
@@ -64,7 +64,7 @@ Material:
     m_Colors:
     - _Color: {r: 0.5471698, g: 0.04903879, b: 0.25801277, a: 1}
     - _GlowColor: {r: 0.8113208, g: 0, b: 0, a: 1}
-    - _LavaFlowSpeed: {r: 0.08, g: 0.02, b: 0, a: 0}
+    - _LavaFlowSpeed: {r: 0.0008, g: 0.0002, b: 0, a: 0}
     - _ObjectFloatAmount: {r: 0.03, g: 0.05, b: 0, a: 0}
     - _ObjectFloatSpeed: {r: 0.06, g: 0.93, b: 0, a: 0}
     - _OffsetMax: {r: 0.25, g: 0.25, b: 0, a: 0}

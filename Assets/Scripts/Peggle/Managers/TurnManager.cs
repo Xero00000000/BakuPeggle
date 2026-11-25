@@ -28,12 +28,25 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private bool isPlayer2Turn;
 
     [Header("Selector de Habilidad Activa")]
-    [Tooltip("True = Habilidad de Daño | False = Habilidad de Curación")]
+    [Tooltip("0 = Daño | 1 = Curación | 2 = Clonar | 3 = Refrescar")]
     [SerializeField] private int currentAbility;
 
+    [Header("Cut-in por Habilidad (al ejecutar)")]
+    [Tooltip("Ej: cutin_0_A, cutin_0_B (elige uno al azar al usar habilidad 0)")]
+    [SerializeField] private Image[] damageCutinImages;
+
+    [Tooltip("Imágenes de cut-in al usar habilidad 1 (Curación)")]
+    [SerializeField] private Image[] healCutinImages;
+
+    [Tooltip("Imágenes de cut-in al usar habilidad 2 (Clonar)")]
+    [SerializeField] private Image[] cloneCutinImages;
+
+    [Tooltip("Imágenes de cut-in al usar habilidad 3 (Refrescar)")]
+    [SerializeField] private Image[] refreshCutinImages;
+
     [Header("Configuración de Prefabs de Bolas")]
-    [SerializeField] private GameObject damageBallPrefab; // Usado cuando la habilidad de daño está activa
-    [SerializeField] private GameObject healBallPrefab;   // Usado cuando la habilidad de curación está activa
+    [SerializeField] private GameObject damageBallPrefab;
+    [SerializeField] private GameObject healBallPrefab;
     [SerializeField] private GameObject cloneBallPrefab;
     [SerializeField] private GameObject refreshBallPrefab;
 
@@ -47,7 +60,6 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private int multiplyCost = 150;
 
     [SerializeField] private int refreshCost = 300;
-    //[SerializeField] private GameObject refreshArea;
     [SerializeField] private BoxCollider refreshArea;
     [SerializeField] private GameObject pegPrefab;
     [SerializeField] private int refreshNumber;
@@ -58,13 +70,11 @@ public class TurnManager : MonoBehaviour
     [Tooltip("Number of this level (1, 2, 3...). Winning it unlocks the next one.")]
     [SerializeField] private int levelNumber = 1;
 
-    // FIX: safety net so a turn can never hang forever
     [Header("Safety")]
     [Tooltip("If a turn takes longer than this after the player shoots, it is forced to end. 0 = disabled.")]
     [SerializeField] private float turnTimeout = 20f;
     private float player1ShotTime;
 
-    // Propiedades dinámicas basadas en la habilidad seleccionada
     private int pointsToActivate => currentAbility switch
     {
         0 => damageCost,
@@ -78,14 +88,13 @@ public class TurnManager : MonoBehaviour
     public bool PlayerCanAct => !isGameOver && !isEndingTurn && !isAbilityOn && !player1Shot;
 
     public bool IsGameOver => isGameOver;
-    public int CurrentAbility => currentAbility;   // 0 damage, 1 heal, 2 clone, 3 bomb
+    public int CurrentAbility => currentAbility;
     private int effectValue => currentAbility switch
     {
         0 => damageEffectValue,
         1 => healEffectValue,
         _ => 0
     };
-
 
     [Header("Habilidad")]
     [SerializeField] private int abilityCharge;
@@ -101,21 +110,20 @@ public class TurnManager : MonoBehaviour
     [Header("Configuración del Enemigo")]
     [SerializeField] private GameObject spawnPoint;
     [SerializeField] private float force;
-    [SerializeField] private Collider enemyAimArea;   // box covering his half of the field
+    [SerializeField] private Collider enemyAimArea;
     [SerializeField] private float spawnPointMinRotation;
     [SerializeField] private float spawnPointMaxRotation;
     [SerializeField] private float launchSpeed = 12f;
 
     [Header("Rotación del lanzador enemigo")]
-    [SerializeField] private Transform enemyLauncher;           // the object that visually rotates (leave empty to rotate spawnPoint)
-    [SerializeField] private float launcherAngleOffset = -90f;  // -90 if the sprite points UP, 0 if it points RIGHT
-    [SerializeField] private float launcherRotateDuration = 0.35f;   // 0 = instant
-    [SerializeField] private float enemyMinAngle = -170f;   // world angle limits, downward only
+    [SerializeField] private Transform enemyLauncher;
+    [SerializeField] private float launcherAngleOffset = -90f;
+    [SerializeField] private float launcherRotateDuration = 0.35f;
+    [SerializeField] private float enemyMinAngle = -170f;
     [SerializeField] private float enemyMaxAngle = -10f;
-    private float launcherAngle;          // current handle angle, tracked by us
+    private float launcherAngle;
     private bool launcherAngleReady;
     private bool enemyShooting;
-
 
     private bool isGameOver = false;
     private bool isFirstTurn = true;
@@ -129,12 +137,11 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private float abilityWaitToUnfreeze = 0.2f;
     [SerializeField] private List<RectTransform> abilityImageTransforms;
 
-
     private bool isAbilityOn = false;
+    private Coroutine cutinRoutine;
 
     [SerializeField] private int[] variablesForUI;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         persistentBullshit = GameObject.Find("PersistentBullshit");
@@ -164,24 +171,22 @@ public class TurnManager : MonoBehaviour
             }
         }
 
+        HideAllCutins();
+
         player1CurrentHP = player1MaxHP;
         player2CurrentHP = player2MaxHP;
         abilityCharge = 0;
         maxBalls = 1;
         currentBallsDestroyed = 0;
 
-
         variablesForUI = new int[] { 0, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
         _turnUpdateUI.Raise(this, variablesForUI);
-
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isGameOver || isEndingTurn) return;
 
-        // FIX: safety net. If the turn never resolves (stuck ball, missed event...), force it to end.
         if (turnTimeout > 0f && player1Shot && Time.time - player1ShotTime > turnTimeout)
         {
             Debug.LogWarning("[TurnManager] Turn timed out, forcing it to end.");
@@ -190,6 +195,8 @@ public class TurnManager : MonoBehaviour
             ball2Destroyed = true;
             enemyShooting = false;
             StopAllCoroutines();
+            Time.timeScale = 1f;
+            isAbilityOn = false;
         }
 
         if (player1Shot && player2Shot && ball1Destroyed && ball2Destroyed)
@@ -211,7 +218,7 @@ public class TurnManager : MonoBehaviour
         ball1Destroyed = false;
         ball2Destroyed = false;
         isEndingTurn = false;
-        enemyShooting = false;   // FIX: never carry a stuck flag into the next turn
+        enemyShooting = false;
 
         maxBalls = 1;
         currentBallsDestroyed = 0;
@@ -232,7 +239,6 @@ public class TurnManager : MonoBehaviour
             case 0: HandleGameOver(); break;
             case 1: ResetTurn(); break;
             case 2: isAbilityOn = false; break;
-
         }
     }
 
@@ -247,7 +253,6 @@ public class TurnManager : MonoBehaviour
 
         variablesForUI = new int[] { 1, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
 
-        //Continue(this, 1);
         _turnUpdateUI.Raise(this, variablesForUI);
     }
 
@@ -262,7 +267,7 @@ public class TurnManager : MonoBehaviour
         if (playerWon)
         {
             MarbeastSave.AddCoins(winReward);
-            LevelProgress.CompleteLevel(levelNumber);   // unlocks the next level
+            LevelProgress.CompleteLevel(levelNumber);
         }
 
         variablesForUI = new int[] { 4, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
@@ -276,7 +281,7 @@ public class TurnManager : MonoBehaviour
         if (which == 1)
         {
             player1Shot = true;
-            player1ShotTime = Time.time;   // FIX: start the safety timer
+            player1ShotTime = Time.time;
         }
         ShootEnemyBall();
     }
@@ -294,7 +299,6 @@ public class TurnManager : MonoBehaviour
             case 2: points = 60; charge += 15; break;
         }
 
-        // Multi-hit pegs (the squares) give less on every hit after the first
         if (sender is FeedbackBalls hitPeg)
         {
             points = Mathf.RoundToInt(points * hitPeg.PointsMultiplier);
@@ -321,7 +325,7 @@ public class TurnManager : MonoBehaviour
 
     private IEnumerator EnemyShootRoutine()
     {
-        if (enemyShooting) yield break;   // never run two at once
+        if (enemyShooting) yield break;
         enemyShooting = true;
 
         GameObject prefabToSpawn = currentAbility switch
@@ -340,7 +344,6 @@ public class TurnManager : MonoBehaviour
             yield break;
         }
 
-        // 1) Decide the shot first
         Vector2 origin = spawnPoint.transform.position;
         Vector2 vel;
         Vector2 aimDir;
@@ -365,18 +368,17 @@ public class TurnManager : MonoBehaviour
             aimDir = vel;
         }
 
-        // 2) Rotate the handle: plain float interpolation, no wrapping possible
         Transform pivot = enemyLauncher != null ? enemyLauncher : spawnPoint.transform;
 
         if (!launcherAngleReady)
         {
-            launcherAngle = Mathf.DeltaAngle(0f, pivot.eulerAngles.z);   // -180..180
+            launcherAngle = Mathf.DeltaAngle(0f, pivot.eulerAngles.z);
             launcherAngleReady = true;
         }
 
         float aimWorld = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
         aimWorld = Mathf.Clamp(aimWorld, enemyMinAngle, enemyMaxAngle);
-        float targetAngle = aimWorld + launcherAngleOffset;   // -80..80 with offset 90
+        float targetAngle = aimWorld + launcherAngleOffset;
 
         float startAngle = launcherAngle;
 
@@ -400,11 +402,10 @@ public class TurnManager : MonoBehaviour
 
         if (isGameOver) { enemyShooting = false; yield break; }
 
-        // 3) Fire (FIX: defensive, so a missing component can't leave the turn hanging)
         var instance = Instantiate(prefabToSpawn, spawnPoint.transform.position, Quaternion.identity);
 
         var rb = instance.GetComponent<Rigidbody2D>();
-        if (rb != null) rb.linearVelocity = vel;   // rb.velocity on Unity 2022 or older
+        if (rb != null) rb.linearVelocity = vel;
         else Debug.LogError($"Enemy prefab {prefabToSpawn.name} has no Rigidbody2D!");
 
         var glow = instance.GetComponent<BallComboGlow>();
@@ -460,6 +461,116 @@ public class TurnManager : MonoBehaviour
 
         variablesForUI = new int[] { 2, player1CurrentHP, player1MaxHP, player2CurrentHP, player2MaxHP, player1DamageToTake, player2DamageToTake, abilityCharge };
         _turnUpdateUI.Raise(this, variablesForUI);
+
+        Image chosenCutin = PickRandomCutinForCurrentAbility();
+        if (chosenCutin != null)
+        {
+            if (cutinRoutine != null) StopCoroutine(cutinRoutine);
+            cutinRoutine = StartCoroutine(PlayAbilityCutinRoutine(chosenCutin));
+        }
+        else
+        {
+            isAbilityOn = false;
+        }
+    }
+
+    private Image PickRandomCutinForCurrentAbility()
+    {
+        Image[] pool = currentAbility switch
+        {
+            0 => damageCutinImages,
+            1 => healCutinImages,
+            2 => cloneCutinImages,
+            3 => refreshCutinImages,
+            _ => null
+        };
+
+        if (pool == null || pool.Length == 0) return null;
+
+        List<Image> valid = new List<Image>();
+        for (int i = 0; i < pool.Length; i++)
+        {
+            if (pool[i] != null) valid.Add(pool[i]);
+        }
+
+        if (valid.Count == 0) return null;
+        return valid[Random.Range(0, valid.Count)];
+    }
+
+    private void HideAllCutins()
+    {
+        SetArrayActive(damageCutinImages, false);
+        SetArrayActive(healCutinImages, false);
+        SetArrayActive(cloneCutinImages, false);
+        SetArrayActive(refreshCutinImages, false);
+    }
+
+    private void SetArrayActive(Image[] images, bool active)
+    {
+        if (images == null) return;
+        for (int i = 0; i < images.Length; i++)
+        {
+            if (images[i] != null) images[i].gameObject.SetActive(active);
+        }
+    }
+
+    private IEnumerator PlayAbilityCutinRoutine(Image cutinImage)
+    {
+        HideAllCutins();
+        float previousTimeScale = Time.timeScale;
+        Time.timeScale = 0f;
+
+        RectTransform rect = cutinImage.rectTransform;
+        Vector2 startPos = rect.anchoredPosition;
+        Vector2 enterOffset = new Vector2(-250f, 0f);
+
+        cutinImage.gameObject.SetActive(true);
+        rect.anchoredPosition = startPos + enterOffset;
+
+        // Animación de entrada (sin tocar tamaño ni escala)
+        float t = 0f;
+        float inDur = Mathf.Max(0.01f, abilityInDuration);
+        while (t < inDur)
+        {
+            t += Time.unscaledDeltaTime;
+            float p = Mathf.Clamp01(t / inDur);
+            float ease = 1f - Mathf.Pow(1f - p, 3f);
+            rect.anchoredPosition = Vector2.LerpUnclamped(startPos + enterOffset, startPos, ease);
+            yield return null;
+        }
+
+        rect.anchoredPosition = startPos;
+
+        // Espera mientras se muestra el cut-in
+        if (abilityWaitTime > 0f)
+        {
+            yield return new WaitForSecondsRealtime(abilityWaitTime);
+        }
+
+        // Animación de salida (sin tocar tamaño ni escala)
+        t = 0f;
+        float outDur = Mathf.Max(0.01f, abilityInDuration);
+        Vector2 exitOffset = new Vector2(250f, 0f);
+        while (t < outDur)
+        {
+            t += Time.unscaledDeltaTime;
+            float p = Mathf.Clamp01(t / outDur);
+            float ease = p * p;
+            rect.anchoredPosition = Vector2.LerpUnclamped(startPos, startPos + exitOffset, ease);
+            yield return null;
+        }
+
+        cutinImage.gameObject.SetActive(false);
+        rect.anchoredPosition = startPos;
+
+        if (abilityWaitToUnfreeze > 0f)
+        {
+            yield return new WaitForSecondsRealtime(abilityWaitToUnfreeze);
+        }
+
+        Time.timeScale = previousTimeScale > 0f ? previousTimeScale : 1f;
+        isAbilityOn = false;
+        cutinRoutine = null;
     }
 
     public void SetDamageAbility()

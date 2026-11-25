@@ -49,8 +49,8 @@ Material:
     - _LavaScale: 4
     - _LavaSmoothness: 0.12
     - _LavaThreshold: 0.35
-    - _ObjectWobbleAngle: 1.15
-    - _ObjectWobbleSpeed: 2
+    - _ObjectWobbleAngle: 0.63
+    - _ObjectWobbleSpeed: 0.99
     - _OuterBorderSize: 0.04
     - _OuterBorderSoftness: 0.01
     - _PulseCount: 1
