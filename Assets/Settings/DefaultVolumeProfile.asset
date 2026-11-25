@@ -488,7 +488,7 @@ MonoBehaviour:
     m_Value: 4
   firstFlareIntensity:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 1.97
   secondaryFlareIntensity:
     m_OverrideState: 1
     m_Value: 1
