@@ -9,18 +9,18 @@ public class AbilitySwitchMotion : MonoBehaviour
     public struct CreatureSlot
     {
         public string label;
-        public ResizableItem itemReference; // Damage, Healing, Duplicate, Bomb
-        public Color slotAccentColor;     // Color propio de esta criatura/habilidad
+        public ResizableItem itemReference; 
+        public Color slotAccentColor;     
     }
 
     [Header("Objetos a Animar al Cambiar")]
-    [SerializeField] private RectTransform barRectTransform;     // Tu objeto "Barra"
-    [SerializeField] private RectTransform movingAccentRect;  // Opcional: HabilidadLine o Effect (1)
-    [SerializeField] private GameObject optionalFlashObject;    // Opcional: Effect (1)
+    [SerializeField] private RectTransform barRectTransform;    
+    [SerializeField] private RectTransform movingAccentRect;  
+    [SerializeField] private GameObject optionalFlashObject;    
 
     [Header("Destello y Partículas por Criatura")]
-    [SerializeField] private Image slotFlashImage;          // Imagen encima de la barra para el destello
-    [SerializeField] private ParticleSystem slotParticles;  // Partículas cortas opcionales
+    [SerializeField] private Image slotFlashImage;          
+    [SerializeField] private ParticleSystem slotParticles;  
     [SerializeField] private float flashPeakAlpha = 0.45f;
     [SerializeField] private float flashDuration = 0.18f;
 
