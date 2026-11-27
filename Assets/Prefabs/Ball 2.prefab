@@ -199,9 +199,16 @@ MonoBehaviour:
   alignToNormal: 1
   wallHitCooldown: 0.08
   wallVFXLifetime: 1
+  onlyWhenPlayerBall: 1
+  sideFilter: 0
+  splitX: 0
+  wallHitAudioSource: {fileID: 0}
+  wallHitClip: {fileID: 0}
+  wallHitVolume: 1
+  wallHitMaxDuration: 0
   squashOnWall: 1
-  squashAmount: 0.45
-  sidewaysBulge: 0.5
+  squashAmount: 0.7
+  sidewaysBulge: 0.52
   squashDuration: 1.5
   wobbles: 1
   minImpactSpeed: 2

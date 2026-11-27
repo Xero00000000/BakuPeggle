@@ -208,8 +208,8 @@ MonoBehaviour:
   wallHitVolume: 0.818
   wallHitMaxDuration: 0.901
   squashOnWall: 1
-  squashAmount: 0.45
-  sidewaysBulge: 0.5
+  squashAmount: 0.7
+  sidewaysBulge: 0.52
   squashDuration: 1.5
   wobbles: 1
   minImpactSpeed: 2

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2347284828932773889}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Shrink Sparks Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 4386373832315761608}
   - component: {fileID: 29812241714179424}
   - component: {fileID: 3311718712742281562}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Shrink Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}

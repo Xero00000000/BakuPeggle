@@ -66856,7 +66856,7 @@ GameObject:
   - component: {fileID: 1930219947}
   - component: {fileID: 1930219949}
   - component: {fileID: 1930219948}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sparks_VFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67243,7 +67243,7 @@ GameObject:
   - component: {fileID: 1943249226}
   - component: {fileID: 1943249228}
   - component: {fileID: 1943249227}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sparks_VFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}

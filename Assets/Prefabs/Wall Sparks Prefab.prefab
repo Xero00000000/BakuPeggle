@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6822695205429416026}
   - component: {fileID: 8734640962915199551}
   - component: {fileID: 6738183609897676512}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Buy Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,7 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2798804148723815431}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wall Sparks Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
