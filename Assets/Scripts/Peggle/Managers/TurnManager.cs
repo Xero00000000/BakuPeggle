@@ -89,6 +89,8 @@ public class TurnManager : MonoBehaviour
 
     public bool IsGameOver => isGameOver;
     public int CurrentAbility => currentAbility;
+
+    public int WinReward => winReward;
     private int effectValue => currentAbility switch
     {
         0 => damageEffectValue,

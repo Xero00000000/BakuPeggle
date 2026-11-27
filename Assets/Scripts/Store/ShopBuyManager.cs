@@ -15,18 +15,16 @@ public class ShopBuyManager : MonoBehaviour
     [SerializeField] private List<Button> shopButtons;        // Botones de la tienda
     [SerializeField] private List<TMP_Text> buttonTexts;      // Textos de los botones
 
-    // Variables de sesión (Viven mientras el juego esté abierto y se mantienen al entrar/salir de la tienda)
-    public static int sessionCoins = 0;
+    // Las monedas ahora viven en MarbeastSave.Coins (una sola billetera para todas las tiendas)
     public static int selectedWallpaperIndex = -1;
 
     private static Dictionary<int, bool> sessionUnlockedWallpapers = new Dictionary<int, bool>();
 
     void Awake()
     {
-        // Si no asignaste la imagen en el Inspector, la busca automáticamente en los hijos del Canvas/Panel
+        // Si no asignaste la imagen en el Inspector, la busca automáticamente
         if (backgroundDisplayImage == null)
         {
-            // Busca cualquier componente Image que esté en la escena (puedes ajustar esto si hay muchas imágenes)
             backgroundDisplayImage = GetComponent<Image>();
             if (backgroundDisplayImage == null)
             {
@@ -51,14 +49,13 @@ public class ShopBuyManager : MonoBehaviour
     {
         if (coinText != null)
         {
-            coinText.text = sessionCoins.ToString();
+            coinText.text = MarbeastSave.Coins.ToString();
         }
     }
 
     // Cambia la imagen visual del fondo según el índice seleccionado
     void ActualizarFondoVisual()
     {
-        // Si todavía es null, intentamos buscarla de nuevo por seguridad
         if (backgroundDisplayImage == null)
         {
             GameObject bgObj = GameObject.FindWithTag("BackgroundShop"); // Opcional si le ponés un Tag
@@ -69,7 +66,6 @@ public class ShopBuyManager : MonoBehaviour
         {
             backgroundDisplayImage.sprite = wallpaperSprites[selectedWallpaperIndex];
 
-            // Forzamos a que el color no sea transparente/gris
             Color c = backgroundDisplayImage.color;
             c.a = 1f;
             backgroundDisplayImage.color = c;
@@ -78,6 +74,8 @@ public class ShopBuyManager : MonoBehaviour
 
     void ActualizarEstadoBotones()
     {
+        int coins = MarbeastSave.Coins;
+
         for (int i = 0; i < wallpaperPrices.Count; i++)
         {
             bool isUnlocked = sessionUnlockedWallpapers.ContainsKey(i) && sessionUnlockedWallpapers[i];
@@ -88,14 +86,7 @@ public class ShopBuyManager : MonoBehaviour
             {
                 if (isUnlocked)
                 {
-                    if (selectedWallpaperIndex == i)
-                    {
-                        buttonTexts[i].text = "Seleccionado";
-                    }
-                    else
-                    {
-                        buttonTexts[i].text = "Seleccionar";
-                    }
+                    buttonTexts[i].text = (selectedWallpaperIndex == i) ? "Seleccionado" : "Seleccionar";
                 }
                 else
                 {
@@ -112,7 +103,7 @@ public class ShopBuyManager : MonoBehaviour
                 }
                 else
                 {
-                    shopButtons[i].interactable = (sessionCoins >= price);
+                    shopButtons[i].interactable = (coins >= price);
                 }
             }
         }
@@ -136,9 +127,11 @@ public class ShopBuyManager : MonoBehaviour
             // Intentar comprar
             int price = wallpaperPrices[index];
 
-            if (sessionCoins >= price)
+            if (MarbeastSave.Coins >= price)
             {
-                sessionCoins -= price;
+                MarbeastSave.Coins -= price;
+                PlayerPrefs.Save();
+
                 sessionUnlockedWallpapers[index] = true;
                 selectedWallpaperIndex = index;
 

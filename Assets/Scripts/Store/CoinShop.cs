@@ -3,18 +3,16 @@ using TMPro;
 
 public class CoinShop : MonoBehaviour
 {
-    [Header("Configuración de Victoria")]
-    [SerializeField] private int coinsToAdd = 100;          
-    [SerializeField] private TMP_Text rewardDisplayText;    
+    [Header("Referencias")]
+    [SerializeField] private TurnManager turnManager;       // drag the TurnManager object here
+    [SerializeField] private TMP_Text rewardDisplayText;
 
-    void Start()
+    // Only displays the reward. TurnManager.HandleGameOver() is what pays it.
+    void OnEnable()
     {
-        if (rewardDisplayText != null)
+        if (rewardDisplayText != null && turnManager != null)
         {
-            rewardDisplayText.text = "+ " + coinsToAdd;
+            rewardDisplayText.text = "+ " + turnManager.WinReward;
         }
-
-        ShopBuyManager.sessionCoins += coinsToAdd;
-        Debug.Log("¡Partida ganada! Monedas actuales en sesión: " + ShopBuyManager.sessionCoins);
     }
 }
