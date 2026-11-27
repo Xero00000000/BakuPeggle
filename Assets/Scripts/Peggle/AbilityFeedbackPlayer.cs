@@ -23,6 +23,9 @@ public class AbilityFeedbackPlayer : MonoBehaviour
     [SerializeField] private List<Image> cutInImages = new List<Image>();
     [Tooltip("Hue of the ORIGINAL art, 0-1. Red = 0, green = 0.33, blue = 0.66. Your art is red, so 0.")]
     [SerializeField, Range(0f, 1f)] private float artBaseHue = 0f;
+    [Tooltip("Only the BACK layer(s) of the cut-in, the ones that form the silhouette. Not the inner layers, or you'll get lines across the art.")]
+    [SerializeField] private List<Image> outlineImages = new List<Image>();
+    private readonly List<Outline> outlines = new List<Outline>();
 
     [Header("UI reactions")]
     [SerializeField] private List<RectTransform> enemyUI = new List<RectTransform>();
@@ -54,6 +57,16 @@ public class AbilityFeedbackPlayer : MonoBehaviour
             img.material = m;
             cutInMats.Add(m);
         }
+
+        foreach (var img in outlineImages)
+        {
+            if (img == null) continue;
+            Outline o = img.GetComponent<Outline>();
+            if (o == null) o = img.gameObject.AddComponent<Outline>();
+            o.useGraphicAlpha = true;
+            o.enabled = false;
+            outlines.Add(o);
+        }
     }
 
     private void OnDestroy()
@@ -74,6 +87,7 @@ public class AbilityFeedbackPlayer : MonoBehaviour
     {
         PlaySound(fx.introSound);
         SetCutInHue(fx.color);
+        ApplyOutline(fx);
 
         Vector2 offset = SlideOffset(fx.slideFrom);
 
@@ -269,6 +283,31 @@ public class AbilityFeedbackPlayer : MonoBehaviour
         foreach (var m in cutInMats)
             if (m != null && m.HasProperty(HueId))
                 m.SetFloat(HueId, shift);
+    }
+
+    private void ApplyOutline(AbilityFeedbackData fx)
+    {
+        foreach (var o in outlines)
+        {
+            if (o == null) continue;
+
+            if (fx.outlineSize <= 0f)
+            {
+                o.enabled = false;
+                continue;
+            }
+
+            // Cancel the RectTransform scale so the thickness is in real pixels
+            Graphic g = o.GetComponent<Graphic>();
+            Vector3 s = g.rectTransform.lossyScale;
+            Vector3 cs = g.canvas.rootCanvas.transform.lossyScale;
+            float sx = Mathf.Max(0.0001f, s.x / cs.x);
+            float sy = Mathf.Max(0.0001f, s.y / cs.y);
+
+            o.effectColor = fx.outlineColor;
+            o.effectDistance = new Vector2(fx.outlineSize / sx, fx.outlineSize / sy);
+            o.enabled = true;
+        }
     }
 
     private static Vector2 SlideOffset(SlideDirection d)

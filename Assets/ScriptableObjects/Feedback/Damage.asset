@@ -16,6 +16,8 @@ MonoBehaviour:
   slideFrom: 0
   slideInDuration: 0.12
   holdTime: 0.35
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineSize: 8
   anticipationPause: 0.05
   flashAlpha: 0
   flashDuration: 0.15

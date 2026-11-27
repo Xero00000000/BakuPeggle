@@ -3499,6 +3499,10 @@ MonoBehaviour:
   cutInImages:
   - {fileID: 0}
   artBaseHue: 0
+  outlineImages:
+  - {fileID: 6371847868026865544}
+  - {fileID: 7260721564148720724}
+  - {fileID: 8413768887158671317}
   enemyUI:
   - {fileID: 4171451412732976031}
 --- !u!1 &8790766505888165895

@@ -151,12 +151,14 @@ MonoBehaviour:
   - {fileID: 1938648734}
   - {fileID: 1938648733}
   delayBeforeTitle: 0.2
+  titleSlideDuration: 0.5
   titleHold: 0.8
-  fadeDuration: 0.3
-  delayBeforeButtons: 0.3
+  coinSlideDuration: 0.5
   coinAnimator: {fileID: 0}
   coinsAnimationDuration: 1.5
   coinAnimTimeout: 5
+  delayBeforeButtons: 0.3
+  fadeDuration: 0.3
 --- !u!1001 &650848327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -532,6 +534,18 @@ PrefabInstance:
       propertyPath: scenesToUnload.Array.data[0].m_SceneAsset
       value: 
       objectReference: {fileID: 102900000, guid: 31ca601e513bd664c8f6306fdc234e91, type: 3}
+    - target: {fileID: 2936381003508478373, guid: ff4a9b441532fb944812d4299fc9d6f7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3437252992649734191, guid: ff4a9b441532fb944812d4299fc9d6f7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3909695727543859744, guid: ff4a9b441532fb944812d4299fc9d6f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3974974371415399777, guid: ff4a9b441532fb944812d4299fc9d6f7, type: 3}
       propertyPath: m_Name
       value: Prefab Nivel
@@ -555,6 +569,14 @@ PrefabInstance:
     - target: {fileID: 4369493906956864014, guid: ff4a9b441532fb944812d4299fc9d6f7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: RaiseEvent
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362707608668237489, guid: ff4a9b441532fb944812d4299fc9d6f7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085785953657546456, guid: ff4a9b441532fb944812d4299fc9d6f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8227344976538715633, guid: ff4a9b441532fb944812d4299fc9d6f7, type: 3}
       propertyPath: m_LocalPosition.x

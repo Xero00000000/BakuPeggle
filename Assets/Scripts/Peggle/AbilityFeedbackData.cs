@@ -15,7 +15,12 @@ public class AbilityFeedbackData : ScriptableObject
     [Tooltip("How long the cut-in stays on screen. Keep it short so it doesn't block the board.")]
     public float holdTime = 0.35f;
 
-    
+    [Header("Cut-in outline")]
+    public Color outlineColor = Color.black;
+    [Tooltip("Outline thickness in screen pixels. 0 = no outline.")]
+    public float outlineSize = 8f;
+
+
 
     [Header("Impact")]
     [Tooltip("Tiny beat of stillness right before the effect fires.")]
